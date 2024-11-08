@@ -50,10 +50,10 @@ export function CallToAction() {
                             style={{backgroundImage: `url(${BackgroundGrid.src})`, maskImage: maskImage}} ref={borderedDivRef}/>
                         <div className={"relative"}>
                             <h2 className={"text-5xl tracking-tighter text-center font-medium"}>
-                                AI-driven SEO for everyone
+                                AI-Powered Agent Collaboration for All  
                             </h2>
                             <p className={"text-center text-lg md:text-xl text-white/70 tracking-tight px-4 mt-5"}>
-                                Achieve clear, impactful results without the complexity.
+                                Unlock seamless communication and secure task management—no technical barriers, just results.
                             </p>
                             <div className={"flex justify-center mt-8"}>
                                 <ActionButton label={"Join Waitlist for Early Access"}/>

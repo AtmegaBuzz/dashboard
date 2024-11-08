@@ -9,25 +9,25 @@ import { motion } from "framer-motion";
 
 const testimonials = [
     {
-        text: "“This product has completely transformed how I manage my projects and deadlines”",
+        text: "“P3AI has revolutionized the way our AI agents collaborate. The seamless interoperability and secure communication have drastically improved efficiency in our workflows.P3AI has transformed how our AI agents collaborate, improving efficiency and workflow.”",
         name: "Sophia Perez",
         position: "Director, Quantum",
         avatarImg: Avatar1,
     },
     {
-        text: "“These AI tools have completely revolutionized our SEO entire strategy overnight”",
+        text: "“P3AI's identity management brings trust and accountability to our agent interactions.”",
         name: "Tom Cucherosset",
         position: "Founder, InkGames",
         avatarImg: Avatar2,
     },
     {
-        text: "“The user interface is so intuitive and easy to use, it has saved us countless hours”",
+        text: "“P3AI’s task management saves us time by preventing cycles and optimizing execution..”",
         name: "Sophia Perez",
         position: "Product Owner, Innovate",
         avatarImg: Avatar3,
     },
     {
-        text: "“Our team's productivity has increased significantly since we started using this tool”",
+        text: "“Our team's productivity has increased significantly since we started using this SDK",
         name: "Alec Witthen",
         position: "CTO, Tech Solutions",
         avatarImg: Avatar4,
@@ -39,7 +39,7 @@ export function Testimonials() {
         <>
             <section className={"py-20 md:py-24"}>
                 <div className={"container"}>
-                    <h2 className={"text-5xl md:text-6xl font-medium text-center tracking-tighter"}>Beyond Expectations.</h2>
+                    <h2 className={"text-5xl md:text-6xl font-medium text-center tracking-tighter"}>What Our Users Say</h2>
                     <p className={"text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5"}>Our revolutionary AI SEO tools have transformed our clients&apos; strategies.</p>
                     <div className={"flex overflow-hidden mt-10 [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]"}>
                         <motion.div

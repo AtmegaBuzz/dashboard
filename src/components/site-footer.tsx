@@ -14,19 +14,19 @@ export default function SiteFooter() {
                         <div className={"border size-8 rounded-lg inline-flex items-center justify-center"}>
                             <SiteLogo className={"size-6 h-auto"}/>
                         </div>
-                        <p className={"font-medium"}>AI Startup Landing Page</p>
+                        <p className={"font-medium"}>P3.AI Network</p>
                     </section>
 
 
 
                     <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
                         ©️ 2024 Spectron Labs, All rights reserved. Built by <a
-                        href={"https://github.com/MrInspection"}
+                        href={"https://github.com/AtmegaBuzz"}
                         target="_blank"
                         rel="noreferrer"
                         className="font-medium underline underline-offset-4"
                     >
-                        Moussa
+                        P3 AI
                     </a>
                         .
                     </p>

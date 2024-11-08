@@ -8,7 +8,7 @@ import {ComponentPropsWithoutRef, useEffect, useRef, useState} from "react";
 const tabs = [
     {
         icon: "/assets/lottie/vroom.lottie",
-        title: "User-friendly dashboard",
+        title: "Seamless Interoperability",
         isNew: false,
         backgroundPositionX: 0,
         backgroundPositionY: 0,
@@ -16,7 +16,7 @@ const tabs = [
     },
     {
         icon: "/assets/lottie/click.lottie",
-        title: "One-click optimization",
+        title: "Secure Identity Management",
         isNew: false,
         backgroundPositionX: 98,
         backgroundPositionY: 100,
@@ -24,7 +24,7 @@ const tabs = [
     },
     {
         icon: "/assets/lottie/stars.lottie",
-        title: "Smart keyword generator",
+        title: "Intelligent Task Management",
         isNew: true,
         backgroundPositionX: 100,
         backgroundPositionY: 27,
@@ -152,11 +152,10 @@ export function Features() {
             <section className={"py-20 md:py-24"}>
                 <div className={"container"}>
                     <h2 className={"text-5xl md:text-6xl font-medium text-center tracking-tighter"}>
-                        Elevate your SEO efforts.
+                        Revolutionizing AI Agent Collaboration
                     </h2>
                     <p className={"text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5"}>
-                        From small startups to large enterprises, our AI-driven tool has
-                        revolutionized the way businesses approach SEO.
+                        P3AI is transforming AI agent interactions, ensuring seamless communication and secure task execution.
                     </p>
 
                     <div className={"mt-10 grid lg:grid-cols-3 gap-3"}>
