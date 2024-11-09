@@ -1,8 +1,8 @@
 "use client";
 
-import {DotLottieCommonPlayer, DotLottiePlayer,} from "@dotlottie/react-player";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import ProductImage from "@/assets/product-image.png";
-import {animate, motion, useMotionTemplate, useMotionValue, ValueAnimationTransition,} from "framer-motion";
+import {animate, motion, useMotionTemplate, useMotionValue, ValueAnimationTransition} from "framer-motion";
 import {ComponentPropsWithoutRef, useEffect, useRef, useState} from "react";
 
 const tabs = [
@@ -32,12 +32,28 @@ const tabs = [
     }
 ];
 
-const FeatureTab = (
-    props: (typeof tabs)[number] &
-        ComponentPropsWithoutRef<"div"> & { selected: boolean }
-) => {
+interface FeatureTabProps extends ComponentPropsWithoutRef<"div"> {
+    icon: string;
+    title: string;
+    isNew: boolean;
+    selected: boolean;
+    backgroundPositionX: number;
+    backgroundPositionY: number;
+    backgroundSizeX: number;
+}
+
+const FeatureTab = ({ 
+    icon, 
+    title, 
+    isNew, 
+    selected, 
+    onClick,
+    backgroundPositionX,
+    backgroundPositionY,
+    backgroundSizeX 
+}: FeatureTabProps) => {
     const tabRef = useRef<HTMLDivElement>(null);
-    const dotLottieRef = useRef<DotLottieCommonPlayer>(null);
+    const [dotLottie, setDotLottie] = useState<any>(null);
 
     const xPercentage = useMotionValue(0);
     const yPercentage = useMotionValue(0);
@@ -45,7 +61,7 @@ const FeatureTab = (
     const maskImage = useMotionTemplate`radial-gradient(80px 80px at ${xPercentage}% ${yPercentage}%, black, transparent)`;
 
     useEffect(() => {
-        if (!tabRef.current || !props.selected) return;
+        if (!tabRef.current || !selected) return;
 
         xPercentage.set(0);
         yPercentage.set(0);
@@ -69,43 +85,45 @@ const FeatureTab = (
 
         animate(xPercentage, [0, 100, 100, 0, 0], options);
         animate(yPercentage, [0, 0, 100, 100, 0], options);
-    }, [props.selected]);
+    }, [selected]);
 
     const handleTabHover = () => {
-        if (dotLottieRef.current === null) return;
-        dotLottieRef.current.seek(0);
-        dotLottieRef.current.play();
+        if (dotLottie) {
+            dotLottie.stop();
+            dotLottie.play();
+        }
+    };
+
+    const dotLottieRefCallback = (ref: any) => {
+        setDotLottie(ref);
     };
 
     return (
         <div
             onMouseEnter={handleTabHover}
-            className={
-                "border border-muted flex items-center p-2.5 gap-2.5 rounded-xl relative cursor-pointer hover:bg-muted/30"
-            }
+            className="border border-muted flex items-center p-2.5 gap-2.5 rounded-xl relative cursor-pointer hover:bg-muted/30"
             ref={tabRef}
-            onClick={props.onClick}
+            onClick={onClick}
         >
-            {props.selected && (
+            {selected && (
                 <motion.div
                     style={{maskImage}}
-                    className={
-                        "absolute inset-0 -m-px border border-[#A369FF] rounded-xl"
-                    }
+                    className="absolute inset-0 -m-px border border-[#A369FF] rounded-xl"
                 />
             )}
 
-            <div className={"size-12 border border-muted rounded-lg inline-flex items-center justify-center"}>
-                <DotLottiePlayer
-                    src={props.icon}
-                    className={"size-5"}
-                    autoplay
-                    ref={dotLottieRef}
+            <div className="size-12 border border-muted rounded-lg inline-flex items-center justify-center">
+                <DotLottieReact
+                    src={icon}
+                    autoplay={false}
+                    loop={false}
+                    className="size-5"
+                    dotLottieRefCallback={dotLottieRefCallback}
                 />
             </div>
-            <div className={"font-medium"}>{props.title}</div>
-            {props.isNew && (
-                <div className={"text-xs rounded-full text-white px-2 py-0.5 bg-[#8c44ff] font-semibold"}>
+            <div className="font-medium">{title}</div>
+            {isNew && (
+                <div className="text-xs rounded-full text-white px-2 py-0.5 bg-[#8c44ff] font-semibold">
                     New
                 </div>
             )}
@@ -148,38 +166,38 @@ export function Features() {
     };
 
     return (
-        <>
-            <section className={"py-20 md:py-24"}>
-                <div className={"container"}>
-                    <h2 className={"text-5xl md:text-6xl font-medium text-center tracking-tighter"}>
-                        The Future of Autonomous AI Communication
-                    </h2>
-                    <p className={"text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5"}>
-                        P3 AI is revolutionizing the way AI agents interact, solving the current challenges of AI agent interoperability across diverse networks.
-                    </p>
+        <section className="py-20 md:py-24">
+            <div className="container">
+                <h2 className="text-5xl md:text-6xl font-medium text-center tracking-tighter">
+                    The Future of Autonomous AI Communication
+                </h2>
+                <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5">
+                    P3 AI is revolutionizing the way AI agents interact, solving the current challenges of AI agent interoperability across diverse networks.
+                </p>
 
-                    <div className={"mt-10 grid lg:grid-cols-3 gap-3"}>
-                        {tabs.map((tab, index) => (
-                            <FeatureTab
-                                {...tab}
-                                key={tab.title}
-                                onClick={() => handleSelectTab(index)}
-                                selected={selectedTab === index}
-                            />
-                        ))}
-                    </div>
-                    <motion.div className={"border border-muted rounded-xl p-2.5 mt-3"}>
-                        <div
-                            className={"aspect-video bg-cover border border-muted rounded-lg"}
-                            style={{
-                                backgroundPosition: backgroundPosition.get(),
-                                backgroundSize: backgroundSize.get(),
-                                backgroundImage: `url(${ProductImage.src})`,
-                            }}
-                        ></div>
-                    </motion.div>
+                <div className="mt-10 grid lg:grid-cols-3 gap-3">
+                    {tabs.map((tab, index) => (
+                        <FeatureTab
+                            {...tab}
+                            key={tab.title}
+                            onClick={() => handleSelectTab(index)}
+                            selected={selectedTab === index}
+                        />
+                    ))}
                 </div>
-            </section>
-        </>
+                <motion.div className="border border-muted rounded-xl p-2.5 mt-3">
+                    <div
+                        className="aspect-video bg-cover border border-muted rounded-lg"
+                        style={{
+                            backgroundPosition: backgroundPosition.get(),
+                            backgroundSize: backgroundSize.get(),
+                            backgroundImage: `url(${ProductImage.src})`,
+                        }}
+                    />
+                </motion.div>
+            </div>
+        </section>
     );
 }
+
+export default Features;
