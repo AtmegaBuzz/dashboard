@@ -22,13 +22,12 @@ export default function SiteHeader() {
                         <section className={"max-md:hidden"}>
                             <nav className={"flex gap-8 items-center text-sm"}>
                                 <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Features</Link>
-                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Developers</Link>
-                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Pricing</Link>
-                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Changelog</Link>
+                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Roadmap</Link>
+                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Technical Components</Link>
                             </nav>
                         </section>
                         <section className={"flex max-md:gap-4 items-center"}>
-                            <ActionButton label={"Join Waitlist"} />
+                            <ActionButton label={"Get Started"} />
                             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                                 <SheetTrigger>
                                     <MenuIcon className={"size-9 md:hidden hover:text-white/70 transition"}/>

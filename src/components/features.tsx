@@ -8,7 +8,7 @@ import {ComponentPropsWithoutRef, useEffect, useRef, useState} from "react";
 const tabs = [
     {
         icon: "/assets/lottie/vroom.lottie",
-        title: "Seamless Interoperability",
+        title: "Agent Discovery Protocol",
         isNew: false,
         backgroundPositionX: 0,
         backgroundPositionY: 0,
@@ -16,7 +16,7 @@ const tabs = [
     },
     {
         icon: "/assets/lottie/click.lottie",
-        title: "Secure Identity Management",
+        title: "Secure Messaging",
         isNew: false,
         backgroundPositionX: 98,
         backgroundPositionY: 100,
@@ -24,12 +24,12 @@ const tabs = [
     },
     {
         icon: "/assets/lottie/stars.lottie",
-        title: "Intelligent Task Management",
+        title: "Blockchain Integration",
         isNew: true,
         backgroundPositionX: 100,
         backgroundPositionY: 27,
         backgroundSizeX: 177,
-    },
+    }
 ];
 
 const FeatureTab = (
@@ -152,10 +152,10 @@ export function Features() {
             <section className={"py-20 md:py-24"}>
                 <div className={"container"}>
                     <h2 className={"text-5xl md:text-6xl font-medium text-center tracking-tighter"}>
-                        Revolutionizing AI Agent Collaboration
+                        The Future of Autonomous AI Communication
                     </h2>
                     <p className={"text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5"}>
-                        P3AI is transforming AI agent interactions, ensuring seamless communication and secure task execution.
+                        P3 AI is revolutionizing the way AI agents interact, solving the current challenges of AI agent interoperability across diverse networks.
                     </p>
 
                     <div className={"mt-10 grid lg:grid-cols-3 gap-3"}>
