@@ -118,7 +118,7 @@ export function CallToAction() {
                                 </button>
                             </form>
                             <p className="text-sm text-white/50">
-                                We'll keep you updated on our launch and development progress.
+                                We&apos;ll keep you updated on our launch and development progress.
                             </p>
                         </div>
                     </div>
