@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import SiteLogo from "@/assets/logo.svg"
-import {CodeXml, Feather, MenuIcon, Newspaper, Wallet2} from "lucide-react";
-import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet"
-import {useState} from "react";
-import {ActionButton} from "@/components/action-button";
+import { CodeXml, Feather, MenuIcon, Newspaper, Wallet2 } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useState } from "react";
+import { ActionButton } from "@/components/action-button";
+import { ConnectButton, useAccount } from '@particle-network/connectkit';
 
 export default function SiteHeader() {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+
+    const { address, isConnected, chainId } = useAccount();
+
     return (
         <>
             <header className={"py-4 border-b max-md:backdrop-blur md:border-none sticky top-0 z-10"}>
@@ -28,14 +32,21 @@ export default function SiteHeader() {
                         </section>
                         <section className={"flex max-md:gap-4 items-center"}>
                             <ActionButton label={"Get Started"} />
+                            {/* <ConnectButton /> */}
+                            {/* {isConnected && (
+                                <>
+                                    <h2>Address: {address}</h2>
+                                    <h2>Chain ID: {chainId}</h2>
+                                </>
+                            )} */}
                             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                                 <SheetTrigger>
-                                    <MenuIcon className={"size-9 md:hidden hover:text-white/70 transition"}/>
+                                    <MenuIcon className={"size-9 md:hidden hover:text-white/70 transition"} />
                                 </SheetTrigger>
                                 <SheetContent side={"top"} className={"p-8"}>
                                     <div className={"inline-flex items-center center gap-3"}>
                                         <div className={"border size-8 rounded-lg inline-flex items-center justify-center"}>
-                                            <SiteLogo className={"size-6 h-auto"}/>
+                                            <SiteLogo className={"size-6 h-auto"} />
                                         </div>
                                         <p className={"font-bold"}>AI Startup Landing Page</p>
                                     </div>
