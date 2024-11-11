@@ -163,7 +163,7 @@ const NetworkAnimation = () => {
 };
 
 
-export default function Component() {
+export default function Auth() {
 
     const { address, chain, status, isConnected, connector } = useAccount();
 
