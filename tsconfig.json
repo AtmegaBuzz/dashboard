@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/dashboard/add-identity"  ],
   "exclude": [
     "node_modules"
   ]

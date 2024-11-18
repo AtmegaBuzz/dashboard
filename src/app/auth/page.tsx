@@ -212,14 +212,20 @@ export default function Auth() {
           }
         }
 
+    const checkUserAlreadyExists = async ()=>{
+
+        // let exists = await contract?.methods.isRegisteredUser(web3?.defaultAccount).call();
+        // console.log(exists)
+        console.log(web3?.eth.accounts,"====")
+    }
+
 
     useEffect(() => {
         if (isConnected){
-            loadContract()
+            loadContract();
+            checkUserAlreadyExists();
         }
     }, [isConnected])
-
-    useSmartAccount()
 
 
 

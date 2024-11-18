@@ -7,6 +7,7 @@ import { Icons } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
 import { usePathname } from 'next/navigation';
 import Link from "next/link";
+import SiteLogo from "@/assets/logo.svg"
 
 interface MainNavProps {
   items?: MainNavItem[];
@@ -26,8 +27,7 @@ export function MainNav({ items, children }: MainNavProps) {
           "hidden items-center space-x-2 hover:text-foreground/80 md:flex"
         )}
       >
-        <img src="@/assets/logo.svg" className="w-8 h-8"/>
-
+        <SiteLogo />
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
         </span>

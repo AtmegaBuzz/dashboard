@@ -11,8 +11,6 @@ import { ConnectButton, useAccount } from '@particle-network/connectkit';
 export default function SiteHeader() {
     const [isOpen, setIsOpen] = useState(false);
 
-    const { address, isConnected, chainId } = useAccount();
-
     return (
         <>
             <header className={"py-4 border-b max-md:backdrop-blur md:border-none sticky top-0 z-10"}>
@@ -31,7 +29,9 @@ export default function SiteHeader() {
                             </nav>
                         </section>
                         <section className={"flex max-md:gap-4 items-center"}>
-                            <ActionButton label={"Get Started"} />
+                            <Link href={"/auth"}>
+                                <ActionButton onClick={()=>{}} label={"Get Started"} />
+                            </Link>
                             {/* <ConnectButton /> */}
                             {/* {isConnected && (
                                 <>
