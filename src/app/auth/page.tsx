@@ -18,6 +18,8 @@ import { AbiItem } from 'web3-utils'
 import { ABI } from '@/lib/abi'
 import { DIDDocumentCreator } from '@/lib/did'
 import { ParticleProvider } from '@particle-network/provider';
+import Link from 'next/link'
+import { useRouter } from "next/navigation"
 
 const NetworkAnimation = () => {
     const initialNodes = [
@@ -166,7 +168,7 @@ const NetworkAnimation = () => {
 export default function Auth() {
 
     const { address, chain, status, isConnected, connector } = useAccount();
-
+    const router = useRouter();
     const [contract, setContract] = useAtom(contractAtom);
     const [web3, setWeb3] = useAtom(web3Atom);
 
@@ -211,6 +213,7 @@ export default function Auth() {
             console.log(tx?.transactionHash);
 
 
+            router.push("/dashboard/add-identity")
 
           } catch (error: any) {
             console.error(error.message);

@@ -36,7 +36,7 @@ type User = {
     title: string;
     disabled?: boolean;
     external?: boolean;
-    icon?: keyof typeof Icons;
+    icon?: string;
   } & (
     | {
         href: string;
