@@ -197,10 +197,15 @@ export default function Auth() {
             const didDocument = DIDDocumentCreator.createDIDDocument(address!, false);
             DIDDocumentCreator.validateDIDDocument(didDocument);
             const did = JSON.stringify(didDocument, null, 2);
+
             
+            const gasEstimate = await contract?.methods.registerUserDID(did).estimateGas({ from: address });
+
             console.log(did)
             let tx = await contract?.methods.registerUserDID(did).send({
-                from: address
+                from: address,
+                value: '0x00',
+                gasPrice: gasEstimate?.toString()
             });
 
             console.log(tx?.transactionHash);
