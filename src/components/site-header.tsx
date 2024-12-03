@@ -11,11 +11,40 @@ import { ConnectButton, useAccount } from '@particle-network/connectkit';
 export default function SiteHeader() {
     const [isOpen, setIsOpen] = useState(false);
 
+    const scrollToSection = (sectionId: string) => {
+        setIsOpen(false); // Close mobile menu if open
+        const element = document.getElementById(sectionId);
+        if (element) {
+            const offset = 80; // Height of fixed header
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    };
+
+    const navLinks = [
+        { label: "About", sectionId: "about" },
+        { label: "Architecture", sectionId: "technical" },
+        { label: "Features", sectionId: "features" },
+        { label: "Roadmap", sectionId: "roadmap" },
+        { label: "Litepaper", sectionId: "litepaper" }
+    ];
+
+    const mobileNavLinks = [
+        { label: "Features", sectionId: "features", Icon: Feather },
+        { label: "Developers", sectionId: "technical", Icon: CodeXml },
+        { label: "Roadmap", sectionId: "roadmap", Icon: Newspaper }
+    ];
+
     return (
         <>
-            <header className={"py-4 border-b max-md:backdrop-blur md:border-none sticky top-0 z-10"}>
+            <header className={"py-4 border-b max-md:backdrop-blur md:border-none sticky top-0 z-10 bg-[#0B0611]/80"}>
                 <div className={"container max-md:px-4"}>
-                    <div className={"flex items-center justify-between md:border md:p-2.5 md:rounded-xl max-w-2xl mx-auto md:backdrop-blur "}>
+                    <div className={"flex items-center justify-between md:border md:p-2.5 md:rounded-xl max-w-2xl mx-auto md:backdrop-blur"}>
                         <Link href={"/"}>
                             <div className={"border size-10 rounded-lg inline-flex items-center justify-center"}>
                                 <SiteLogo className={"size-8 h-auto"} />
@@ -23,22 +52,31 @@ export default function SiteHeader() {
                         </Link>
                         <section className={"max-md:hidden"}>
                             <nav className={"flex gap-8 items-center text-sm"}>
-                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Features</Link>
-                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Roadmap</Link>
-                                <Link href={"#"} className={"text-white/70 hover:text-white transition"}>Technical Components</Link>
+                                {navLinks.map((link) => {
+
+                                    let actionFunction = () => scrollToSection(link.sectionId)
+
+                                    if (link.sectionId === "litepaper") {
+                                        actionFunction = () => window.open('/docs/litepaper.pdf', '_blank');
+                                    }
+
+                                    return (
+                                        <button
+                                            key={link.sectionId}
+                                            onClick={actionFunction}
+                                            className={"text-white/70 hover:text-white transition cursor-pointer"}
+                                        >
+                                            {link.label}
+                                        </button>
+                                    )
+                                })}
                             </nav>
                         </section>
                         <section className={"flex max-md:gap-4 items-center"}>
                             <Link href={"/auth"}>
-                                <ActionButton onClick={()=>{}} label={"Get Started"} />
+                                <ActionButton onClick={() => { }} label={"Get Started"} />
                             </Link>
-                            {/* <ConnectButton /> */}
-                            {/* {isConnected && (
-                                <>
-                                    <h2>Address: {address}</h2>
-                                    <h2>Chain ID: {chainId}</h2>
-                                </>
-                            )} */}
+
                             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                                 <SheetTrigger>
                                     <MenuIcon className={"size-9 md:hidden hover:text-white/70 transition"} />
@@ -48,26 +86,29 @@ export default function SiteHeader() {
                                         <div className={"border size-8 rounded-lg inline-flex items-center justify-center"}>
                                             <SiteLogo className={"size-6 h-auto"} />
                                         </div>
-                                        <p className={"font-bold"}>AI Startup Landing Page</p>
+                                        <p className={"font-bold"}>P3AI Protocol</p>
                                     </div>
                                     <div className={"mt-8 mb-4"}>
                                         <nav className={"grid gap-4 items-center text-lg"}>
-                                            <Link href={"#"} className={"flex items-center gap-3 text-white/70 hover:text-white transition"}>
-                                                <Feather className={"size-6"} />
-                                                Features
-                                            </Link>
-                                            <Link href={"#"} className={"flex items-center gap-3 text-white/70 hover:text-white transition"}>
-                                                <CodeXml className={"size-6"} />
-                                                Developers
-                                            </Link>
-                                            <Link href={"#"} className={"flex items-center gap-3 text-white/70 hover:text-white transition"}>
-                                                <Wallet2 className={"size-6"} />
-                                                Pricing
-                                            </Link>
-                                            <Link href={"#"} className={"flex items-center gap-3 text-white/70 hover:text-white transition"}>
-                                                <Newspaper className={"size-6"} />
-                                                Changelog
-                                            </Link>
+                                            {mobileNavLinks.map((link) => {
+
+                                                let actionFunction = () => scrollToSection(link.sectionId)
+
+                                                if (link.sectionId === "litepaper") {
+                                                    actionFunction = () => window.open('/docs/litepaper.pdf', '_blank');
+                                                }
+
+                                                return (
+                                                    <button
+                                                        key={link.sectionId}
+                                                        onClick={actionFunction}
+                                                        className={"flex items-center gap-3 text-white/70 hover:text-white transition w-full text-left"}
+                                                    >
+                                                        <link.Icon className={"size-6"} />
+                                                        {link.label}
+                                                    </button>
+                                                )
+                                            })}
                                         </nav>
                                     </div>
                                 </SheetContent>

@@ -1,200 +1,148 @@
-"use client";
+"use client"
 
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import ProductImage from "@/assets/product-image.png";
-import {animate, motion, useMotionTemplate, useMotionValue, ValueAnimationTransition} from "framer-motion";
-import {ComponentPropsWithoutRef, useEffect, useRef, useState} from "react";
+import { motion } from "framer-motion";
+import {
+    Fingerprint,
+    Search,
+    ShieldCheck,
+    Wallet,
+    Users,
+    LucideIcon,
+    MessageSquare,
+    Puzzle,
+    Code
+} from "lucide-react";
 
-const tabs = [
-    {
-        icon: "/assets/lottie/vroom.lottie",
-        title: "Agent Discovery Protocol",
-        isNew: false,
-        backgroundPositionX: 0,
-        backgroundPositionY: 0,
-        backgroundSizeX: 150,
-    },
-    {
-        icon: "/assets/lottie/click.lottie",
-        title: "Secure Messaging",
-        isNew: false,
-        backgroundPositionX: 98,
-        backgroundPositionY: 100,
-        backgroundSizeX: 135,
-    },
-    {
-        icon: "/assets/lottie/stars.lottie",
-        title: "Blockchain Integration",
-        isNew: true,
-        backgroundPositionX: 100,
-        backgroundPositionY: 27,
-        backgroundSizeX: 177,
-    }
-];
-
-interface FeatureTabProps extends ComponentPropsWithoutRef<"div"> {
-    icon: string;
+interface Feature {
     title: string;
-    isNew: boolean;
-    selected: boolean;
-    backgroundPositionX: number;
-    backgroundPositionY: number;
-    backgroundSizeX: number;
+    description: string;
+    Icon: LucideIcon;
 }
 
-const FeatureTab = ({ 
-    icon, 
-    title, 
-    isNew, 
-    selected, 
-    onClick,
-    backgroundPositionX,
-    backgroundPositionY,
-    backgroundSizeX 
-}: FeatureTabProps) => {
-    const tabRef = useRef<HTMLDivElement>(null);
-    const [dotLottie, setDotLottie] = useState<any>(null);
-
-    const xPercentage = useMotionValue(0);
-    const yPercentage = useMotionValue(0);
-
-    const maskImage = useMotionTemplate`radial-gradient(80px 80px at ${xPercentage}% ${yPercentage}%, black, transparent)`;
-
-    useEffect(() => {
-        if (!tabRef.current || !selected) return;
-
-        xPercentage.set(0);
-        yPercentage.set(0);
-        const {height, width} = tabRef.current?.getBoundingClientRect();
-        const circumference = height * 2 + width * 2;
-        const times = [
-            0,
-            width / circumference,
-            (width + height) / circumference,
-            (width * 2 + height) / circumference,
-            1,
-        ];
-
-        const options: ValueAnimationTransition = {
-            times,
-            duration: 5,
-            repeat: Infinity,
-            repeatType: "loop",
-            ease: "linear",
-        };
-
-        animate(xPercentage, [0, 100, 100, 0, 0], options);
-        animate(yPercentage, [0, 0, 100, 100, 0], options);
-    }, [selected]);
-
-    const handleTabHover = () => {
-        if (dotLottie) {
-            dotLottie.stop();
-            dotLottie.play();
-        }
-    };
-
-    const dotLottieRefCallback = (ref: any) => {
-        setDotLottie(ref);
-    };
-
+interface FeatureCardProps {
+    feature: Feature;
+}
+const FeatureCard = ({ feature }: FeatureCardProps) => {
     return (
-        <div
-            onMouseEnter={handleTabHover}
-            className="border border-muted flex items-center p-2.5 gap-2.5 rounded-xl relative cursor-pointer hover:bg-muted/30"
-            ref={tabRef}
-            onClick={onClick}
+        <motion.div
+            className="relative group border border-muted p-4 sm:p-6 md:p-10 rounded-xl bg-[linear-gradient(to_bottom_left,rgb(140,69,255,0.3),black)] w-[280px] sm:w-[320px] md:w-[340px] lg:w-[380px] flex-none"
+            whileHover={{ scale: 1.02 }}
+            transition={{ 
+                scale: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20
+                }
+            }}
         >
-            {selected && (
-                <motion.div
-                    style={{maskImage}}
-                    className="absolute inset-0 -m-px border border-[#A369FF] rounded-xl"
-                />
-            )}
-
-            <div className="size-12 border border-muted rounded-lg inline-flex items-center justify-center">
-                <DotLottieReact
-                    src={icon}
-                    autoplay={false}
-                    loop={false}
-                    className="size-5"
-                    dotLottieRefCallback={dotLottieRefCallback}
-                />
-            </div>
-            <div className="font-medium">{title}</div>
-            {isNew && (
-                <div className="text-xs rounded-full text-white px-2 py-0.5 bg-[#8c44ff] font-semibold">
-                    New
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 rounded-xl bg-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" />
+            
+            {/* Animated border */}
+            <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-purple-500/50 to-blue-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur" />
+            
+            {/* Content container */}
+            <div className="relative bg-black/50 rounded-lg p-4 sm:p-6 md:p-8 backdrop-blur-sm border border-white/10 transition-colors duration-300 group-hover:border-purple-500/50">
+                <div className="relative mb-4 sm:mb-6">
+                    <div className="relative inline-block p-2 sm:p-3 transition-all duration-300 after:content-[''] after:absolute after:inset-0 after:bg-[rgb(140,69,244)] after:mix-blend-soft-light after:rounded-lg before:content-[''] before:absolute before:inset-0 before:border before:border-white/30 before:z-10 before:rounded-lg group-hover:after:bg-purple-500">
+                        <feature.Icon className="size-6 sm:size-7 md:size-8 relative z-20 text-white transition-transform duration-500 group-hover:rotate-12" />
+                    </div>
                 </div>
-            )}
-        </div>
+                
+                <h3 className="text-lg sm:text-xl md:text-2xl font-medium tracking-tight mb-2 bg-clip-text transition-colors duration-300 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-purple-400">
+                    {feature.title}
+                </h3>
+                
+                <p className="text-white/70 text-sm sm:text-base md:text-lg tracking-tight transition-colors duration-300 group-hover:text-white/90">
+                    {feature.description}
+                </p>
+
+                {/* Animated corner accents */}
+                <div className="absolute top-0 left-0 w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 border-t-2 border-l-2 border-transparent rounded-tl-lg transition-colors duration-300 group-hover:border-purple-500/50" />
+                <div className="absolute top-0 right-0 w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 border-t-2 border-r-2 border-transparent rounded-tr-lg transition-colors duration-300 group-hover:border-purple-500/50" />
+                <div className="absolute bottom-0 left-0 w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 border-b-2 border-l-2 border-transparent rounded-bl-lg transition-colors duration-300 group-hover:border-purple-500/50" />
+                <div className="absolute bottom-0 right-0 w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 border-b-2 border-r-2 border-transparent rounded-br-lg transition-colors duration-300 group-hover:border-purple-500/50" />
+            </div>
+        </motion.div>
     );
 };
 
+const features: Feature[] = [
+    {
+        title: "Universal Identity",
+        description: "Generate and manage unique identities for your AI agents through our developer dashboard.",
+        Icon: Fingerprint
+    },
+    {
+        title: "Agent Discovery",
+        description: "Find specialized AI agents across the network based on capabilities and requirements.",
+        Icon: Search
+    },
+    {
+        title: "Seamless Integration",
+        description: "Simple Python SDK wrapper for LangChain and CrewAI agents with just a few lines of code.",
+        Icon: Code
+    },
+    {
+        title: "Verifiable Credentials",
+        description: "Agents earn and store credentials based on successful task completions and interactions.",
+        Icon: ShieldCheck
+    },
+    {
+        title: "Crypto Payments",
+        description: "Built-in payment system for agent services with secure blockchain transactions.",
+        Icon: Wallet
+    },
+    {
+        title: "Agent Collaboration",
+        description: "Enable your agents to work together, share tasks, and coordinate actions seamlessly.",
+        Icon: Users
+    },
+    {
+        title: "Standardized Communication",
+        description: "Pre-built protocols for secure and efficient agent-to-agent interaction.",
+        Icon: MessageSquare
+    },
+    {
+        title: "Third-party Integrations",
+        description: "Connect with calendar, meeting, and productivity tools for real-world actions.",
+        Icon: Puzzle
+    }
+];
+
 export function Features() {
-    const [selectedTab, setSelectedTab] = useState(0);
-
-    const backgroundPositionX = useMotionValue(tabs[0].backgroundPositionX);
-    const backgroundPositionY = useMotionValue(tabs[0].backgroundPositionY);
-    const backgroundSizeX = useMotionValue(tabs[0].backgroundSizeX);
-
-    const backgroundPosition = useMotionTemplate`${backgroundPositionX}% ${backgroundPositionY}%`;
-    const backgroundSize = useMotionTemplate`${backgroundSizeX}% auto`;
-
-    const handleSelectTab = (index: number) => {
-        setSelectedTab(index);
-
-        const animateOptions: ValueAnimationTransition = {
-            duration: 2,
-            ease: "easeInOut",
-        };
-        animate(
-            backgroundSizeX,
-            [backgroundSizeX.get(), 100, tabs[index].backgroundSizeX],
-            animateOptions
-        );
-        animate(
-            backgroundPositionX,
-            [backgroundPositionX.get(), tabs[index].backgroundPositionX],
-            animateOptions
-        );
-        animate(
-            backgroundPositionY,
-            [backgroundPositionY.get(), tabs[index].backgroundPositionY],
-            animateOptions
-        );
-    };
-
     return (
-        <section className="py-20 md:py-24">
-            <div className="container">
-                <h2 className="text-5xl md:text-6xl font-medium text-center tracking-tighter">
-                    The Future of Autonomous AI Communication
+        <section id="features" className="py-10 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
+            <div className="container px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-center tracking-tighter">
+                    Empower Your AI Agents
                 </h2>
-                <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5">
-                    P3 AI is revolutionizing the way AI agents interact, solving the current challenges of AI agent interoperability across diverse networks.
+                <p className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-3 sm:mt-4 md:mt-5">
+                    Transform your AI agents into collaborative entities with P3AI's powerful SDK and integration tools.
                 </p>
+                <div className="relative mt-8 sm:mt-10">
+                    {/* Gradient masks */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[100px] bg-gradient-to-r from-[#0B0611] to-transparent z-10" />
+                    <div className="absolute right-0 top-0 bottom-0 w-[100px] bg-gradient-to-l from-[#0B0611] to-transparent z-10" />
 
-                <div className="mt-10 grid lg:grid-cols-3 gap-3">
-                    {tabs.map((tab, index) => (
-                        <FeatureTab
-                            {...tab}
-                            key={tab.title}
-                            onClick={() => handleSelectTab(index)}
-                            selected={selectedTab === index}
-                        />
-                    ))}
+                    <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
+                        <motion.div
+                            initial={{ translateX: '-50%' }}
+                            animate={{ translateX: '0' }}
+                            transition={{
+                                repeat: Infinity,
+                                duration: 50,
+                                ease: "linear",
+                                repeatType: "loop"
+                            }}
+                            className="flex flex-none gap-3 sm:gap-4 md:gap-5"
+                        >
+                            {[...features, ...features].map((feature, index) => (
+                                <FeatureCard key={index} feature={feature} />
+                            ))}
+                        </motion.div>
+                    </div>
                 </div>
-                <motion.div className="border border-muted rounded-xl p-2.5 mt-3">
-                    <div
-                        className="aspect-video bg-cover border border-muted rounded-lg"
-                        style={{
-                            backgroundPosition: backgroundPosition.get(),
-                            backgroundSize: backgroundSize.get(),
-                            backgroundImage: `url(${ProductImage.src})`,
-                        }}
-                    />
-                </motion.div>
             </div>
         </section>
     );
