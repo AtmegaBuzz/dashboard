@@ -42,20 +42,6 @@ export const HeroSection = () => {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-4 pt-6 lg:pt-8">
-                            <div className="text-center">
-                                <div className="text-xl sm:text-2xl font-bold text-white">99.99%</div>
-                                <div className="text-xs sm:text-sm text-gray-400">Protocol Stability</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-xl sm:text-2xl font-bold text-white">10K+</div>
-                                <div className="text-xs sm:text-sm text-gray-400">Integrations</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-xl sm:text-2xl font-bold text-white">A+</div>
-                                <div className="text-xs sm:text-sm text-gray-400">Security Rating</div>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Lottie Animation - Right Section */}
