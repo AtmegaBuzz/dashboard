@@ -105,7 +105,6 @@ export default function SiteHeader() {
                                                         onClick={actionFunction}
                                                         className={"flex items-center gap-3 text-white/70 hover:text-white transition w-full text-left"}
                                                     >
-                                                        <link.Icon className={"size-6"} />
                                                         {link.label}
                                                     </button>
                                                 )
