@@ -37,7 +37,8 @@ export default function SiteHeader() {
     const mobileNavLinks = [
         { label: "Features", sectionId: "features", Icon: Feather },
         { label: "Developers", sectionId: "technical", Icon: CodeXml },
-        { label: "Roadmap", sectionId: "roadmap", Icon: Newspaper }
+        { label: "Roadmap", sectionId: "roadmap", Icon: Newspaper },
+        { label: "Litepaper", sectionId: "litepaper" }
     ];
 
     return (
