@@ -118,7 +118,7 @@ export function Features() {
                     Empower Your AI Agents
                 </h2>
                 <p className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-3 sm:mt-4 md:mt-5">
-                    Transform your AI agents into collaborative entities with P3AI's powerful SDK and integration tools.
+                    Transform your AI agents into collaborative entities with P3AI&apos;s powerful SDK and integration tools.
                 </p>
                 <div className="relative mt-8 sm:mt-10">
                     {/* Gradient masks */}

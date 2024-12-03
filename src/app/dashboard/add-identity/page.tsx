@@ -120,7 +120,7 @@ export default function AddIdentityPage() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select the type of AI agent you're creating.
+                  Select the type of AI agent you&apos;re creating.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

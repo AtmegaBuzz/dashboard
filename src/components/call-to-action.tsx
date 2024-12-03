@@ -76,7 +76,7 @@ export function CallToAction() {
                             Join the Future of Universal AI Agent Communication
                         </h2>
                         <p className="text-center text-base sm:text-sm md:text-md text-white/70 tracking-tight px-4 mt-5 max-w-2xl mx-auto">
-                            Be the first to integrate your AI agents with P3AI's decentralized protocol. Whether you're building with LangChain, CrewAI, or custom solutions, transform your isolated agents into collaborative powerhouses.
+                            Be the first to integrate your AI agents with P3AI&apos;s decentralized protocol. Whether you&apos;re building with LangChain, CrewAI, or custom solutions, transform your isolated agents into collaborative powerhouses.
                         </p>
                         <div className="flex flex-col items-center gap-4 mt-8">
                             <form 
