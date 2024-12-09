@@ -1,11 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import { User, Mail } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ConnectButton, useAccount, useConnect, useConnectors, useParticleAuth, useSmartAccount } from '@particle-network/connectkit'
 import Web3 from "web3";
 import { motion, useAnimation } from "framer-motion";
 import { Brain, Hexagon, Network, Cpu, CircuitBoard } from "lucide-react";
@@ -13,13 +10,10 @@ import { useEffect, useCallback } from "react";
 import { PersonIcon } from '@radix-ui/react-icons'
 import { useAtom } from 'jotai'
 import { contractAtom, web3Atom } from '@/store/global.store'
-import Contract from 'web3-eth-contract'
-import { AbiItem } from 'web3-utils'
 import { ABI } from '@/lib/abi'
 import { DIDDocumentCreator } from '@/lib/did'
-import { ParticleProvider } from '@particle-network/provider';
-import Link from 'next/link'
 import { useRouter } from "next/navigation"
+import ConnectWalletButton from '@/components/ui/ConnectWalletButton';
 
 const NetworkAnimation = () => {
     const initialNodes = [
@@ -167,73 +161,72 @@ const NetworkAnimation = () => {
 
 export default function Auth() {
 
-    const { address, chain, status, isConnected, connector } = useAccount();
     const router = useRouter();
     const [contract, setContract] = useAtom(contractAtom);
     const [web3, setWeb3] = useAtom(web3Atom);
 
-    const loadContract = async () => {
+    // const loadContract = async () => {
         
-        const provider = await connector?.getProvider();
-        const _web3 = new Web3(provider as string);
-        setWeb3(_web3);
+    //     const provider = await connector?.getProvider();
+    //     const _web3 = new Web3(provider as string);
+    //     setWeb3(_web3);
     
-        const contractInstance = new _web3.eth.Contract(
-            ABI,
-            process.env.NEXT_PUBLIC_DID_REGISTRY_CONTRACT_ADDRESS as string
-        );
+    //     const contractInstance = new _web3.eth.Contract(
+    //         ABI,
+    //         process.env.NEXT_PUBLIC_DID_REGISTRY_CONTRACT_ADDRESS as string
+    //     );
         
-        setContract(contractInstance);
-    }
+    //     setContract(contractInstance);
+    // }
 
     
-    const registerUser = async (e: any) => {
+    // const registerUser = async (e: any) => {
 
-        e.preventDefault();
+    //     e.preventDefault();
 
-        try {
-            if (!isConnected) {
-              throw new Error("No account connected");
-            }
+    //     try {
+    //         if (!isConnected) {
+    //           throw new Error("No account connected");
+    //         }
       
-            const didDocument = DIDDocumentCreator.createDIDDocument(address!, false);
-            DIDDocumentCreator.validateDIDDocument(didDocument);
-            const did = JSON.stringify(didDocument, null, 2);
+    //         const didDocument = DIDDocumentCreator.createDIDDocument(address!, false);
+    //         DIDDocumentCreator.validateDIDDocument(didDocument);
+    //         const did = JSON.stringify(didDocument, null, 2);
 
             
-            const gasEstimate = await contract?.methods.registerUserDID(did).estimateGas({ from: address });
+    //         const gasEstimate = await contract?.methods.registerUserDID(did).estimateGas({ from: address });
 
-            console.log(did)
-            let tx = await contract?.methods.registerUserDID(did).send({
-                from: address,
-                value: '0x00',
-                gasPrice: gasEstimate?.toString()
-            });
+    //         console.log(did)
+    //         let tx = await contract?.methods.registerUserDID(did).send({
+    //             from: address,
+    //             value: '0x00',
+    //             gasPrice: gasEstimate?.toString()
+    //         });
 
-            console.log(tx?.transactionHash);
-
-
-            router.push("/dashboard/add-identity")
-
-          } catch (error: any) {
-            console.error(error.message);
-          }
-        }
-
-    const checkUserAlreadyExists = async ()=>{
-
-        // let exists = await contract?.methods.isRegisteredUser(web3?.defaultAccount).call();
-        // console.log(exists)
-        console.log(web3?.eth.accounts,"====")
-    }
+    //         console.log(tx?.transactionHash);
 
 
-    useEffect(() => {
-        if (isConnected){
-            loadContract();
-            checkUserAlreadyExists();
-        }
-    }, [isConnected])
+    //         router.push("/dashboard/add-identity")
+
+    //       } catch (error: any) {
+    //         console.error(error.message);
+    //       }
+    //     }
+
+    // const checkUserAlreadyExists = async ()=>{
+
+    //     // let exists = await contract?.methods.isRegisteredUser(web3?.defaultAccount).call();
+    //     // console.log(exists)
+    //     console.log(web3?.eth.accounts,"====")
+    // }
+
+
+    // useEffect(() => {
+    //     if (isConnected){
+    //         loadContract();
+    //         checkUserAlreadyExists();
+    //     }
+    // }, [isConnected])
 
 
 
@@ -249,7 +242,7 @@ export default function Auth() {
             <div className='flex w-[60%] flex-col'>
 
                 <div className='flex justify-end p-3'>
-                    <ConnectButton label='Connect Wallet' />
+                    <ConnectWalletButton/>
                 </div>
                 <div className="flex-1 flex items-center justify-center p-8">
 
@@ -307,7 +300,7 @@ export default function Auth() {
                                 </div>
                             </div>
 
-                            <Button className="w-full" onClick={registerUser}>
+                            <Button className="w-full" >
                                 Get my AI Identity
                             </Button>
                         </form>

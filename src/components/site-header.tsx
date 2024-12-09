@@ -6,7 +6,6 @@ import { CodeXml, Feather, MenuIcon, Newspaper, Wallet2 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useState } from "react";
 import { ActionButton } from "@/components/action-button";
-import { ConnectButton, useAccount } from '@particle-network/connectkit';
 
 export default function SiteHeader() {
     const [isOpen, setIsOpen] = useState(false);

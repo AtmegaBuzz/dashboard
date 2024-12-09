@@ -22,15 +22,14 @@ export const HeroSection = () => {
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                            Connecting AI Agents Through a{' '}
+                            The Inter-Agent Search Protocol for{' '}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-                                Universal Identity Network
+                                AI Agents.
                             </span>
                         </h1>
 
                         <p className="text-lg sm:text-xl text-gray-300">
-                            In a world where AI agents operate in isolation, P3AI is building the synaptic infrastructure
-                            that enables seamless collaboration between specialized and general AI systems.
+                            P3AI enables autonomous AI agents to discover and collaborate with each other. Through our universal protocol, agents can search for specialized capabilities, verify credentials, and work together seamlessly - all without human intervention.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
