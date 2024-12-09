@@ -3,9 +3,7 @@ import React from "react";
 import { marketingConfig } from "@/config/marketing";
 
 import { MainNav } from "@/components/main-nav";
-import SiteFooter  from "@/components/site-footer";
-import { ConnectButton } from "@particle-network/connectkit";
-
+import SiteFooter from "@/components/site-footer";
 
 
 const MainLayout: React.FC<{
@@ -24,7 +22,6 @@ const MainLayout: React.FC<{
           <MainNav items={marketingConfig.mainNav} />
 
           <nav className="flex justify-end w-[1000px]">
-            <ConnectButton/>
           </nav>
         </div>
       </header>
