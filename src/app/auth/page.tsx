@@ -14,8 +14,8 @@ import { useWaitForTransactionReceipt, useWriteContract, useReadContract, useSig
 import { contractConfig } from '@/config/contract-config';
 import { useAccount } from "wagmi";
 import { useToast } from "@/hooks/use-toast"
-import { encodeFunctionData } from 'viem';
 import { sha256Hash } from '@/lib/utils';
+import { z } from 'zod';
 
 const NetworkAnimation = () => {
     const initialNodes = [
@@ -161,6 +161,13 @@ const NetworkAnimation = () => {
 };
 
 
+const UserRegisterSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email format'),
+    website: z.string().optional(),
+});
+type UserRegistration = z.infer<typeof UserRegisterSchema>;
+
 export default function Auth() {
 
     const router = useRouter();
@@ -169,16 +176,35 @@ export default function Auth() {
     const [didStr, setDIDStr] = useState("");
     const { isConnected, address } = useAccount();
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [website, setWebsite] = useState("");
+
+    const [formData, setFormData] = useState<UserRegistration>({
+        name: '',
+        email: '',
+        website: '',
+    });
+
+    const [errors, setErrors] = useState<{
+        name?: string;
+        email?: string;
+        website?: string;
+    }>({});
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        console.log(name)
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
 
-    const { data: approvalHash, writeContractAsync, error: writeContractError, isError: isWriteContractError } = useWriteContract()
+    const { data: approvalHash, writeContractAsync, error: writeContractError, isError: isWriteContractError, isPending: writeContractPending } = useWriteContract()
 
-    const { isSuccess: isApprovalConfirmed, error } = useWaitForTransactionReceipt({
+    const { isSuccess: isApprovalConfirmed } = useWaitForTransactionReceipt({
         hash: approvalHash,
     });
+
 
     const { data: resolveDIDData, isError: isResolveDIDError, error: resolveDIDError } = useReadContract({
         abi: contractConfig.abi,
@@ -196,6 +222,24 @@ export default function Auth() {
         e.preventDefault();
 
         try {
+            UserRegisterSchema.parse(formData);
+            setErrors({});
+        } catch (error: any) {
+            if (error instanceof z.ZodError) {
+                const formErrors = error.errors.reduce((acc, curr) => {
+                    if (curr.path.length > 0) {
+                        acc[curr.path[0] as keyof UserRegistration] = curr.message;
+                    }
+                    return acc;
+                }, {} as typeof errors);
+
+                setErrors(formErrors);
+            }
+            return;
+        }
+
+        try {
+
             if (!isConnected) {
                 throw new Error("No account connected");
             }
@@ -220,50 +264,60 @@ export default function Auth() {
                 ]
             });
 
-            console.log(res);
-
-            if (isApprovalConfirmed) {
-                toast({
-                    title: "Error",
-                    description: "You are already registered or Something went Wrong!",
-                })
-                return;
-            }
-
-
-            const signature = await signMessageAsync({message: process.env.NEXT_PUBLIC_MESSAGE!})
-
-            const resp = await fetch("/api/auth", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    website: website,
-                    did_str: did,
-                    wallet_address: address,
-                    signature: signature
-                })
-            })
-
-            console.log(resp);
-
-            toast({
-                title: "Success",
-                description: "Sucessfully regitered User to the Registry",
-            })
-
-
-            // router.push("/dashboard/add-identity")
-
         } catch (error: any) {
             console.error(error.message);
         }
     }
 
-    console.log(writeContractError, error, "++++");
+
+    const createUserNode = async () => {
+
+        const signature = await signMessageAsync({ message: process.env.NEXT_PUBLIC_MESSAGE! })
+
+
+        const resp = await fetch("/api/auth", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: formData.name,
+                email: formData.email,
+                website: formData.website,
+                did_str: didStr,
+                wallet_address: address,
+                signature: signature
+            })
+        })
+
+        if (resp.status !== 201) {
+            toast({
+                title: "Error",
+                description: "Error Occured",
+            })
+            return
+        }
+
+
+        toast({
+            title: "Success",
+            description: "Sucessfully regitered User to the Registry",
+        })
+
+    }
+
+    useEffect(() => {
+        if (isApprovalConfirmed) {
+            createUserNode();
+        } 
+        else if (!isApprovalConfirmed && !writeContractPending) {
+            toast({
+                title: "Error",
+                description: "User Already registered",
+            })
+        }
+
+    }, [isApprovalConfirmed, writeContractPending])
 
 
     return (
@@ -286,8 +340,9 @@ export default function Auth() {
                             <h2 className="text-3xl font-bold text-foreground">Welcome Back</h2>
                             <p className="mt-2 text-sm text-muted-foreground">Sign in to your AI Identity</p>
                         </div>
-                        <form className="mt-8 space-y-6" onClick={registerUser}>
+                        <form className="mt-8 space-y-6" onSubmit={registerUser}>
                             <div className="space-y-4">
+                                {/* Name Input */}
                                 <div>
                                     <div className="relative">
                                         <div className='absolute left-2 h-full flex items-center'>
@@ -300,59 +355,79 @@ export default function Auth() {
                                             required
                                             className="pl-10"
                                             placeholder="Full Name"
-                                            onChange={(e)=> setName(e.target.value)}
-                                            value={name}
+                                            onChange={handleChange}
+                                            value={formData.name}
                                         />
+                                        {errors.name && (
+                                            <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                                        )}
                                     </div>
                                 </div>
 
+                                {/* Email Input */}
                                 <div>
                                     <div className="relative">
                                         <div className='absolute left-2 h-full flex items-center'>
                                             <Mail className="w-5" />
                                         </div>
                                         <Input
+                                            name="email"
                                             type="email"
                                             autoComplete="email"
                                             required
                                             className="pl-10"
                                             placeholder="Email"
-                                            onChange={(e)=> setEmail(e.target.value)}
-                                            value={email}
+                                            value={formData.email}
+                                            onChange={handleChange}
                                         />
+                                        {errors.email && (
+                                            <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                                        )}
                                     </div>
                                 </div>
+
+                                {/* GitHub/Website Input */}
                                 <div>
                                     <div className="relative">
                                         <div className='absolute left-2 h-full flex items-center'>
                                             <Mail className="w-5" />
                                         </div>
                                         <Input
-                                            name="github"
+                                            name="website"
                                             type="text"
                                             autoComplete="github"
-                                            required
                                             className="pl-10"
                                             placeholder="https://github.com/aicreator"
-                                            onChange={(e)=> setWebsite(e.target.value)}
-                                            value={website}
+                                            value={formData.website || ''}
+                                            onChange={handleChange}
                                         />
+                                        {errors.website && (
+                                            <p className="mt-1 text-sm text-red-500">{errors.website}</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
 
-                            {
-                                isResolveDIDError === false && (
-                                    <Button className="w-full" onClick={registerUser} >
-                                        Login
-                                    </Button>
-                                )
-                            }
+                            {/* Conditional Login Button */}
+                            {isResolveDIDError === false && (
+                                <Button
+                                    className="w-full"
+                                    onClick={() => {
+                                        // Add login logic
+                                        console.log('Login clicked');
+                                    }}
+                                >
+                                    Login
+                                </Button>
+                            )}
 
-                            <Button className="w-full" type="submit" >
+                            {/* Submit Button */}
+                            <Button
+                                className="w-full"
+                                type="submit"
+                            >
                                 Get my AI Identity
                             </Button>
-
                         </form>
                     </div>
                 </div>
