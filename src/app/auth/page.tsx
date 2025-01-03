@@ -3,17 +3,19 @@
 import { User, Mail } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import Web3 from "web3";
 import { motion, useAnimation } from "framer-motion";
 import { Brain, Hexagon, Network, Cpu, CircuitBoard } from "lucide-react";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { PersonIcon } from '@radix-ui/react-icons'
-import { useAtom } from 'jotai'
-import { contractAtom, web3Atom } from '@/store/global.store'
-import { ABI } from '@/lib/abi'
 import { DIDDocumentCreator } from '@/lib/did'
 import { useRouter } from "next/navigation"
 import ConnectWalletButton from '@/components/ui/ConnectWalletButton';
+import { useWaitForTransactionReceipt, useWriteContract, useReadContract, useSignMessage } from 'wagmi';
+import { contractConfig } from '@/config/contract-config';
+import { useAccount } from "wagmi";
+import { useToast } from "@/hooks/use-toast"
+import { encodeFunctionData } from 'viem';
+import { sha256Hash } from '@/lib/utils';
 
 const NetworkAnimation = () => {
     const initialNodes = [
@@ -162,73 +164,106 @@ const NetworkAnimation = () => {
 export default function Auth() {
 
     const router = useRouter();
-    const [contract, setContract] = useAtom(contractAtom);
-    const [web3, setWeb3] = useAtom(web3Atom);
+    const { toast } = useToast();
 
-    // const loadContract = async () => {
-        
-    //     const provider = await connector?.getProvider();
-    //     const _web3 = new Web3(provider as string);
-    //     setWeb3(_web3);
-    
-    //     const contractInstance = new _web3.eth.Contract(
-    //         ABI,
-    //         process.env.NEXT_PUBLIC_DID_REGISTRY_CONTRACT_ADDRESS as string
-    //     );
-        
-    //     setContract(contractInstance);
-    // }
+    const [didStr, setDIDStr] = useState("");
+    const { isConnected, address } = useAccount();
 
-    
-    // const registerUser = async (e: any) => {
-
-    //     e.preventDefault();
-
-    //     try {
-    //         if (!isConnected) {
-    //           throw new Error("No account connected");
-    //         }
-      
-    //         const didDocument = DIDDocumentCreator.createDIDDocument(address!, false);
-    //         DIDDocumentCreator.validateDIDDocument(didDocument);
-    //         const did = JSON.stringify(didDocument, null, 2);
-
-            
-    //         const gasEstimate = await contract?.methods.registerUserDID(did).estimateGas({ from: address });
-
-    //         console.log(did)
-    //         let tx = await contract?.methods.registerUserDID(did).send({
-    //             from: address,
-    //             value: '0x00',
-    //             gasPrice: gasEstimate?.toString()
-    //         });
-
-    //         console.log(tx?.transactionHash);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [website, setWebsite] = useState("");
 
 
-    //         router.push("/dashboard/add-identity")
+    const { data: approvalHash, writeContractAsync, error: writeContractError, isError: isWriteContractError } = useWriteContract()
 
-    //       } catch (error: any) {
-    //         console.error(error.message);
-    //       }
-    //     }
+    const { isSuccess: isApprovalConfirmed, error } = useWaitForTransactionReceipt({
+        hash: approvalHash,
+    });
 
-    // const checkUserAlreadyExists = async ()=>{
+    const { data: resolveDIDData, isError: isResolveDIDError, error: resolveDIDError } = useReadContract({
+        abi: contractConfig.abi,
+        address: contractConfig.address as any,
+        functionName: "resolveDID",
+        args: [
+            `did:p3ai:user:${address}`
+        ]
+    });
 
-    //     // let exists = await contract?.methods.isRegisteredUser(web3?.defaultAccount).call();
-    //     // console.log(exists)
-    //     console.log(web3?.eth.accounts,"====")
-    // }
+    const { signMessageAsync } = useSignMessage();
+
+    const registerUser = async (e: any) => {
+
+        e.preventDefault();
+
+        try {
+            if (!isConnected) {
+                throw new Error("No account connected");
+            }
+
+            const didDocument = DIDDocumentCreator.createDIDDocument(address!, false);
+            DIDDocumentCreator.validateDIDDocument(didDocument);
+            const did = JSON.stringify(didDocument, null, 2);
+
+            setDIDStr(did);
+
+            console.log(did);
+
+            const didHash = await sha256Hash(did);
+            console.log(didHash)
+
+            const res = await writeContractAsync({
+                abi: contractConfig.abi,
+                address: contractConfig.address! as any,
+                functionName: "registerUserDID",
+                args: [
+                    didHash
+                ]
+            });
+
+            console.log(res);
+
+            if (isApprovalConfirmed) {
+                toast({
+                    title: "Error",
+                    description: "You are already registered or Something went Wrong!",
+                })
+                return;
+            }
 
 
-    // useEffect(() => {
-    //     if (isConnected){
-    //         loadContract();
-    //         checkUserAlreadyExists();
-    //     }
-    // }, [isConnected])
+            const signature = await signMessageAsync({message: process.env.NEXT_PUBLIC_MESSAGE!})
+
+            const resp = await fetch("/api/auth", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    website: website,
+                    did_str: did,
+                    wallet_address: address,
+                    signature: signature
+                })
+            })
+
+            console.log(resp);
+
+            toast({
+                title: "Success",
+                description: "Sucessfully regitered User to the Registry",
+            })
 
 
+            // router.push("/dashboard/add-identity")
+
+        } catch (error: any) {
+            console.error(error.message);
+        }
+    }
+
+    console.log(writeContractError, error, "++++");
 
 
     return (
@@ -242,7 +277,7 @@ export default function Auth() {
             <div className='flex w-[60%] flex-col'>
 
                 <div className='flex justify-end p-3'>
-                    <ConnectWalletButton/>
+                    <ConnectWalletButton />
                 </div>
                 <div className="flex-1 flex items-center justify-center p-8">
 
@@ -251,7 +286,7 @@ export default function Auth() {
                             <h2 className="text-3xl font-bold text-foreground">Welcome Back</h2>
                             <p className="mt-2 text-sm text-muted-foreground">Sign in to your AI Identity</p>
                         </div>
-                        <form className="mt-8 space-y-6">
+                        <form className="mt-8 space-y-6" onClick={registerUser}>
                             <div className="space-y-4">
                                 <div>
                                     <div className="relative">
@@ -265,6 +300,8 @@ export default function Auth() {
                                             required
                                             className="pl-10"
                                             placeholder="Full Name"
+                                            onChange={(e)=> setName(e.target.value)}
+                                            value={name}
                                         />
                                     </div>
                                 </div>
@@ -280,6 +317,8 @@ export default function Auth() {
                                             required
                                             className="pl-10"
                                             placeholder="Email"
+                                            onChange={(e)=> setEmail(e.target.value)}
+                                            value={email}
                                         />
                                     </div>
                                 </div>
@@ -295,14 +334,25 @@ export default function Auth() {
                                             required
                                             className="pl-10"
                                             placeholder="https://github.com/aicreator"
+                                            onChange={(e)=> setWebsite(e.target.value)}
+                                            value={website}
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <Button className="w-full" >
+                            {
+                                isResolveDIDError === false && (
+                                    <Button className="w-full" onClick={registerUser} >
+                                        Login
+                                    </Button>
+                                )
+                            }
+
+                            <Button className="w-full" type="submit" >
                                 Get my AI Identity
                             </Button>
+
                         </form>
                     </div>
                 </div>

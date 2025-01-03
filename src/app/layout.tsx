@@ -3,16 +3,17 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { clsx } from "clsx";
-import { http, createConfig } from 'wagmi'
-import { arbitrumSepolia } from 'wagmi/chains'
+import { http, createConfig, injected, WagmiProvider } from 'wagmi'
+import { baseSepolia } from 'wagmi/chains'
 import { metaMask } from 'wagmi/connectors'
-import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
-const config = createConfig({
-  chains: [arbitrumSepolia],
-  connectors: [metaMask({
+export const wagmiConfig = createConfig({
+  chains: [baseSepolia],
+  connectors: [
+    injected(),
+    metaMask({
     dappMetadata: {
       name: "P3 Ai Network",
       url: "https://p3ai.network",
@@ -20,7 +21,7 @@ const config = createConfig({
     },
   })],
   transports: {
-    [arbitrumSepolia.id]: http(),
+    [baseSepolia.id]: http(),
   },
 })
 
@@ -33,7 +34,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={clsx(inter.className, "antialiased")}>
-        <WagmiProvider config={config}>
+        <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             {children}
           </QueryClientProvider>

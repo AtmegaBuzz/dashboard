@@ -2,11 +2,6 @@ export const ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
 				"internalType": "address",
 				"name": "delegate",
 				"type": "address"
@@ -18,6 +13,11 @@ export const ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -27,13 +27,13 @@ export const ABI = [
 				"type": "string"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "address",
 				"name": "agentAddress",
 				"type": "address"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "address",
 				"name": "creator",
 				"type": "address"
@@ -43,61 +43,10 @@ export const ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			}
-		],
-		"name": "deactivateDID",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			}
-		],
-		"name": "DIDDeactivated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "updater",
-				"type": "address"
-			}
-		],
-		"name": "DIDUpdated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
-				"indexed": false,
 				"internalType": "address",
 				"name": "delegate",
 				"type": "address"
@@ -111,12 +60,6 @@ export const ABI = [
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
-				"indexed": false,
 				"internalType": "address",
 				"name": "delegate",
 				"type": "address"
@@ -159,35 +102,12 @@ export const ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
 				"internalType": "address",
 				"name": "delegate",
 				"type": "address"
 			}
 		],
 		"name": "removeDelegate",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "newDocument",
-				"type": "string"
-			}
-		],
-		"name": "updateDID",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -202,7 +122,7 @@ export const ABI = [
 				"type": "string"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "address",
 				"name": "controller",
 				"type": "address"
@@ -210,6 +130,64 @@ export const ABI = [
 		],
 		"name": "UserDIDRegistered",
 		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "string",
+				"name": "did",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "verifier",
+				"type": "address"
+			}
+		],
+		"name": "UserDIDVerified",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "verifyUserDID",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTotalUsers",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getUnverifiedUsers",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -233,11 +211,6 @@ export const ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "did",
-				"type": "string"
-			},
-			{
 				"internalType": "address",
 				"name": "delegate",
 				"type": "address"
@@ -258,16 +231,29 @@ export const ABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "user",
+				"name": "userAddress",
 				"type": "address"
 			}
 		],
-		"name": "isRegisteredUser",
+		"name": "isUserVerified",
 		"outputs": [
 			{
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -311,6 +297,11 @@ export const ABI = [
 			{
 				"internalType": "bool",
 				"name": "isAIAgent",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "isVerified",
 				"type": "bool"
 			}
 		],

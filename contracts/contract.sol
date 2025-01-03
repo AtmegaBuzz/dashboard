@@ -4,101 +4,117 @@ pragma solidity ^0.8.0;
 contract P3AIDIDRegistry {
     // Struct to store DID information
     struct DIDDocument {
-        string document;        // The DID document stored as a JSON string
+        string documentHash;        // The DID document stored as a JSON string
         address controller;     // The address that controls this DID
-        address creator;        // The address that created this DID (important for AI agents)
+        address creator;        // The address that created this DID
         uint256 timestamp;     // Last update timestamp
         bool active;           // Whether the DID is active
         bool isAIAgent;        // Whether this DID belongs to an AI agent
+        bool isVerified;       // Whether the DID is verified by a delegate
     }
     
-    // Mapping from DID string to DID Document
+    // Registry state variables
     mapping(string => DIDDocument) private didDocuments;
-    
-    // Mapping to track user's AI agents
     mapping(address => string[]) private userAIAgents;
-    
-    // Mapping to track if an address has a registered user DID
     mapping(address => bool) private registeredUsers;
+    mapping(address => bool) private approvedDelegates;
+
+    address[] private allUsers;
+
     
-    // Mapping to track delegated controllers for DIDs
-    mapping(string => mapping(address => bool)) private delegates;
+    // Owner of the registry
+    address public owner;
     
     // Events
-    event UserDIDRegistered(string indexed did, address controller);
-    event AIAgentDIDRegistered(string indexed did, address agentAddress, address creator);
-    event DIDUpdated(string indexed did, address updater);
-    event DIDDeactivated(string indexed did);
-    event DelegateAdded(string indexed did, address delegate);
-    event DelegateRemoved(string indexed did, address delegate);
+    event UserDIDRegistered(string indexed did, address indexed controller);
+    event UserDIDVerified(string indexed did, address indexed verifier);
+    event AIAgentDIDRegistered(string indexed did, address indexed agentAddress, address indexed creator);
+    event DelegateAdded(address indexed delegate);
+    event DelegateRemoved(address indexed delegate);
     
     // Modifiers
-    modifier onlyController(string memory did) {
-        require(
-            didDocuments[did].controller == msg.sender || delegates[did][msg.sender],
-            "Not authorized to modify this DID"
-        );
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
         _;
     }
     
-    modifier didExists(string memory did) {
-        require(didDocuments[did].controller != address(0), "DID does not exist");
+    modifier onlyDelegate() {
+        require(approvedDelegates[msg.sender], "Only approved delegates can call this function");
         _;
     }
     
-    modifier didActive(string memory did) {
-        require(didDocuments[did].active, "DID is not active");
-        _;
-    }
-
-    modifier onlyRegisteredUser() {
-        require(registeredUsers[msg.sender], "Must be a registered user");
-        _;
+    constructor() {
+        owner = msg.sender;
+        approvedDelegates[msg.sender] = true; // Owner is automatically a delegate
     }
     
-    /**
-     * @dev Register a new user DID
-     * @param document The DID document as a JSON string
-     */
-    function registerUserDID(string memory document) public {
+    function registerUserDID(string memory documentHash) public {
+        // 1. Add validation for document size
+        require(bytes(documentHash).length > 0 && bytes(documentHash).length <= 256, "Invalid document size");
+        
+        // 2. Check if msg.sender is not zero address
+        require(msg.sender != address(0), "Invalid sender");
+        
+        // 3. Check if user is not already registered
         require(!registeredUsers[msg.sender], "User already registered");
         
+        // 4. Generate DID first and check if it doesn't exist
         string memory did = generateUserDID(msg.sender);
+        require(didDocuments[did].controller == address(0), "DID already exists");
         
-        didDocuments[did] = DIDDocument({
-            document: document,
+        // 5. Create DID document with memory struct first
+        DIDDocument memory newDoc = DIDDocument({
+            documentHash: documentHash,
             controller: msg.sender,
             creator: msg.sender,
             timestamp: block.timestamp,
             active: true,
-            isAIAgent: false
+            isAIAgent: false,
+            isVerified: false
         });
         
+        // 6. Update state variables in order
+        didDocuments[did] = newDoc;
         registeredUsers[msg.sender] = true;
+        allUsers.push(msg.sender);
+        
+        // 7. Emit event at the end
         emit UserDIDRegistered(did, msg.sender);
     }
     
     /**
-     * @dev Register a new AI agent DID
-     * @param agentAddress The address/public key of the AI agent
-     * @param document The DID document as a JSON string
+     * @dev Verify a user's DID - only callable by delegates
+     * @param userAddress The address of the user to verify
      */
-    function registerAIAgentDID(address agentAddress, string memory document) 
-        public 
-        onlyRegisteredUser 
-    {
+    function verifyUserDID(address userAddress) public onlyDelegate {
+        require(registeredUsers[userAddress], "User not registered");
+        
+        string memory did = generateUserDID(userAddress);
+        require(!didDocuments[did].isVerified, "DID already verified");
+        
+        didDocuments[did].isVerified = true;
+        didDocuments[did].timestamp = block.timestamp;
+        
+        emit UserDIDVerified(did, msg.sender);
+    }
+    
+
+    function registerAIAgentDID(address agentAddress, string memory documentHash) public {
+        string memory userDID = generateUserDID(msg.sender);
+        require(didDocuments[userDID].isVerified, "User DID must be verified to register AI agents");
         require(agentAddress != address(0), "Invalid agent address");
         
         string memory did = generateAIAgentDID(agentAddress);
         require(didDocuments[did].controller == address(0), "Agent DID already registered");
         
         didDocuments[did] = DIDDocument({
-            document: document,
-            controller: agentAddress,
+            documentHash: documentHash,
+            controller: msg.sender,    // User is the controller of AI agent
             creator: msg.sender,
             timestamp: block.timestamp,
             active: true,
-            isAIAgent: true
+            isAIAgent: true,
+            isVerified: true          // Auto-verified since user is verified
         });
         
         userAIAgents[msg.sender].push(did);
@@ -106,185 +122,118 @@ contract P3AIDIDRegistry {
     }
     
     /**
-     * @dev Update an existing DID document
-     * @param did The DID to update
-     * @param newDocument The new DID document
+     * @dev Add a new delegate
+     * @param delegate Address to add as delegate
      */
-    function updateDID(string memory did, string memory newDocument) 
-        public 
-        didExists(did) 
-        didActive(did) 
-        onlyController(did) 
-    {
-        didDocuments[did].document = newDocument;
-        didDocuments[did].timestamp = block.timestamp;
-        
-        emit DIDUpdated(did, msg.sender);
+    function addDelegate(address delegate) public onlyOwner {
+        require(!approvedDelegates[delegate], "Already a delegate");
+        approvedDelegates[delegate] = true;
+        emit DelegateAdded(delegate);
     }
     
     /**
-     * @dev Add a delegate for a DID
-     * @param did The DID to add a delegate for
-     * @param delegate The address to add as a delegate
+     * @dev Remove a delegate
+     * @param delegate Address to remove as delegate
      */
-    function addDelegate(string memory did, address delegate) 
-        public 
-        didExists(did) 
-        didActive(did) 
-        onlyController(did) 
-    {
-        require(delegate != address(0), "Invalid delegate address");
-        require(!delegates[did][delegate], "Already a delegate");
-        
-        delegates[did][delegate] = true;
-        
-        emit DelegateAdded(did, delegate);
-    }
-    
-    /**
-     * @dev Remove a delegate for a DID
-     * @param did The DID to remove a delegate from
-     * @param delegate The address to remove as a delegate
-     */
-    function removeDelegate(string memory did, address delegate) 
-        public 
-        didExists(did) 
-        didActive(did) 
-        onlyController(did) 
-    {
-        require(delegates[did][delegate], "Not a delegate");
-        
-        delegates[did][delegate] = false;
-        
-        emit DelegateRemoved(did, delegate);
-    }
-    
-    /**
-     * @dev Deactivate a DID
-     * @param did The DID to deactivate
-     */
-    function deactivateDID(string memory did) 
-        public 
-        didExists(did) 
-        didActive(did) 
-        onlyController(did) 
-    {
-        didDocuments[did].active = false;
-        
-        emit DIDDeactivated(did);
+    function removeDelegate(address delegate) public onlyOwner {
+        require(delegate != owner, "Cannot remove owner as delegate");
+        require(approvedDelegates[delegate], "Not a delegate");
+        approvedDelegates[delegate] = false;
+        emit DelegateRemoved(delegate);
     }
     
     /**
      * @dev Resolve a DID to get its document
      * @param did The DID to resolve
-     * @return document The DID document
-     * @return controller The controller address
-     * @return creator The creator address
-     * @return timestamp Last update timestamp
-     * @return active Whether the DID is active
-     * @return isAIAgent Whether this is an AI agent DID
      */
-    function resolveDID(string memory did) 
-        public 
-        view 
-        returns (
-            string memory document,
-            address controller,
-            address creator,
-            uint256 timestamp,
-            bool active,
-            bool isAIAgent
-        ) 
-    {
+    function resolveDID(string memory did) public view returns (
+        string memory document,
+        address controller,
+        address creator,
+        uint256 timestamp,
+        bool active,
+        bool isAIAgent,
+        bool isVerified
+    ) {
         DIDDocument memory didDoc = didDocuments[did];
         require(didDoc.controller != address(0), "DID does not exist");
         
         return (
-            didDoc.document,
+            didDoc.documentHash,
             didDoc.controller,
             didDoc.creator,
             didDoc.timestamp,
             didDoc.active,
-            didDoc.isAIAgent
+            didDoc.isAIAgent,
+            didDoc.isVerified
         );
     }
     
     /**
      * @dev Get all AI agents registered by a user
      * @param user The user's address
-     * @return An array of DIDs belonging to the user's AI agents
      */
-    function getUserAIAgents(address user) 
-        public 
-        view 
-        returns (string[] memory) 
-    {
+    function getUserAIAgents(address user) public view returns (string[] memory) {
         return userAIAgents[user];
     }
     
     /**
-     * @dev Check if an address is a delegate for a DID
-     * @param did The DID to check
+     * @dev Check if a user is verified
+     * @param userAddress The address to check
+     */
+    function isUserVerified(address userAddress) public view returns (bool) {
+        string memory did = generateUserDID(userAddress);
+        return didDocuments[did].isVerified;
+    }
+
+    /**
+     * @dev Fetch all the unverified users
+    */
+    function getUnverifiedUsers() public  view returns (address[] memory) {
+        uint256 unverifiedCount = 0;
+
+        for (uint256 i = 0; i < allUsers.length; i++) {
+            if (!isUserVerified(allUsers[i])) {
+                unverifiedCount++;
+            }
+        }
+
+        address[] memory unverifiedUsers = new address[](unverifiedCount);
+
+        uint256 currentIndex = 0;
+        for (uint256 i = 0; i < allUsers.length; i++) {
+            if (!isUserVerified(allUsers[i])) {
+                unverifiedUsers[currentIndex] = allUsers[i];
+                currentIndex++;
+            }
+        }
+
+        return unverifiedUsers;
+
+    }
+
+    function getTotalUsers() public view returns (uint256) {
+        return allUsers.length;
+    }
+    
+    /**
+     * @dev Check if an address is a delegate
      * @param delegate The address to check
-     * @return bool True if the address is a delegate
      */
-    function isDelegate(string memory did, address delegate) 
-        public 
-        view 
-        returns (bool) 
-    {
-        return delegates[did][delegate];
+    function isDelegate(address delegate) public view returns (bool) {
+        return approvedDelegates[delegate];
     }
     
-    /**
-     * @dev Check if an address has a registered user DID
-     * @param user The address to check
-     * @return bool True if the address has a registered user DID
-     */
-    function isRegisteredUser(address user) 
-        public 
-        view 
-        returns (bool) 
-    {
-        return registeredUsers[user];
-    }
-    
-    /**
-     * @dev Generate a user DID string
-     * @param userAddress The user's address
-     * @return The generated DID string
-     */
-    function generateUserDID(address userAddress) 
-        internal 
-        pure 
-        returns (string memory) 
-    {
+    // Helper functions for DID generation
+    function generateUserDID(address userAddress) internal pure returns (string memory) {
         return string(abi.encodePacked("did:p3ai:user:", toHexString(userAddress)));
     }
     
-    /**
-     * @dev Generate an AI agent DID string
-     * @param agentAddress The AI agent's address
-     * @return The generated DID string
-     */
-    function generateAIAgentDID(address agentAddress) 
-        internal 
-        pure 
-        returns (string memory) 
-    {
+    function generateAIAgentDID(address agentAddress) internal pure returns (string memory) {
         return string(abi.encodePacked("did:p3ai:agent:", toHexString(agentAddress)));
     }
     
-    /**
-     * @dev Convert an address to its hex string representation
-     * @param addr The address to convert
-     * @return The hex string
-     */
-    function toHexString(address addr) 
-        internal 
-        pure 
-        returns (string memory) 
-    {
+    function toHexString(address addr) internal pure returns (string memory) {
         bytes memory buffer = new bytes(40);
         for(uint256 i = 0; i < 20; i++) {
             bytes1 b = bytes1(uint8(uint256(uint160(addr)) / (2**(8*(19 - i)))));
@@ -296,16 +245,7 @@ contract P3AIDIDRegistry {
         return string(buffer);
     }
     
-    /**
-     * @dev Convert a byte to its hex char representation
-     * @param b The byte to convert
-     * @return The hex char
-     */
-    function char(bytes1 b) 
-        internal 
-        pure 
-        returns (bytes1) 
-    {
+    function char(bytes1 b) internal pure returns (bytes1) {
         if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
         else return bytes1(uint8(b) + 0x57);
     }
