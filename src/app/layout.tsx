@@ -48,6 +48,17 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <title>P3 AI Network</title>
+        <meta name="description" content="The Inter-Agent Search Protocol for AI Agents." />
+
+        <meta property="og:title" content="P3 AI Network" />
+        <meta property="og:description" content="The Inter-Agent Search Protocol for AI Agents" />
+        <meta property="og:image" content="https://www.p3ai.network/spectronlabs.png" />
+        <meta property="og:url" content="https://www.p3ai.network/" />
+        <meta property="og:type" content="website" />
+
+      </head>
       <body className={clsx(inter.className, "antialiased")}>
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
