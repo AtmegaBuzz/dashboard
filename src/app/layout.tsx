@@ -10,6 +10,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from "@/components/ui/toaster"
 
 
+if (typeof window === 'undefined') {
+  global.localStorage = {
+    getItem: () => null,
+    setItem: () => null,
+    removeItem: () => null
+  } as any;
+}
+
 export const wagmiConfig = createConfig({
   chains: [baseSepolia],
   connectors: [

@@ -78,22 +78,6 @@ const NetworkAnimation = () => {
                     animate={{ pathLength: 1, opacity: 0.4 }}
                     transition={{ duration: 1.5, ease: "easeInOut" }}
                 />
-                <motion.circle
-                    r="2"
-                    fill="rgb(140,69,255)"
-                    initial={{ offsetDistance: "0%" }}
-                    animate={{
-                        offsetDistance: "100%",
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "linear",
-                    }}
-                    style={{
-                        offsetPath: `path("M ${start.x}% ${start.y}% L ${end.x}% ${end.y}%")`,
-                    }}
-                />
             </>
         );
     }, []);
@@ -306,17 +290,30 @@ export default function Auth() {
 
     }
 
+
+    // Check if user already Registered
+    useEffect(() => {
+        const checkUserAlreadyRegistered = async () => {
+            const resp = await fetch(`/api/users/${address}`);
+
+            if (resp.status === 200) {
+                router.push("/dashboard")
+            }
+
+        }
+        checkUserAlreadyRegistered();
+    }, [])
+
     useEffect(() => {
         if (isApprovalConfirmed) {
             createUserNode();
-        } 
+        }
         else if (!isApprovalConfirmed && !writeContractPending) {
             toast({
                 title: "Error",
                 description: "User Already registered",
             })
         }
-
     }, [isApprovalConfirmed, writeContractPending])
 
 
