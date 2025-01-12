@@ -5,12 +5,12 @@ import { verifyMessage } from "@/lib/utils";
 import { UserRegisterSchema } from "@/schema/AuthSchema";
 
 
-export async function GET(req: Request) {
+export async function GET(req: Request, context: any) {
 
     try {
 
         const url = new URL(req.url);
-        const {address} = params;
+        const {address} = context.params;
 
         const user = await prisma.user.findFirst({
             where: {

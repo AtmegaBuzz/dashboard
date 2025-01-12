@@ -33,7 +33,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-const formSchema = z.object({
+const formSchema: any = z.object({
   agentName: z.string().min(2, {
     message: "Agent name must be at least 2 characters.",
   }),

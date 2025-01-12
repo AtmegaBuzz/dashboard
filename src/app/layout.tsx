@@ -18,7 +18,7 @@ if (typeof window === 'undefined') {
   } as any;
 }
 
-export const wagmiConfig = createConfig({
+const wagmiConfig = createConfig({
   chains: [baseSepolia],
   connectors: [
     injected(),
