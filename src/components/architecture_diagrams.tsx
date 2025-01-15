@@ -118,11 +118,11 @@ const FeatureTab = ({
         >
             {selected && (
                 <motion.div
-                    style={{maskImage}}
                     className="absolute inset-0 -m-px rounded-xl"
                     style={{ 
                         background: `linear-gradient(45deg, ${color}20, transparent)`,
-                        borderRadius: '12px'
+                        borderRadius: '12px',
+                        maskImage
                     }}
                 />
             )}

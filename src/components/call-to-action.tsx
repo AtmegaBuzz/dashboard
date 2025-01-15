@@ -62,7 +62,7 @@ export function CallToAction() {
                     className="p-1 rounded-2xl bg-gradient-to-b from-black/5 to-transparent"
                 >
                     <div className="border border-black/10 py-20 sm:py-24 px-4 sm:px-6 rounded-xl overflow-hidden relative group bg-white"
-                        style={{backgroundPositionY}}
+                        style={{}}
                     >
                         {/* Background Effects */}
                         <div className="absolute inset-0 -z-10">
