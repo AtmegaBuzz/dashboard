@@ -1,61 +1,145 @@
-'use client'
+"use client"
 
-import React from 'react';
-import { Network, Brain, Shield, Sparkles } from 'lucide-react';
+import { motion } from "framer-motion";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { ArrowRight, Github, Star, Bot, Sparkle, Zap } from 'lucide-react';
+
+const features = [
+    { 
+        icon: Bot,
+        label: "10k+ Active Agents",
+        color: "#3B82F6" // Tech Blue
+    },
+    { 
+        icon: Sparkle,
+        label: "1M+ Daily Interactions",
+        color: "#06B6D4" // AI Teal
+    },
+    {
+        icon: Zap,
+        label: "99.9% Uptime",
+        color: "#EC4899" // Innovation Pink
+    }
+];
 
 export const HeroSection = () => {
     return (
-        <div id='about' className="relative bg-gradient-to-b from-[#0B0611] via-[#0B0611] to-[#0B0611] overflow-hidden">
-            {/* Animated background effect */}
-            <div className="absolute inset-0 opacity-20">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:4rem_4rem] animate-[grid_20s_linear_infinite]" />
+        <div className="relative pt-24 overflow-hidden bg-white">
+            {/* Background decorative elements */}
+            <div className="absolute inset-0 -z-10">
+                <div className="absolute -top-40 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
+                <div className="absolute -top-40 right-20 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
+                <div className="absolute top-40 left-1/2 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
-                <div className="flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-8">
-                    {/* Content - Left Section */}
-                    <div className="w-full lg:w-1/2 space-y-6 lg:space-y-8">
-                        <div className="inline-flex items-center px-4 py-2 bg-blue-500/10 rounded-full border border-blue-500/20">
-                            <Sparkles className="w-4 h-4 text-blue-400 mr-2" />
-                            <span className="text-blue-400 text-sm font-medium">Shaping the Future of AI</span>
-                        </div>
+            <div className="container mx-auto px-4 pb-24">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
+                    {/* Left Content */}
+                    <div className="w-full lg:w-1/2 space-y-6">
+                        {/* Github Stats */}
+                        <motion.a 
+                            href="https://github.com/p3ai/sdk"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-4 bg-white hover:bg-black/5 border border-black/10 rounded-full py-1.5 pl-2 pr-4 transition-colors cursor-pointer"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <div className="flex gap-1.5 items-center bg-black/5 rounded-full py-1 px-2">
+                                <Github size={14} className="text-black" />
+                                <span className="text-xs font-medium">p3ai/sdk</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-xs">
+                                <Star size={14} className="fill-[#7678ed] text-[#7678ed]" />
+                                <span className="font-medium">2.3k stars on GitHub</span>
+                            </div>
+                        </motion.a>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                            The Inter-Agent Search Protocol for{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-                                AI Agents.
-                            </span>
-                        </h1>
+                        {/* Main Heading */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                        >
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-4">
+                                The Inter-Agent{' '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
+                                    Search Protocol{' '}
+                                </span>
+                                for AI Agents
+                            </h1>
+                            <div className="text-lg text-gray-600 max-w-xl">
+                                Enable your AI agents to discover and collaborate with each other autonomously. Built on decentralized infrastructure for secure, scalable agent interactions.
+                            </div>
+                        </motion.div>
 
-                        <p className="text-lg sm:text-xl text-gray-300">
-                            P3AI enables autonomous AI agents to discover and collaborate with each other. Through our universal protocol, agents can search for specialized capabilities, verify credentials, and work together seamlessly - all without human intervention.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity">
-                                Start Building
+                        {/* CTA Buttons */}
+                        <motion.div 
+                            className="flex flex-col sm:flex-row gap-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            <button className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity group">
+                                Get Started
+                                <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
                             </button>
-                            <button className="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 border border-white/20 rounded-lg text-white font-semibold hover:bg-white/20 transition-colors">
+                            <button className="inline-flex items-center justify-center h-12 px-6 bg-black/5 hover:bg-black/10 rounded-lg font-medium text-black transition-colors">
                                 View Documentation
                             </button>
-                        </div>
+                        </motion.div>
 
+                        {/* Stats */}
+                        <motion.div 
+                            className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-black/10"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                        >
+                            {features.map((feature, index) => (
+                                <div 
+                                    key={feature.label}
+                                    className="flex items-center gap-3"
+                                >
+                                    <div 
+                                        className="size-10 rounded-lg flex items-center justify-center"
+                                        style={{ backgroundColor: `${feature.color}10` }}
+                                    >
+                                        <feature.icon 
+                                            size={20} 
+                                            className="transition-transform group-hover:scale-110"
+                                            style={{ color: feature.color }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <div className="text-sm font-medium text-gray-600">{feature.label}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </motion.div>
                     </div>
 
-                    {/* Lottie Animation - Right Section */}
-                    <div className="w-full lg:w-1/2 h-full flex items-center justify-center">
-                        <div className="relative w-full h-full min-h-[300px] sm:min-h-[400px] lg:min-h-[600px] flex items-center justify-center">
+                    {/* Right Animation */}
+                    <div className="w-full lg:w-1/2">
+                        <motion.div 
+                            className="relative w-full aspect-square"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#7678ed]/10 to-transparent rounded-3xl" />
                             <DotLottieReact
-                                src={"/assets/lottie/ainetwork.lottie"}
-                                autoplay={true}
-                                loop={true}
-                                className="w-full h-full"
+                                src="/assets/lottie/ainetwork.lottie"
+                                autoplay
+                                loop
                             />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
+export default HeroSection;

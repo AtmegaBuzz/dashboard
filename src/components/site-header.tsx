@@ -2,19 +2,28 @@
 
 import Link from "next/link";
 import SiteLogo from "@/assets/logo.svg"
-import { CodeXml, Feather, MenuIcon, Newspaper, Wallet2 } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useState } from "react";
-import { ActionButton } from "@/components/action-button";
+import { useState, useEffect } from "react";
 
-export default function SiteHeader() {
+export default function Navbar() {
+    const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
+    // Handle scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const scrollToSection = (sectionId: string) => {
-        setIsOpen(false); // Close mobile menu if open
+        setIsOpen(false);
         const element = document.getElementById(sectionId);
         if (element) {
-            const offset = 80; // Height of fixed header
+            const offset = 80;
             const elementPosition = element.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -26,96 +35,122 @@ export default function SiteHeader() {
     };
 
     const navLinks = [
-        { label: "About", sectionId: "about" },
-        { label: "Architecture", sectionId: "technical" },
-        { label: "Features", sectionId: "features" },
-        { label: "Roadmap", sectionId: "roadmap" },
-        { label: "Litepaper", sectionId: "litepaper" }
-    ];
-
-    const mobileNavLinks = [
-        { label: "Features", sectionId: "features", Icon: Feather },
-        { label: "Developers", sectionId: "technical", Icon: CodeXml },
-        { label: "Roadmap", sectionId: "roadmap", Icon: Newspaper },
-        { label: "Litepaper", sectionId: "litepaper" }
+        { label: "Features", sectionId: "features", color: "#06B6D4" },
+        { label: "Technical", sectionId: "technical", color: "#3B82F6" },
+        { label: "Roadmap", sectionId: "roadmap", color: "#EC4899" },
+        { label: "Documentation", href: "/docs", color: "#7678ed" }
     ];
 
     return (
-        <>
-            <header className={"py-4 border-b max-md:backdrop-blur md:border-none sticky top-0 z-10 bg-[#0B0611]/80"}>
-                <div className={"container max-md:px-4"}>
-                    <div className={"flex items-center justify-between md:border md:p-2.5 md:rounded-xl max-w-2xl mx-auto md:backdrop-blur"}>
-                        <Link href={"/"}>
-                            <div className={"border size-10 rounded-lg inline-flex items-center justify-center"}>
-                                <SiteLogo className={"size-8 h-auto"} />
-                            </div>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+            isScrolled ? 'bg-white/80 backdrop-blur-lg border-b border-black/5 shadow-sm' : 'bg-white'
+        }`}>
+            <div className="container mx-auto px-4">
+                <div className="flex items-center justify-between h-16">
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center gap-2 group">
+                        <div className="size-8 border border-black/10 rounded-lg flex items-center justify-center bg-white group-hover:border-[#7678ed] transition-colors">
+                            <SiteLogo className="size-6" />
+                        </div>
+                        <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
+                            P3AI Protocol
+                        </div>
+                    </Link>
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center gap-8">
+                        {navLinks.map((link) => {
+                            const content = (
+                                <button
+                                    key={link.sectionId || link.href}
+                                    onClick={link.sectionId ? () => scrollToSection(link.sectionId) : undefined}
+                                    className="text-gray-600 hover:text-black relative group text-sm font-medium"
+                                >
+                                    {link.label}
+                                    <div 
+                                        className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full"
+                                        style={{ backgroundColor: link.color }}
+                                    />
+                                </button>
+                            );
+
+                            return link.href ? (
+                                <Link key={link.href} href={link.href}>
+                                    {content}
+                                </Link>
+                            ) : (
+                                content
+                            );
+                        })}
+                    </nav>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-4">
+                        <Link 
+                            href="/login" 
+                            className="hidden md:inline-flex text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                        >
+                            Sign In
                         </Link>
-                        <section className={"max-md:hidden"}>
-                            <nav className={"flex gap-8 items-center text-sm"}>
-                                {navLinks.map((link) => {
+                        <Link 
+                            href="/register" 
+                            className="hidden md:inline-flex h-9 px-4 items-center justify-center rounded-lg bg-[#7678ed] text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                        >
+                            Get Started
+                        </Link>
 
-                                    let actionFunction = () => scrollToSection(link.sectionId)
+                        {/* Mobile Menu Button */}
+                        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                            <SheetTrigger className="md:hidden">
+                                <Menu className="size-6 text-gray-600 hover:text-black transition-colors" />
+                            </SheetTrigger>
+                            <SheetContent side="right" className="w-full max-w-xs p-6 bg-white/80 backdrop-blur-xl border-l border-black/5">
+                                <div className="flex flex-col gap-6">
+                                    {/* Mobile Navigation Links */}
+                                    <nav className="flex flex-col gap-4">
+                                        {navLinks.map((link) => (
+                                            <button
+                                                key={link.sectionId || link.href}
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    if (link.sectionId) {
+                                                        scrollToSection(link.sectionId);
+                                                    }
+                                                }}
+                                                className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                            >
+                                                <div 
+                                                    className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
+                                                    style={{ backgroundColor: link.color }}
+                                                />
+                                                {link.label}
+                                            </button>
+                                        ))}
+                                    </nav>
 
-                                    if (link.sectionId === "litepaper") {
-                                        actionFunction = () => window.open('/docs/litepaper.pdf', '_blank');
-                                    }
-
-                                    return (
-                                        <button
-                                            key={link.sectionId}
-                                            onClick={actionFunction}
-                                            className={"text-white/70 hover:text-white transition cursor-pointer"}
+                                    {/* Mobile Action Buttons */}
+                                    <div className="grid gap-3">
+                                        <Link 
+                                            href="/login" 
+                                            className="h-10 flex items-center justify-center rounded-lg border border-black/10 text-gray-600 text-sm font-medium hover:text-black hover:border-black/20 transition-colors"
+                                            onClick={() => setIsOpen(false)}
                                         >
-                                            {link.label}
-                                        </button>
-                                    )
-                                })}
-                            </nav>
-                        </section>
-                        <section className={"flex max-md:gap-4 items-center"}>
-                            <Link href={"/auth"}>
-                                <ActionButton onClick={() => { }} label={"Get Started"} />
-                            </Link>
-
-                            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                                <SheetTrigger>
-                                    <MenuIcon className={"size-9 md:hidden hover:text-white/70 transition"} />
-                                </SheetTrigger>
-                                <SheetContent side={"top"} className={"p-8"}>
-                                    <div className={"inline-flex items-center center gap-3"}>
-                                        <div className={"border size-8 rounded-lg inline-flex items-center justify-center"}>
-                                            <SiteLogo className={"size-6 h-auto"} />
-                                        </div>
-                                        <p className={"font-bold"}>P3AI Protocol</p>
+                                            Sign In
+                                        </Link>
+                                        <Link 
+                                            href="/register" 
+                                            className="h-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            Get Started
+                                        </Link>
                                     </div>
-                                    <div className={"mt-8 mb-4"}>
-                                        <nav className={"grid gap-4 items-center text-lg"}>
-                                            {mobileNavLinks.map((link) => {
-
-                                                let actionFunction = () => scrollToSection(link.sectionId)
-
-                                                if (link.sectionId === "litepaper") {
-                                                    actionFunction = () => window.open('/docs/litepaper.pdf', '_blank');
-                                                }
-
-                                                return (
-                                                    <button
-                                                        key={link.sectionId}
-                                                        onClick={actionFunction}
-                                                        className={"flex items-center gap-3 text-white/70 hover:text-white transition w-full text-left"}
-                                                    >
-                                                        {link.label}
-                                                    </button>
-                                                )
-                                            })}
-                                        </nav>
-                                    </div>
-                                </SheetContent>
-                            </Sheet>
-                        </section>
+                                </div>
+                            </SheetContent>
+                        </Sheet>
                     </div>
                 </div>
-            </header>
-        </>
-    )
+            </div>
+        </header>
+    );
 }

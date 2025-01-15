@@ -1,7 +1,6 @@
 "use client";
 
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import ProductImage from "@/assets/product-image.png";
 import {animate, motion, useMotionTemplate, useMotionValue, ValueAnimationTransition} from "framer-motion";
 import {ComponentPropsWithoutRef, useEffect, useRef, useState} from "react";
 
@@ -14,7 +13,8 @@ const tabs = [
         backgroundPositionX: 0,
         backgroundPositionY: 0,
         backgroundSizeX: 150,
-        image: "/diagrams/identity-layer.png"
+        image: "/diagrams/identity-layer.png",
+        color: "#3B82F6"
     },
     {
         icon: "/assets/lottie/click.lottie",
@@ -24,7 +24,8 @@ const tabs = [
         backgroundPositionX: 98,
         backgroundPositionY: 100,
         backgroundSizeX: 135,
-        image: "/diagrams/p2p-layer.png"
+        image: "/diagrams/p2p-layer.png",
+        color: "#7678ed"
     },
     {
         icon: "/assets/lottie/stars.lottie",
@@ -34,7 +35,8 @@ const tabs = [
         backgroundPositionX: 100,
         backgroundPositionY: 27,
         backgroundSizeX: 177,
-        image: "/diagrams/blockchain-layer.png"
+        image: "/diagrams/blockchain-layer.png",
+        color: "#06B6D4"
     }
 ];
 
@@ -44,6 +46,7 @@ interface FeatureTabProps extends ComponentPropsWithoutRef<"div"> {
     description: string;
     isNew: boolean;
     selected: boolean;
+    color: string;
     backgroundPositionX: number;
     backgroundPositionY: number;
     backgroundSizeX: number;
@@ -55,12 +58,12 @@ const FeatureTab = ({
     description, 
     isNew, 
     selected, 
+    color,
     onClick,
     backgroundPositionX,
     backgroundPositionY,
     backgroundSizeX 
 }: FeatureTabProps) => {
-    // [Previous FeatureTab implementation remains the same]
     const tabRef = useRef<HTMLDivElement>(null);
     const [dotLottie, setDotLottie] = useState<any>(null);
 
@@ -104,19 +107,33 @@ const FeatureTab = ({
     return (
         <div
             onMouseEnter={handleTabHover}
-            className="border border-muted flex flex-col p-4 gap-3 rounded-xl relative cursor-pointer hover:bg-muted/30"
+            className={`relative flex flex-col p-6 gap-3 rounded-xl cursor-pointer transition-all duration-300 ${
+                selected ? 'bg-[#1A1A1A]' : 'bg-[#141414] hover:bg-[#1A1A1A]'
+            }`}
+            style={{
+                boxShadow: selected ? `0 0 0 1px ${color}30` : 'none'
+            }}
             ref={tabRef}
             onClick={onClick}
         >
             {selected && (
                 <motion.div
                     style={{maskImage}}
-                    className="absolute inset-0 -m-px border border-[#A369FF] rounded-xl"
+                    className="absolute inset-0 -m-px rounded-xl"
+                    style={{ 
+                        background: `linear-gradient(45deg, ${color}20, transparent)`,
+                        borderRadius: '12px'
+                    }}
                 />
             )}
 
-            <div className="flex items-center gap-2.5">
-                <div className="size-12 border border-muted rounded-lg inline-flex items-center justify-center">
+            <div className="flex items-center gap-2.5 relative z-10">
+                <div 
+                    className={`size-12 rounded-lg inline-flex items-center justify-center transition-colors duration-300 bg-[#232323]`}
+                    style={{ 
+                        boxShadow: selected ? `0 0 0 1px ${color}30` : 'none',
+                    }}
+                >
                     <DotLottieReact
                         src={icon}
                         autoplay={false}
@@ -125,14 +142,20 @@ const FeatureTab = ({
                         dotLottieRefCallback={dotLottieRefCallback}
                     />
                 </div>
-                <div className="font-medium flex-1">{title}</div>
+                <div className="font-medium text-white/90 flex-1">{title}</div>
                 {isNew && (
-                    <div className="text-xs rounded-full text-white px-2 py-0.5 bg-[#8c44ff] font-semibold">
+                    <div 
+                        className="text-xs rounded-full px-2 py-0.5 font-medium"
+                        style={{ 
+                            backgroundColor: `${color}20`,
+                            color: color
+                        }}
+                    >
                         New
                     </div>
                 )}
             </div>
-            <p className="text-sm text-white/70">{description}</p>
+            <p className="text-sm text-white/60 relative z-10">{description}</p>
         </div>
     );
 };
@@ -172,28 +195,35 @@ export function ArchitectureDiagrams() {
     };
 
     return (
-        <section id='technical' className="py-20 md:py-24">
-            <div className="container">
-                <h2 className="text-5xl md:text-6xl font-medium text-center tracking-tighter">
-                    Technical Architecture
-                </h2>
-                <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto text-center tracking-tight mt-5">
-                    A layered approach to secure, decentralized AI agent communication and collaboration.
-                </p>
+        <section id="technical" className="py-24 bg-[#111111] relative overflow-hidden">
+            {/* Gradient Background Effect */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(118,120,237,0.05),rgba(59,130,246,0.05),rgba(6,182,212,0.05))] opacity-50" />
+            
+            <div className="container max-w-6xl mx-auto px-4 relative">
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                        Technical Architecture
+                    </h2>
+                    <p className="text-white/60 text-lg max-w-2xl mx-auto">
+                        A layered approach to secure, decentralized AI agent communication and collaboration.
+                    </p>
+                </div>
 
-                <div className="mt-10 grid lg:grid-cols-3 gap-3">
+                <div className="grid lg:grid-cols-3 gap-3">
                     {tabs.map((tab, index) => (
                         <FeatureTab
                             {...tab}
                             key={tab.title}
                             onClick={() => handleSelectTab(index)}
                             selected={selectedTab === index}
+                            color={tab.color}
                         />
                     ))}
                 </div>
-                <motion.div className="border border-muted rounded-xl p-2.5 mt-3">
+
+                <motion.div className="bg-[#141414] rounded-xl p-2.5 mt-3">
                     <div
-                        className="aspect-video bg-cover border border-muted rounded-lg"
+                        className="aspect-video bg-cover rounded-lg"
                         style={{
                             backgroundPosition: backgroundPosition.get(),
                             backgroundSize: backgroundSize.get(),
