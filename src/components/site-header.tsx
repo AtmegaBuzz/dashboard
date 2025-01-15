@@ -35,16 +35,15 @@ export default function Navbar() {
     };
 
     const navLinks = [
-        { label: "Features", sectionId: "features", color: "#06B6D4" },
         { label: "Technical", sectionId: "technical", color: "#3B82F6" },
+        { label: "Features", sectionId: "features", color: "#06B6D4" },
         { label: "Roadmap", sectionId: "roadmap", color: "#EC4899" },
-        { label: "Documentation", href: "/docs", color: "#7678ed" }
+        { label: "Litepaper", href: "/litepaper", color: "#7678ed" }
     ];
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            isScrolled ? 'bg-white/80 backdrop-blur-lg border-b border-black/5 shadow-sm' : 'bg-white'
-        }`}>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-lg border-b border-black/5 shadow-sm' : 'bg-white'
+            }`}>
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -67,12 +66,20 @@ export default function Navbar() {
                                     className="text-gray-600 hover:text-black relative group text-sm font-medium"
                                 >
                                     {link.label}
-                                    <div 
+                                    <div
                                         className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full"
                                         style={{ backgroundColor: link.color }}
                                     />
                                 </button>
                             );
+
+                            if (link.label === "Litepaper") {
+                                return (
+                                    <Link target="blank" key={link.href} href={"/docs/litepaper.pdf"}>
+                                        {content}
+                                    </Link>
+                                )
+                            }
 
                             return link.href ? (
                                 <Link key={link.href} href={link.href}>
@@ -86,14 +93,14 @@ export default function Navbar() {
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-4">
-                        <Link 
-                            href="/login" 
+                        <Link
+                            href="/login"
                             className="hidden md:inline-flex text-sm font-medium text-gray-600 hover:text-black transition-colors"
                         >
                             Sign In
                         </Link>
-                        <Link 
-                            href="/register" 
+                        <Link
+                            href="/register"
                             className="hidden md:inline-flex h-9 px-4 items-center justify-center rounded-lg bg-[#7678ed] text-white text-sm font-medium hover:opacity-90 transition-opacity"
                         >
                             Get Started
@@ -119,7 +126,7 @@ export default function Navbar() {
                                                 }}
                                                 className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
                                             >
-                                                <div 
+                                                <div
                                                     className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
                                                     style={{ backgroundColor: link.color }}
                                                 />
@@ -130,15 +137,15 @@ export default function Navbar() {
 
                                     {/* Mobile Action Buttons */}
                                     <div className="grid gap-3">
-                                        <Link 
-                                            href="/login" 
+                                        <Link
+                                            href="/login"
                                             className="h-10 flex items-center justify-center rounded-lg border border-black/10 text-gray-600 text-sm font-medium hover:text-black hover:border-black/20 transition-colors"
                                             onClick={() => setIsOpen(false)}
                                         >
                                             Sign In
                                         </Link>
-                                        <Link 
-                                            href="/register" 
+                                        <Link
+                                            href="/register"
                                             className="h-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white text-sm font-medium hover:opacity-90 transition-opacity"
                                             onClick={() => setIsOpen(false)}
                                         >
