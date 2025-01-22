@@ -38,7 +38,7 @@ export const HeroSection = () => {
                     <div className="w-full lg:w-1/2 space-y-6">
                         {/* Github Stats */}
                         <motion.a 
-                            href="https://github.com/P3-AI-Network/P3AI-Framework"
+                            href="https://github.com/P3-AI-Network/agent-framework"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-4 bg-white hover:bg-black/5 border border-black/10 rounded-full py-1.5 pl-2 pr-4 transition-colors cursor-pointer"
