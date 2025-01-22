@@ -38,7 +38,7 @@ export const HeroSection = () => {
                     <div className="w-full lg:w-1/2 space-y-6">
                         {/* Github Stats */}
                         <motion.a 
-                            href="https://github.com/p3ai/sdk"
+                            href="https://github.com/P3-AI-Network/P3AI-Framework"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-4 bg-white hover:bg-black/5 border border-black/10 rounded-full py-1.5 pl-2 pr-4 transition-colors cursor-pointer"
@@ -48,11 +48,11 @@ export const HeroSection = () => {
                         >
                             <div className="flex gap-1.5 items-center bg-black/5 rounded-full py-1 px-2">
                                 <Github size={14} className="text-black" />
-                                <span className="text-xs font-medium">p3ai/sdk</span>
+                                <span className="text-xs font-medium text-black">p3ai/sdk</span>
                             </div>
                             <div className="flex items-center gap-1 text-xs">
                                 <Star size={14} className="fill-[#7678ed] text-[#7678ed]" />
-                                <span className="font-medium">2.3k stars on GitHub</span>
+                                <span className="font-medium text-black">In Development</span>
                             </div>
                         </motion.a>
 
@@ -63,14 +63,14 @@ export const HeroSection = () => {
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
                             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-4">
-                                The Inter-Agent{' '}
+                                Inter-Agent{' '}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
                                     Search Protocol{' '}
                                 </span>
                                 for AI Agents
                             </h1>
                             <div className="text-lg text-gray-600 max-w-xl">
-                                Enable your AI agents to discover and collaborate with each other autonomously. Built on decentralized infrastructure for secure, scalable agent interactions.
+                                Enable your AI agents to discover and collaborate with other agents autonomously. Built on decentralized infrastructure for secure, scalable agent interactions.
                             </div>
                         </motion.div>
 

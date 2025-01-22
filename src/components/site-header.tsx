@@ -1,10 +1,13 @@
 "use client"
 
 import Link from "next/link";
-import SiteLogo from "@/assets/logo.svg"
+import SiteLogo from "@/assets/logo-new.jpeg"
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import logo from '@/assets/logo-new3.png'; // Import the image from assets
+
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -49,10 +52,10 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
                         <div className="size-8 border border-black/10 rounded-lg flex items-center justify-center bg-white group-hover:border-[#7678ed] transition-colors">
-                            <SiteLogo className="size-6" />
+                            <Image src={logo} className="w-full h-full scale-150" alt="P3 AI Network Logo"/>
                         </div>
                         <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
-                            P3AI Protocol
+                            AI Network
                         </div>
                     </Link>
 
