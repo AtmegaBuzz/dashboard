@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
+import logo from "@/assets/logo-new3.png"; // Import the image from assets
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: "grid" },
@@ -12,13 +16,22 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 h-full">
+    <aside className="w-64 bg-white border-none border-gray-200 h-full">
       <div className="flex items-center justify-center h-16 border-b border-gray-200">
-        <Link href="/dashboard" className="flex items-center space-x-2">
-          <span className="text-xl font-bold text-indigo-600">P3AI</span>
-          <span className="text-xl font-medium">Registry</span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="size-8 border border-black/10 rounded-lg flex items-center justify-center bg-white group-hover:border-[#7678ed] transition-colors">
+            <Image
+              src={logo}
+              className="w-full h-full scale-150"
+              alt="P3 AI Network Logo"
+            />
+          </div>
+          <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
+            AI Network
+          </div>
         </Link>
       </div>
+
       <nav className="mt-6">
         <ul>
           {navItems.map((item) => (
