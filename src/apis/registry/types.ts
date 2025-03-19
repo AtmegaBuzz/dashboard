@@ -28,6 +28,12 @@ export interface UpdateAgentDto {
 }
 
 export interface AgentResponse {
+  data: Agent[];
+  count: number;
+  total: number;
+}
+
+export interface Agent {
   id: string;
   did: string;
   name: string;

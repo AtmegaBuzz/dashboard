@@ -14,16 +14,8 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
-
-// Define types based on your Swagger docs
-interface Agent {
-  id: string;
-  did: string;
-  name: string;
-  description?: string;
-  status: "ACTIVE" | "INACTIVE" | "DEPRECATED";
-  capabilities: Record<string, string[]>;
-}
+import { getAgents } from "@/apis/registry";
+import { Agent, Capabilities } from "@/apis/registry/types";
 
 export default function AgentsPage() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -33,12 +25,10 @@ export default function AgentsPage() {
   useEffect(() => {
     async function fetchAgents() {
       try {
-        const response = await fetch("/api/agents");
-        if (!response.ok) {
-          throw new Error("Failed to fetch agents");
-        }
-        const data = await response.json();
-        setAgents(data);
+        setLoading(true);
+        const response = await getAgents({ status: "ACTIVE", limit: 10 });
+        setAgents(response.data);
+        setError(null);
       } catch (err) {
         setError("Failed to load agents");
         console.error(err);
@@ -51,9 +41,9 @@ export default function AgentsPage() {
   }, []);
 
   // Helper function to display capabilities
-  const renderCapabilities = (capabilities: Record<string, string[]>) => {
-    return Object.entries(capabilities).flatMap(([category, items]) =>
-      items.slice(0, 2).map((item) => (
+  const renderCapabilities = (capabilities?: Capabilities) => {
+    return Object.entries(capabilities ?? {}).flatMap(([category, items]) =>
+      items?.slice(0, 2).map((item) => (
         <Badge key={`${category}-${item}`} variant="outline" className="mr-1">
           {item}
         </Badge>
@@ -115,9 +105,8 @@ export default function AgentsPage() {
                     </TableCell>
                     <TableCell>
                       {renderCapabilities(agent.capabilities)}
-                      {Object.values(agent.capabilities).flat().length > 2 && (
-                        <Badge variant="outline">+more</Badge>
-                      )}
+                      {Object.values(agent.capabilities ?? {}).flat().length >
+                        2 && <Badge variant="outline">+more</Badge>}
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">

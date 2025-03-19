@@ -37,11 +37,12 @@ export const createAgent = async (
  */
 export const getAgents = async (
   params?: GetAgentsParams
-): Promise<AgentResponse[]> => {
+): Promise<AgentResponse> => {
   const queryParams = params ? prepareQueryParams(params) : {};
-  const response = await apiClient.get<AgentResponse[]>("/agents", {
+  const response = await apiClient.get<AgentResponse>("/agents", {
     params: queryParams,
   });
+
   return response.data;
 };
 
