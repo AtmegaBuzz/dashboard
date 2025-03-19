@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createAgent } from "@/apis/registry";
+import { useAccount, useSignMessage } from "wagmi";
 
 // Define the agent schema
 const agentSchema = z.object({
@@ -44,6 +45,8 @@ type AgentFormProps = {
 export function AgentForm({ agent, isEditing = false }: AgentFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isConnected, address: walletAddress } = useAccount();
+  const { signMessageAsync } = useSignMessage();
 
   // Initialize form with default values or existing agent data
   const form = useForm<z.infer<typeof agentSchema>>({
@@ -63,16 +66,27 @@ export function AgentForm({ agent, isEditing = false }: AgentFormProps) {
   });
 
   async function onSubmit(values: z.infer<typeof agentSchema>) {
+    if (!walletAddress) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const method = isEditing ? "PUT" : "POST";
 
       if (method === "POST") {
-        // TODO: Implement signature and wallet address
+        const signature = await signMessageAsync({
+          message: values.message,
+        });
+
+        if (!signature) {
+          throw new Error("Failed to sign message");
+        }
+
         const res = await createAgent({
           ...values,
-          walletAddress: "",
-          signature: "",
+          walletAddress,
+          signature,
         });
       } else if (method === "PUT") {
         // TODO: Update agent
@@ -85,6 +99,14 @@ export function AgentForm({ agent, isEditing = false }: AgentFormProps) {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  if (!isConnected) {
+    return (
+      <div className="text-red-500 py-8 text-center">
+        Connect your wallet to create an agent
+      </div>
+    );
   }
 
   return (
