@@ -20,15 +20,8 @@ import {
 import { PencilIcon, TrashIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { MetadataTable } from "@/components/dashboard/metadata-table";
-
-interface Agent {
-  id: string;
-  did: string;
-  name: string;
-  description?: string;
-  status: "ACTIVE" | "INACTIVE" | "DEPRECATED";
-  capabilities: Record<string, string[]>;
-}
+import { Agent } from "@/apis/registry/types";
+import { getAgentById } from "@/apis/registry";
 
 export default function AgentDetailPage({
   params,
@@ -43,12 +36,8 @@ export default function AgentDetailPage({
   useEffect(() => {
     async function fetchAgent() {
       try {
-        const response = await fetch(`/api/agents/${params.id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch agent");
-        }
-        const data = await response.json();
-        setAgent(data);
+        const agent = await getAgentById(params.id);
+        setAgent(agent);
       } catch (err) {
         setError("Failed to load agent details");
         console.error(err);
@@ -60,6 +49,7 @@ export default function AgentDetailPage({
     fetchAgent();
   }, [params.id]);
 
+  // TODO: Implement delete agent functionality
   const handleDelete = async () => {
     try {
       const response = await fetch(`/api/agents/${params.id}`, {
@@ -107,7 +97,7 @@ export default function AgentDetailPage({
           </Link>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
+              <Button variant="destructive" disabled>
                 <TrashIcon className="mr-2 h-4 w-4" />
                 Delete
               </Button>

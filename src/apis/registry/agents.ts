@@ -48,8 +48,8 @@ export const getAgents = async (
 /**
  * Get agent by ID
  */
-export const getAgentById = async (id: string): Promise<AgentResponse> => {
-  const response = await apiClient.get<AgentResponse>(`/agents/${id}`);
+export const getAgentById = async (id: string): Promise<Agent> => {
+  const response = await apiClient.get<Agent>(`/agents/${id}`);
   return response.data;
 };
 
