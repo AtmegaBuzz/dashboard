@@ -36,6 +36,7 @@ export default function AgentDetailPage({
   useEffect(() => {
     async function fetchAgent() {
       try {
+        setLoading(true);
         const agent = await getAgentById(params.id);
         setAgent(agent);
       } catch (err) {
