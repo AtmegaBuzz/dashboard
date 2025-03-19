@@ -1,6 +1,14 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { formatAddress } from "@/lib/utils";
+import { injected, useAccount, useConnect, useDisconnect } from "wagmi";
 
 export function TopNav() {
+  const { address, isConnected } = useAccount();
+  const { connect, isPending: isConnectPending } = useConnect();
+  const { disconnect } = useDisconnect();
+
   return (
     <header className="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200">
       <div className="flex items-center">
@@ -8,13 +16,33 @@ export function TopNav() {
       </div>
 
       <div className="flex items-center space-x-4">
-        <Button variant="outline" size="default">
-          0x123...abc
-        </Button>
+        {isConnected && (
+          <Button
+            variant="outline"
+            size="default"
+            onClick={() => {
+              disconnect();
+            }}
+          >
+            {formatAddress(address)}
+          </Button>
+        )}
 
-        {/* <Button variant="outline" size="sm">
-          Disconnect
-        </Button> */}
+        {isConnectPending && <Button variant="outline">Connecting...</Button>}
+
+        {!isConnected && (
+          <Button
+            variant="outline"
+            size="default"
+            onClick={() =>
+              connect({
+                connector: injected(),
+              })
+            }
+          >
+            Connect Wallet
+          </Button>
+        )}
       </div>
     </header>
   );
