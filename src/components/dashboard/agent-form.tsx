@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { createAgent } from "@/apis/registry";
 
 // Define the agent schema
 const agentSchema = z.object({
@@ -32,6 +33,7 @@ const agentSchema = z.object({
   description: z.string().optional(),
   status: z.enum(["ACTIVE", "INACTIVE", "DEPRECATED"]),
   capabilities: z.any(), // This would be more strongly typed in a real implementation
+  message: z.string().min(1, "Message is required"),
 });
 
 type AgentFormProps = {
@@ -56,25 +58,24 @@ export function AgentForm({ agent, isEditing = false }: AgentFormProps) {
         integration: [],
         protocols: [],
       },
+      message: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof agentSchema>) {
     setIsSubmitting(true);
     try {
-      const url = isEditing ? `/api/agents/${agent.id}` : "/api/agents";
       const method = isEditing ? "PUT" : "POST";
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save agent");
+      if (method === "POST") {
+        // TODO: Implement signature and wallet address
+        const res = await createAgent({
+          ...values,
+          walletAddress: "",
+          signature: "",
+        });
+      } else if (method === "PUT") {
+        // TODO: Update agent
       }
 
       router.push("/dashboard/agents");
@@ -138,6 +139,20 @@ export function AgentForm({ agent, isEditing = false }: AgentFormProps) {
                       placeholder="Describe the agent's functionality"
                       rows={4}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Message</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Message" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

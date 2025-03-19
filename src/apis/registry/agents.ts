@@ -1,6 +1,7 @@
 // api/agents.ts
 import apiClient from "./client";
 import {
+  Agent,
   AgentResponse,
   CreateAgentDto,
   GetAgentsParams,
@@ -25,10 +26,8 @@ const prepareQueryParams = (params: any) => {
 /**
  * Create a new agent
  */
-export const createAgent = async (
-  data: CreateAgentDto
-): Promise<AgentResponse> => {
-  const response = await apiClient.post<AgentResponse>("/agents", data);
+export const createAgent = async (data: CreateAgentDto): Promise<Agent> => {
+  const response = await apiClient.post<Agent>("/agents", data);
   return response.data;
 };
 
@@ -60,8 +59,8 @@ export const getAgentById = async (id: string): Promise<AgentResponse> => {
 export const updateAgent = async (
   id: string,
   data: UpdateAgentDto
-): Promise<AgentResponse> => {
-  const response = await apiClient.put<AgentResponse>(`/agents/${id}`, data);
+): Promise<Agent> => {
+  const response = await apiClient.put<Agent>(`/agents/${id}`, data);
   return response.data;
 };
 

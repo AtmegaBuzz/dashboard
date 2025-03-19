@@ -40,6 +40,7 @@ export interface Agent {
   description?: string;
   capabilities?: Capabilities;
   status: AgentStatus;
+  ownerId: string;
   createdAt: string;
   updatedAt: string;
 }
