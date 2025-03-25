@@ -88,7 +88,7 @@ export default function AgentsPage() {
                   <TableRow key={agent.id}>
                     <TableCell className="font-medium">{agent.name}</TableCell>
                     <TableCell className="font-mono text-sm">
-                      {agent.did.substring(0, 16)}...
+                      {agent.didIdentifier.substring(0, 16)}...
                     </TableCell>
                     <TableCell>
                       <Badge

@@ -26,8 +26,12 @@ const prepareQueryParams = (params: any) => {
 /**
  * Create a new agent
  */
-export const createAgent = async (data: CreateAgentDto): Promise<Agent> => {
-  const response = await apiClient.post<Agent>("/agents", data);
+export const createAgent = async (authToken: string, data: CreateAgentDto): Promise<Agent> => {
+  const response = await apiClient.post<Agent>("/agents", {...data, status: "ACTIVE"}, {
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
   return response.data;
 };
 

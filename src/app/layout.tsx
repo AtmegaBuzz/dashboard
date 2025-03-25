@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { clsx } from "clsx";
 import { http, createConfig, injected, WagmiProvider } from 'wagmi'
-import { baseSepolia } from 'wagmi/chains'
+import { polygonAmoy } from 'wagmi/chains'
 import { metaMask } from 'wagmi/connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from "@/components/ui/toaster"
@@ -19,7 +19,7 @@ if (typeof window === 'undefined') {
 }
 
 const wagmiConfig = createConfig({
-  chains: [baseSepolia],
+  chains: [polygonAmoy],
   connectors: [
     injected(),
     metaMask({
@@ -30,7 +30,7 @@ const wagmiConfig = createConfig({
       },
     })],
   transports: {
-    [baseSepolia.id]: http(),
+    [polygonAmoy.id]: http(),
   },
 })
 

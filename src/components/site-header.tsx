@@ -7,11 +7,41 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import logo from '@/assets/logo-new3.png'; // Import the image from assets
+import { useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
+import { metaMask } from "wagmi/connectors";
+import { useAtom } from "jotai";
+import { accessTokenAtom } from "@/store/global.store";
+import { login } from "@/apis/registry/auth";
+import { LoginDto } from "@/apis/registry/types";
+import { useRouter } from "next/navigation";
 
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const { address, isConnected } = useAccount()
+    const { connect } = useConnect()
+    const { signMessage, data } = useSignMessage()
+
+    const [, setAccessToken] = useAtom(accessTokenAtom)
+
+    const router = useRouter();
+
+
+    const connectWallet = async () => {
+        try {
+
+            connect({ connector: metaMask() });
+            signMessage({ message: "This is P3AI." })
+
+            console.log("Signature: ", data);
+            console.log(address);
+
+        } catch (error) {
+            console.error('Error connecting to wallet:', error)
+        }
+    }
+
 
     // Handle scroll effect
     useEffect(() => {
@@ -21,6 +51,22 @@ export default function Navbar() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    useEffect(() => {
+        (async () => {
+            const loginData: LoginDto = {
+                wallet_address: address!,
+                signature: data!,
+                message: "This is P3AI."
+            }
+            
+            const resp = await login(loginData);
+
+            setAccessToken(resp.access_token);
+
+            router.push("dashboard")
+        })();
+    }, [data])
 
     const scrollToSection = (sectionId: string) => {
         setIsOpen(false);
@@ -37,6 +83,7 @@ export default function Navbar() {
         }
     };
 
+
     const navLinks = [
         { label: "Technical", sectionId: "technical", color: "#3B82F6" },
         { label: "Features", sectionId: "features", color: "#06B6D4" },
@@ -52,7 +99,7 @@ export default function Navbar() {
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
                         <div className="size-8 border border-black/10 rounded-lg flex items-center justify-center bg-white group-hover:border-[#7678ed] transition-colors">
-                            <Image src={logo} className="w-full h-full scale-150" alt="P3 AI Network Logo"/>
+                            <Image src={logo} className="w-full h-full scale-150" alt="P3 AI Network Logo" />
                         </div>
                         <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
                             AI Network
@@ -96,18 +143,12 @@ export default function Navbar() {
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-4">
-                        <Link
-                            href="/login"
-                            className="hidden md:inline-flex text-sm font-medium text-gray-600 hover:text-black transition-colors"
-                        >
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/register"
+                        <button
+                            onClick={connectWallet}
                             className="hidden md:inline-flex h-9 px-4 items-center justify-center rounded-lg bg-[#7678ed] text-white text-sm font-medium hover:opacity-90 transition-opacity"
                         >
                             Get Started
-                        </Link>
+                        </button>
 
                         {/* Mobile Menu Button */}
                         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -140,20 +181,12 @@ export default function Navbar() {
 
                                     {/* Mobile Action Buttons */}
                                     <div className="grid gap-3">
-                                        <Link
-                                            href="/login"
+                                        <button
                                             className="h-10 flex items-center justify-center rounded-lg border border-black/10 text-gray-600 text-sm font-medium hover:text-black hover:border-black/20 transition-colors"
-                                            onClick={() => setIsOpen(false)}
+                                            onClick={connectWallet}
                                         >
-                                            Sign In
-                                        </Link>
-                                        <Link
-                                            href="/register"
-                                            className="h-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white text-sm font-medium hover:opacity-90 transition-opacity"
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            Get Started
-                                        </Link>
+                                            Connect Wallet
+                                        </button>
                                     </div>
                                 </div>
                             </SheetContent>

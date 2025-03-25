@@ -1,49 +1,105 @@
 "use client";
-
+import { getMe } from "@/apis/registry";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { formatAddress } from "@/lib/utils";
-import { injected, useAccount, useConnect, useDisconnect } from "wagmi";
+import { accessTokenAtom, userAtom, userCredsAtom } from "@/store/global.store";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import { useAccount } from "wagmi";
+import { User, LogOut, Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function TopNav() {
   const { address, isConnected } = useAccount();
-  const { connect, isPending: isConnectPending } = useConnect();
-  const { disconnect } = useDisconnect();
+  const [authToken, setAuthToken] = useAtom(accessTokenAtom);
+  const [user, setUser] = useAtom(userAtom);
+  const [userCreds, setUserUserCreds] = useAtom(userCredsAtom);
+  const router = useRouter();
+
+  useEffect(() => {
+    const getMyself = async () => {
+      if (isConnected && authToken) {
+        try {
+          const fetchedUser = await getMe(authToken);
+
+          setUserUserCreds(fetchedUser.credentials);
+          setUser(fetchedUser.user);
+        } catch (error) {
+          console.error("Failed to fetch user info", error);
+        }
+      }
+    };
+
+    getMyself();
+  }, [isConnected, authToken, setUser]);
+
+  const handleLogout = () => {
+    setAuthToken(null);
+  };
+
+
+  useEffect(() => {
+
+    if (authToken === null) {
+      router.push("/")
+    }
+
+  }, [authToken])
 
   return (
-    <header className="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200">
-      <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-gray-800">P3AI Dashboard</h1>
-      </div>
+    <nav className="flex justify-between items-center p-4 bg-white shadow-md">
+      <div className="text-xl font-bold">P3AI Dashboard</div>
 
-      <div className="flex items-center space-x-4">
-        {isConnected && (
-          <Button
-            variant="outline"
-            size="default"
-            onClick={() => {
-              disconnect();
-            }}
-          >
-            {formatAddress(address)}
-          </Button>
-        )}
+      {isConnected && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="w-auto">
+              {formatAddress(address)}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[700px] mr-5">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
 
-        {isConnectPending && <Button variant="outline">Connecting...</Button>}
+            {user && (
+              <>
+                <DropdownMenuItem disabled>
+                  <User className="mr-2 h-4 w-4" />
+                  <p>{user.didIdentifier || 'User'}</p>
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  <span className="mr-2">Wallet:</span>
+                  <span>{user.walletAddress}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  <span className="mr-2">Connection:</span>
+                  <span>{user.connectionString || "Nil"}</span>
+                </DropdownMenuItem>
+              </>
+            )}
 
-        {!isConnected && (
-          <Button
-            variant="outline"
-            size="default"
-            onClick={() =>
-              connect({
-                connector: injected(),
-              })
-            }
-          >
-            Connect Wallet
-          </Button>
-        )}
-      </div>
-    </header>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </nav>
   );
 }
