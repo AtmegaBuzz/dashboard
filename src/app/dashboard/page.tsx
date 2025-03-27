@@ -46,7 +46,7 @@ const getCredentialStatus = (revoked: boolean, expirationDate: number) => {
 
 export default function AgentsPage() {
   const [error, setError] = useState<string | null>(null);
-  const [credentials, setCredentials] = useAtom(userCredsAtom);
+  const [credentials,] = useAtom(userCredsAtom);
 
   const getStatusIcon = (revoked: VCResponse["revoked"]) => {
 

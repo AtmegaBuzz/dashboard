@@ -7,6 +7,7 @@ import {
   GetAgentsParams,
   SearchAgentsParams,
   UpdateAgentDto,
+  VCResponse,
 } from "./types";
 
 // Helper function to convert array params to comma-separated strings for query params
@@ -52,8 +53,8 @@ export const getAgents = async (
 /**
  * Get agent by ID
  */
-export const getAgentById = async (id: string): Promise<Agent> => {
-  const response = await apiClient.get<Agent>(`/agents/${id}`);
+export const getAgentById = async (id: string): Promise<{agent: Agent, credentials: VCResponse[]}> => {
+  const response = await apiClient.get<{agent: Agent, credentials: VCResponse[]}>(`/agents/${id}`);
   return response.data;
 };
 

@@ -21,7 +21,7 @@ export function TopNav() {
   const { address, isConnected } = useAccount();
   const [authToken, setAuthToken] = useAtom(accessTokenAtom);
   const [user, setUser] = useAtom(userAtom);
-  const [userCreds, setUserUserCreds] = useAtom(userCredsAtom);
+  const [, setUserUserCreds] = useAtom(userCredsAtom);
   const router = useRouter();
 
   useEffect(() => {
