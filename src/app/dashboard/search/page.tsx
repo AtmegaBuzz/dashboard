@@ -52,9 +52,16 @@ export default function TagSearchPage() {
     async function fetchAgents() {
       try {
         setLoading(true);
-        const response = await searchAgents({capabilities: selectedTags.join(","), status: "ACTIVE", limit: 50 });
-        setAgents(response.data);
-        setFilteredAgents(response.data);
+        let data: Agent[] = []
+        if (selectedTags.length !== 0) {
+          const response = await searchAgents({capabilities: selectedTags.join(","), status: "ACTIVE", limit: 50 });
+          data = response.data
+        } else {
+          const response = await searchAgents({status: "ACTIVE", limit: 50 });
+          data = response.data
+        }
+        setAgents(data);
+        setFilteredAgents(data);
         setError(null);
       } catch (err) {
         setError("Failed to load agents");

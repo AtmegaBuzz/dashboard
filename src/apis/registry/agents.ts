@@ -83,7 +83,7 @@ export const searchAgents = async (
   params?: SearchAgentsParams
 ): Promise<{ data: Agent[]; count: number, total: number }> => {
   const queryParams = params ? prepareQueryParams(params) : {};
-  const response = await apiClient.get<{ data: Agent[]; count: number, total: number }>("/agents/search", {
+  const response = await apiClient.get<{ data: Agent[]; count: number, total: number }>("/search/agents", {
     params: queryParams,
   });
   return response.data;
