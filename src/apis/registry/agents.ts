@@ -81,12 +81,9 @@ export const deleteAgent = async (id: string): Promise<void> => {
  */
 export const searchAgents = async (
   params?: SearchAgentsParams
-): Promise<{ items: AgentResponse[]; total: number }> => {
+): Promise<{ data: Agent[]; count: number, total: number }> => {
   const queryParams = params ? prepareQueryParams(params) : {};
-  const response = await apiClient.get<{
-    items: AgentResponse[];
-    total: number;
-  }>("/agents/search", {
+  const response = await apiClient.get<{ data: Agent[]; count: number, total: number }>("/agents/search", {
     params: queryParams,
   });
   return response.data;

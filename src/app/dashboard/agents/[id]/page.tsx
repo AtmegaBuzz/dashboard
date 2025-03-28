@@ -34,7 +34,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import CredentialCard from "@/components/dashboard/credential-card";
 
 // Helper component for copying text to clipboard
-const CopyButton = ({ text, className = "" }) => {
+const CopyButton = ({ text = "", className = "" }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -68,7 +68,7 @@ const CopyButton = ({ text, className = "" }) => {
 };
 
 // Helper component for truncated text display
-const TruncatedText = ({ text, maxLength = 20 }) => {
+const TruncatedText = ({ text = "", maxLength = 20 }) => {
   if (!text) return null;
 
   const truncated = text.length > maxLength ?

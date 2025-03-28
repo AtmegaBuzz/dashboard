@@ -101,7 +101,7 @@ export interface GetMetadataParams {
 
 export interface SearchAgentsParams {
   keyword?: string;
-  capabilities?: string[];
+  capabilities?: string;
   status?: AgentStatus;
   limit?: number;
   offset?: number;
