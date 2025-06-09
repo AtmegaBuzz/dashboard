@@ -85,19 +85,31 @@ const TruncatedText = ({ text = "", maxLength = 20 }) => {
 export default function AgentDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const router = useRouter();
   const [agent, setAgent] = useState<Agent | null>(null);
   const [agentCredentials, setAgentCredentials] = useState<VCResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [agentId, setAgentId] = useState<string | null>(null);
+
+  // Resolve params Promise
+  useEffect(() => {
+    async function resolveParams() {
+      const resolvedParams = await params;
+      setAgentId(resolvedParams.id);
+    }
+    resolveParams();
+  }, [params]);
 
   useEffect(() => {
+    if (!agentId) return;
+
     async function fetchAgent() {
       try {
         setLoading(true);
-        const { agent, credentials } = await getAgentById(params.id);
+        const { agent, credentials } = await getAgentById(agentId!);
         setAgent(agent);
         setAgentCredentials(credentials);
       } catch (err) {
@@ -109,12 +121,14 @@ export default function AgentDetailPage({
     }
 
     fetchAgent();
-  }, [params.id]);
+  }, [agentId]);
 
   // TODO: Implement delete agent functionality
   const handleDelete = async () => {
+    if (!agentId) return;
+    
     try {
-      const response = await fetch(`/api/agents/${params.id}`, {
+      const response = await fetch(`/api/agents/${agentId}`, {
         method: "DELETE",
       });
 
@@ -138,7 +152,7 @@ export default function AgentDetailPage({
     );
   }
 
-  if (error || !agent) {
+  if (error || !agent || !agentId) {
     return (
       <div className="bg-red-50 border border-red-200 text-red-700 py-8 px-4 rounded-lg text-center">
         <span className="font-medium">{error || "Agent not found"}</span>
@@ -154,7 +168,6 @@ export default function AgentDetailPage({
     );
   }
 
-
   return (
     <div className="space-y-6 bg-white text-black">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b">
@@ -165,10 +178,10 @@ export default function AgentDetailPage({
               {agent.status}
             </Badge>
           </div>
-          <p className="text-gray-500 mt-1">ID: {params.id}</p>
+          <p className="text-gray-500 mt-1">ID: {agentId}</p>
         </div>
         <div className="flex space-x-3">
-          <Link href={`/dashboard/agents/${params.id}/edit`}>
+          <Link href={`/dashboard/agents/${agentId}/edit`}>
             <Button variant="outline" className="bg-white text-black border-gray-300 hover:bg-gray-50">
               <PencilIcon className="mr-2 h-4 w-4" />
               Edit
@@ -186,7 +199,7 @@ export default function AgentDetailPage({
                 <AlertDialogTitle className="text-black">Are you sure?</AlertDialogTitle>
                 <AlertDialogDescription className="text-gray-600">
                   This action cannot be undone. This will permanently delete the
-                  agent "{agent.name}" and all associated metadata.
+                  agent &ldquo;{agent.name}&rdquo; and all associated metadata.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -288,7 +301,7 @@ export default function AgentDetailPage({
         <TabsContent value="metadata" className="space-y-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-semibold text-black">Agent Metadata</h3>
-            <Link href={`/dashboard/agents/${params.id}/metadata/create`}>
+            <Link href={`/dashboard/agents/${agentId}/metadata/create`}>
               <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                 <PlusIcon className="mr-2 h-4 w-4" />
                 Add Metadata
@@ -296,13 +309,13 @@ export default function AgentDetailPage({
             </Link>
           </div>
 
-          <MetadataTable agentId={params.id} />
+          <MetadataTable agentId={agentId} />
         </TabsContent>
 
         <TabsContent value="credentials" className="space-y-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-semibold text-black">Agent Credentials</h3>
-            <Link href={`/dashboard/agents/${params.id}/credentials/issue`}>
+            <Link href={`/dashboard/agents/${agentId}/credentials/issue`}>
               <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                 <ShieldIcon className="mr-2 h-4 w-4" />
                 Issue New Credential
@@ -314,8 +327,8 @@ export default function AgentDetailPage({
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
               <KeyIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-black mb-1">No credentials found</h3>
-              <p className="text-gray-500 mb-4">This agent doesn't have any credentials yet.</p>
-              <Link href={`/dashboard/agents/${params.id}/credentials/issue`}>
+              <p className="text-gray-500 mb-4">This agent doesn&apos;t have any credentials yet.</p>
+              <Link href={`/dashboard/agents/${agentId}/credentials/issue`}>
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">Issue First Credential</Button>
               </Link>
             </div>

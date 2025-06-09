@@ -141,7 +141,7 @@ export function MetadataTable({ agentId }: MetadataTableProps) {
                         <AlertDialogTitle>Delete Metadata</AlertDialogTitle>
                         <AlertDialogDescription>
                           Are you sure you want to delete the metadata with key
-                          "{item.key}"? This action cannot be undone.
+                          &ldquo;{item.key}&ldquo;? This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

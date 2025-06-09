@@ -102,7 +102,7 @@ export default function TagSearchPage() {
       // Check if every active tag is included in the agent's capabilities
       return activeTags.every(tag => 
         agentCapabilities.some(capability => 
-          capability.toLowerCase().includes(tag.toLowerCase())
+          capability?.toLowerCase().includes(tag.toLowerCase())
         )
       );
     });
@@ -164,7 +164,7 @@ export default function TagSearchPage() {
     
     // Flatten capabilities for display
     const allCapabilities = Object.entries(capabilities).flatMap(([category, items]) => 
-      items.map(item => ({ category, capability: item }))
+      items?.map(item => ({ category, capability: item }))
     );
     
     // Show first 5 capabilities, prioritizing matches with active tags
@@ -174,10 +174,10 @@ export default function TagSearchPage() {
       // Sort capabilities to show matches first
       prioritizedCapabilities.sort((a, b) => {
         const aIsMatch = activeTags.some(tag => 
-          a.capability.toLowerCase().includes(tag.toLowerCase())
+          a?.capability.toLowerCase().includes(tag.toLowerCase())
         );
         const bIsMatch = activeTags.some(tag => 
-          b.capability.toLowerCase().includes(tag.toLowerCase())
+          b?.capability.toLowerCase().includes(tag.toLowerCase())
         );
         
         if (aIsMatch && !bIsMatch) return -1;
@@ -191,7 +191,7 @@ export default function TagSearchPage() {
         {prioritizedCapabilities.slice(0, 5).map((item, idx) => {
           // Check if this capability matches any active tag
           const isMatch = activeTags.some(tag => 
-            item.capability.toLowerCase().includes(tag.toLowerCase())
+            item?.capability.toLowerCase().includes(tag.toLowerCase())
           );
           
           return (
@@ -206,8 +206,8 @@ export default function TagSearchPage() {
                 }
               `}
             >
-              <span className="text-gray-500 mr-1">{item.category}:</span>
-              {item.capability}
+              <span className="text-gray-500 mr-1">{item?.category}:</span>
+              {item?.capability}
             </Badge>
           );
         })}
