@@ -1,4 +1,5 @@
 // api/agents.ts
+import { headers } from "next/headers";
 import apiClient from "./client";
 import {
   Agent,
@@ -28,7 +29,7 @@ const prepareQueryParams = (params: any) => {
  * Create a new agent
  */
 export const createAgent = async (authToken: string, data: CreateAgentDto): Promise<Agent> => {
-  const response = await apiClient.post<Agent>("/agents", {...data, status: "ACTIVE"}, {
+  const response = await apiClient.post<Agent>("/agents", { ...data, status: "ACTIVE" }, {
     headers: {
       Authorization: `Bearer ${authToken}`
     }
@@ -51,10 +52,28 @@ export const getAgents = async (
 };
 
 /**
+ * Get agents with optional filtering
+ */
+export const getMyAgents = async (
+  authToken: string
+): Promise<Agent[]> => {
+  console.log(authToken,"===")  
+  const response = await apiClient.get<Agent[]>("/agents/get-my-agents", {
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
+
+  
+  return response.data;
+};
+
+
+/**
  * Get agent by ID
  */
-export const getAgentById = async (id: string): Promise<{agent: Agent, credentials: VCResponse[]}> => {
-  const response = await apiClient.get<{agent: Agent, credentials: VCResponse[]}>(`/agents/${id}`);
+export const getAgentById = async (id: string): Promise<{ agent: Agent, credentials: VCResponse[] }> => {
+  const response = await apiClient.get<{ agent: Agent, credentials: VCResponse[] }>(`/agents/${id}`);
   return response.data;
 };
 

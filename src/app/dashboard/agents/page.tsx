@@ -14,22 +14,26 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { PlusIcon, ExternalLinkIcon, Pencil, EyeIcon, SearchIcon } from "lucide-react";
-import { getAgents } from "@/apis/registry";
+import { getMyAgents } from "@/apis/registry";
 import { Agent, Capabilities } from "@/apis/registry/types";
 import { Input } from "@/components/ui/input";
+import { useAtom } from "jotai";
+import { accessTokenAtom } from "@/store/global.store";
 
 export default function AgentsPage() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [accessToken] = useAtom(accessTokenAtom)
+
 
   useEffect(() => {
     async function fetchAgents() {
       try {
         setLoading(true);
-        const response = await getAgents({ status: "ACTIVE", limit: 20 });
-        setAgents(response.data);
+        const response = await getMyAgents(accessToken!);
+        setAgents(response);
         setError(null);
       } catch (err) {
         setError("Failed to load agents");
@@ -43,7 +47,7 @@ export default function AgentsPage() {
   }, []);
 
   // Filter agents based on search term
-  const filteredAgents = agents.filter(agent => 
+  const filteredAgents = (agents || []).filter(agent =>
     agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     agent.didIdentifier.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -53,17 +57,17 @@ export default function AgentsPage() {
     if (!capabilities || Object.keys(capabilities).length === 0) {
       return <span className="text-gray-400 italic text-xs">No capabilities</span>;
     }
-    
+
     // Get all capability items flattened
     const allItems = Object.values(capabilities).flat();
-    
+
     // Show first 2 items
     return (
       <div className="flex flex-wrap gap-1">
         {allItems.slice(0, 2).map((item, idx) => (
-          <Badge 
-            key={idx} 
-            variant="outline" 
+          <Badge
+            key={idx}
+            variant="outline"
             className="bg-gradient-to-r from-[#7678ed10] to-[#3B82F610] text-[#3B82F6] border-[#3B82F620]"
           >
             {item}
@@ -88,6 +92,7 @@ export default function AgentsPage() {
         return "bg-gradient-to-r from-red-50 to-orange-50 text-red-600 border-red-200";
     }
   };
+
 
   return (
     <div className="space-y-6 bg-white text-black">
@@ -131,17 +136,17 @@ export default function AgentsPage() {
             </div>
           ) : filteredAgents.length === 0 ? (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 m-6 text-center">
-              <svg 
-                className="mx-auto h-12 w-12 text-gray-400" 
-                fill="none" 
-                viewBox="0 0 24 24" 
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={1} 
-                  d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.75 2.198m0 0a2.25 2.25 0 002.25-2.198c0-.616-.197-1.185-.52-1.657M3 10.5v-7.25a1.5 1.5 0 111.5 0v7.5a2.25 2.25 0 002.25 2.25c.896 0 1.7-.393 2.25-1.016m0 0c.512.654 1.311 1.076 2.25 1.076a2.25 2.25 0 002.25-2.25V6a3 3 0 00-3-3H6A3 3 0 003 6v4.5" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 001.75 2.198m0 0a2.25 2.25 0 002.25-2.198c0-.616-.197-1.185-.52-1.657M3 10.5v-7.25a1.5 1.5 0 111.5 0v7.5a2.25 2.25 0 002.25 2.25c.896 0 1.7-.393 2.25-1.016m0 0c.512.654 1.311 1.076 2.25 1.076a2.25 2.25 0 002.25-2.25V6a3 3 0 00-3-3H6A3 3 0 003 6v4.5"
                 />
               </svg>
               <h3 className="mt-2 text-lg font-medium text-black">
@@ -152,7 +157,7 @@ export default function AgentsPage() {
               </p>
               {searchTerm ? (
                 <div className="mt-6 flex justify-center gap-3">
-                  <Button 
+                  <Button
                     onClick={() => setSearchTerm("")}
                     className="bg-white text-black border border-gray-300 hover:bg-gray-50"
                   >
@@ -190,8 +195,8 @@ export default function AgentsPage() {
                 </TableHeader>
                 <TableBody>
                   {filteredAgents.map((agent) => (
-                    <TableRow 
-                      key={agent.id} 
+                    <TableRow
+                      key={agent.id}
                       className="hover:bg-blue-50/40 border-b border-gray-200 transition-colors"
                     >
                       <TableCell className="py-4">
@@ -218,8 +223,8 @@ export default function AgentsPage() {
                       <TableCell className="text-right">
                         <div className="flex space-x-2 justify-end">
                           <Link href={`/dashboard/agents/${agent.id}`}>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               className="bg-white text-[#3B82F6] border-[#3B82F640] hover:bg-[#3B82F610] h-8 px-3"
                             >
@@ -228,8 +233,8 @@ export default function AgentsPage() {
                             </Button>
                           </Link>
                           <Link href={`/dashboard/agents/${agent.id}/edit`}>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               className="bg-white text-gray-600 border-gray-200 hover:bg-gray-50 h-8 px-3"
                             >
