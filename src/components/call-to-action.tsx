@@ -6,6 +6,8 @@ import BackgroundGrid from "@/assets/grid-lines.png";
 import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { RefObject, useEffect, useRef, useState } from "react";
 import { Send, Sparkle } from "lucide-react";
+import { collectMail } from "@/apis/registry/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const useRelativeMousePosition = (to: RefObject<HTMLElement>) => {
     const mouseX = useMotionValue(0);
@@ -30,6 +32,8 @@ export function CallToAction() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
+    const { toast } = useToast();
+
     const sectionRef = useRef<HTMLElement>(null);
     const borderedDivRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: sectionRef, offset: [`start end`, 'end start'] })
@@ -42,8 +46,20 @@ export function CallToAction() {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulated API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        if (email.length === 0 || email.trim() === "") {
+            return;
+        }
+
+        collectMail({
+            email,
+            purpose: "EARLY_ACCESS"
+        })
+
+        toast({
+            title: "Success",
+            description: "✅ Early access confirmed! Watch your inbox for exclusive updates.",
+        })
+
 
         setIsSubmitting(false);
         setIsSubmitted(true);
@@ -57,8 +73,8 @@ export function CallToAction() {
         <section className="py-20 md:py-24 bg-gradient-to-b from-white to-gray-50" ref={sectionRef}>
             <div className="container max-w-6xl mx-auto px-4">
                 <motion.div
-                    animate={{backgroundPositionX: BackgroundStars.width}}
-                    transition={{duration: 120, repeat: Infinity, ease: 'linear'}}
+                    animate={{ backgroundPositionX: BackgroundStars.width }}
+                    transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
                     className="p-1 rounded-2xl bg-gradient-to-b from-black/5 to-transparent"
                 >
                     <div className="border border-black/10 py-20 sm:py-24 px-4 sm:px-6 rounded-xl overflow-hidden relative group bg-white"
@@ -71,12 +87,12 @@ export function CallToAction() {
                             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-4000" />
                         </div>
 
-                        <div 
+                        <div
                             className="absolute inset-0 bg-[#7678ed]/5 bg-blend-overlay [mask-image:radial-gradient(50%_50%_at_50%_35%,black,transparent)] group-hover:opacity-0 transition duration-700"
                         />
                         <motion.div
                             className="absolute inset-0 bg-[#7678ed]/5 bg-blend-overlay opacity-0 group-hover:opacity-100 transition duration-700"
-                            style={{maskImage: maskImage}} 
+                            style={{ maskImage: maskImage }}
                             ref={borderedDivRef}
                         />
                         <div className="relative">
@@ -98,8 +114,8 @@ export function CallToAction() {
                                 Be the first to integrate your AI agents with P3AI&apos;s decentralized protocol. Whether you&apos;re building with LangChain, CrewAI, or custom solutions, transform your isolated agents into collaborative powerhouses.
                             </p>
                             <div className="flex flex-col items-center gap-4 mt-8">
-                                <form 
-                                    onSubmit={handleSubmit} 
+                                <form
+                                    onSubmit={handleSubmit}
                                     className="flex flex-col sm:flex-row w-full max-w-md gap-2 px-4"
                                 >
                                     <div className="relative flex-1">
@@ -112,7 +128,7 @@ export function CallToAction() {
                                             className="w-full px-4 py-3 bg-white border border-black/10 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all"
                                         />
                                         {isSubmitted && (
-                                            <motion.div 
+                                            <motion.div
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 className="absolute -bottom-6 left-0 text-sm text-green-600 flex items-center gap-1"

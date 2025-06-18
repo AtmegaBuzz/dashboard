@@ -6,8 +6,34 @@ import Youtube from "@/assets/social-youtube.svg"
 import SiteLogo from "@/assets/logo.svg"
 import Link from "next/link"
 import { Send, ChevronRight } from "lucide-react"
+import { collectMail } from "@/apis/registry/utils"
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
 
 export default function SiteFooter() {
+
+    const [email, setEmail] = useState("");
+    const { toast } = useToast();
+
+    const onSubmit = async () => {
+
+        if (email.length === 0 || email.trim() === "") {
+            return;
+        }
+
+        collectMail({
+            email,
+            purpose: "NEWS_LETTER"
+        })
+
+        toast({
+            title: "Success",
+            description: "🎉 Thanks for subscribing! You're on the list.",
+        })
+        
+
+    }
+
     return (
         <footer className="bg-[#111111] border-t border-white/10">
             {/* Main Footer Content */}
@@ -100,13 +126,16 @@ export default function SiteFooter() {
                             Subscribe to our newsletter for the latest updates.
                         </p>
                         <div className="flex gap-2">
-                            <input 
-                                type="email" 
-                                placeholder="Enter your email" 
+                            <input
+                                type="email"
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="flex-1 px-4 py-2 bg-[#141414] border border-white/10 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all"
                             />
-                            <button 
+                            <button
                                 className="p-2 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] hover:opacity-90 rounded-lg transition-all flex items-center justify-center text-white"
+                                onClick={onSubmit}
                             >
                                 <Send className="size-4" />
                             </button>
