@@ -37,6 +37,9 @@ export interface Agent {
   capabilities?: Capabilities;
   status: AgentStatus;
   ownerId: string;
+  owner: {
+    walletAddress: string
+  }
   createdAt: string;
   updatedAt: string;
 }

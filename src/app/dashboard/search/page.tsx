@@ -458,16 +458,6 @@ export default function TagSearchPage() {
                               <span className="ml-1.5">View</span>
                             </Button>
                           </Link>
-                          <Link href={`/dashboard/agents/${agent.id}/edit`}>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="bg-white text-gray-600 border-gray-200 hover:bg-gray-50 h-8 px-3"
-                            >
-                              <Pencil className="h-3.5 w-3.5" />
-                              <span className="ml-1.5">Edit</span>
-                            </Button>
-                          </Link>
                         </div>
                       </TableCell>
                     </TableRow>

@@ -32,6 +32,8 @@ import { Agent, VCResponse } from "@/apis/registry/types";
 import { getAgentById } from "@/apis/registry";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CredentialCard from "@/components/dashboard/credential-card";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/global.store";
 
 // Helper component for copying text to clipboard
 const CopyButton = ({ text = "", className = "" }) => {
@@ -94,6 +96,8 @@ export default function AgentDetailPage({
   const [error, setError] = useState<string | null>(null);
   const [agentId, setAgentId] = useState<string | null>(null);
 
+  const [user] = useAtom(userAtom);
+
   // Resolve params Promise
   useEffect(() => {
     async function resolveParams() {
@@ -110,6 +114,7 @@ export default function AgentDetailPage({
       try {
         setLoading(true);
         const { agent, credentials } = await getAgentById(agentId!);
+        console.log(user?.walletAddress.toLowerCase() === agent.owner.walletAddress.toLowerCase(),"=====")
         setAgent(agent);
         setAgentCredentials(credentials);
       } catch (err) {
@@ -126,7 +131,7 @@ export default function AgentDetailPage({
   // TODO: Implement delete agent functionality
   const handleDelete = async () => {
     if (!agentId) return;
-    
+
     try {
       const response = await fetch(`/api/agents/${agentId}`, {
         method: "DELETE",
@@ -181,12 +186,15 @@ export default function AgentDetailPage({
           <p className="text-gray-500 mt-1">ID: {agentId}</p>
         </div>
         <div className="flex space-x-3">
-          <Link href={`/dashboard/agents/${agentId}/edit`}>
-            <Button variant="outline" className="bg-white text-black border-gray-300 hover:bg-gray-50">
-              <PencilIcon className="mr-2 h-4 w-4" />
-              Edit
-            </Button>
-          </Link>
+          {
+            user?.walletAddress.toLowerCase() === agent.owner.walletAddress.toLowerCase() &&
+            <Link href={`/dashboard/agents/${agentId}/edit`}>
+              <Button variant="outline" className="bg-white text-black border-gray-300 hover:bg-gray-50">
+                <PencilIcon className="mr-2 h-4 w-4" />
+                Edit
+              </Button>
+            </Link>
+          }
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" disabled className="bg-red-600 text-white hover:bg-red-700">
@@ -341,6 +349,6 @@ export default function AgentDetailPage({
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </div >
   );
 }
