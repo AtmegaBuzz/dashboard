@@ -3,14 +3,22 @@
 import { motion } from "framer-motion";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { ArrowRight, Github, Star, Bot, Sparkle, Zap } from 'lucide-react';
+import { useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
+import { metaMask } from "wagmi/connectors";
+import { useEffect } from "react";
+import { LoginDto } from "@/apis/registry/types";
+import { login } from "@/apis/registry/auth";
+import { useAtom } from "jotai";
+import { accessTokenAtom } from "@/store/global.store";
+import { useRouter } from "next/navigation";
 
 const features = [
-    { 
+    {
         icon: Bot,
         label: "10k+ Active Agents",
         color: "#3B82F6" // Tech Blue
     },
-    { 
+    {
         icon: Sparkle,
         label: "1M+ Daily Interactions",
         color: "#06B6D4" // AI Teal
@@ -23,6 +31,44 @@ const features = [
 ];
 
 export const HeroSection = () => {
+
+    const { connect } = useConnect()
+    const { signMessage, data } = useSignMessage()
+    const { address, isConnected } = useAccount()
+    const [, setAccessToken] = useAtom(accessTokenAtom)
+    const router = useRouter();
+
+
+    const connectWallet = async () => {
+        try {
+
+            connect({ connector: metaMask() });
+            signMessage({ message: "This is P3AI." })
+
+            console.log("Signature: ", data);
+            console.log(address);
+
+        } catch (error) {
+            console.error('Error connecting to wallet:', error)
+        }
+    }
+
+    useEffect(() => {
+        (async () => {
+            const loginData: LoginDto = {
+                wallet_address: address!,
+                signature: data!,
+                message: "This is P3AI."
+            }
+
+            const resp = await login(loginData);
+
+            setAccessToken(resp.access_token);
+
+            router.push("dashboard")
+        })();
+    }, [data])
+
     return (
         <div className="relative pt-24 overflow-hidden bg-white">
             {/* Background decorative elements */}
@@ -37,7 +83,7 @@ export const HeroSection = () => {
                     {/* Left Content */}
                     <div className="w-full lg:w-1/2 space-y-6">
                         {/* Github Stats */}
-                        <motion.a 
+                        <motion.a
                             href="https://github.com/P3-AI-Network/agent-framework"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -75,13 +121,13 @@ export const HeroSection = () => {
                         </motion.div>
 
                         {/* CTA Buttons */}
-                        <motion.div 
+                        <motion.div
                             className="flex flex-col sm:flex-row gap-4"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            <button className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity group">
+                            <button onClick={connectWallet} className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity group">
                                 Get Started
                                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
                             </button>
@@ -91,23 +137,23 @@ export const HeroSection = () => {
                         </motion.div>
 
                         {/* Stats */}
-                        <motion.div 
+                        <motion.div
                             className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-black/10"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
                             {features.map((feature, index) => (
-                                <div 
+                                <div
                                     key={feature.label}
                                     className="flex items-center gap-3"
                                 >
-                                    <div 
+                                    <div
                                         className="size-10 rounded-lg flex items-center justify-center"
                                         style={{ backgroundColor: `${feature.color}10` }}
                                     >
-                                        <feature.icon 
-                                            size={20} 
+                                        <feature.icon
+                                            size={20}
                                             className="transition-transform group-hover:scale-110"
                                             style={{ color: feature.color }}
                                         />
@@ -122,7 +168,7 @@ export const HeroSection = () => {
 
                     {/* Right Animation */}
                     <div className="w-full lg:w-1/2">
-                        <motion.div 
+                        <motion.div
                             className="relative w-full aspect-square"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
