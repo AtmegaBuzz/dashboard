@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { ArrowRight, Github, Star, Bot, Sparkle, Zap } from 'lucide-react';
+import { ArrowRight, Github, Star, Shield, FileText, Settings } from 'lucide-react';
+
 import { useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
 import { metaMask } from "wagmi/connectors";
 import { useEffect } from "react";
@@ -14,18 +15,18 @@ import { useRouter } from "next/navigation";
 
 const features = [
     {
-        icon: Bot,
-        label: "10k+ Active Agents",
+        icon: Shield,
+        label: "Decentralized & Secure",
         color: "#3B82F6" // Tech Blue
     },
     {
-        icon: Sparkle,
-        label: "1M+ Daily Interactions",
+        icon: FileText,
+        label: "Open Protocol Standards",
         color: "#06B6D4" // AI Teal
     },
     {
-        icon: Zap,
-        label: "99.9% Uptime",
+        icon: Settings,
+        label: "Developer Friendly SDK",
         color: "#EC4899" // Innovation Pink
     }
 ];
