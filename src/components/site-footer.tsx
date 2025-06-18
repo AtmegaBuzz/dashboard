@@ -5,7 +5,7 @@ import Instagram from "@/assets/social-instagram.svg"
 import Youtube from "@/assets/social-youtube.svg"
 import SiteLogo from "@/assets/logo.svg"
 import Link from "next/link"
-import { Send, ChevronRight } from "lucide-react"
+import { Send } from "lucide-react"
 import { collectMail } from "@/apis/registry/utils"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -30,7 +30,7 @@ export default function SiteFooter() {
             title: "Success",
             description: "🎉 Thanks for subscribing! You're on the list.",
         })
-        
+
 
     }
 
@@ -38,7 +38,7 @@ export default function SiteFooter() {
         <footer className="bg-[#111111] border-t border-white/10">
             {/* Main Footer Content */}
             <div className="container max-w-6xl mx-auto py-12 md:py-16 px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {/* Brand Column */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-3 group">
@@ -51,70 +51,8 @@ export default function SiteFooter() {
                             Empowering the future of autonomous AI communication.
                         </p>
                         <ul className="flex gap-4 text-white/40">
-                            <li className="hover:text-[#7678ed] transition-colors cursor-pointer">
+                            <li onClick={() => window.open('https://x.com/P3_AI_Network', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
                                 <X className="size-5" />
-                            </li>
-                            <li className="hover:text-[#3B82F6] transition-colors cursor-pointer">
-                                <Instagram className="size-5" />
-                            </li>
-                            <li className="hover:text-[#06B6D4] transition-colors cursor-pointer">
-                                <Youtube className="size-5" />
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Quick Links */}
-                    <div className="space-y-4">
-                        <h3 className="font-semibold text-white/90">Quick Links</h3>
-                        <ul className="space-y-3 text-white/60">
-                            <li>
-                                <Link href="/about" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    About Us
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/features" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    Features
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/roadmap" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    Roadmap
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/documentation" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    Documentation
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Contact Info */}
-                    <div className="space-y-4">
-                        <h3 className="font-semibold text-white/90">Contact</h3>
-                        <ul className="space-y-3 text-white/60">
-                            <li>
-                                <a href="mailto:info@p3ai.com" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    info@p3ai.com
-                                </a>
-                            </li>
-                            <li>
-                                <Link href="/support" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    Support
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/careers" className="hover:text-[#7678ed] transition-colors inline-flex items-center gap-1 group">
-                                    <ChevronRight className="size-3 text-white/40 group-hover:text-[#7678ed]" />
-                                    Careers
-                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -150,16 +88,16 @@ export default function SiteFooter() {
                     <p className="text-sm text-white/60">
                         © 2024 P3 AI. All rights reserved.
                     </p>
-                    <div className="flex gap-6 text-sm text-white/60">
+                    {/* <div className="flex gap-6 text-sm text-white/60">
                         <Link href="/privacy" className="hover:text-[#7678ed] transition-colors">
                             Privacy Policy
                         </Link>
                         <Link href="/terms" className="hover:text-[#7678ed] transition-colors">
                             Terms of Service
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
-        </footer>
+        </footer >
     )
 }
