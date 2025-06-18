@@ -53,6 +53,10 @@ export const HeroSection = () => {
         }
     }
 
+    const handleClick = () => {
+        window.open('https://pypi.org/project/p3ai-agent/', '_blank', 'noopener,noreferrer');
+    };
+
     useEffect(() => {
         (async () => {
             const loginData: LoginDto = {
@@ -131,7 +135,7 @@ export const HeroSection = () => {
                                 Get Started
                                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
                             </button>
-                            <button className="inline-flex items-center justify-center h-12 px-6 bg-black/5 hover:bg-black/10 rounded-lg font-medium text-black transition-colors">
+                            <button onClick={handleClick} className="inline-flex items-center justify-center h-12 px-6 bg-black/5 hover:bg-black/10 rounded-lg font-medium text-black transition-colors">
                                 View Documentation
                             </button>
                         </motion.div>
