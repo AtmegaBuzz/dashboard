@@ -98,6 +98,7 @@ export default function AgentDetailPage({
 
   const [user] = useAtom(userAtom);
 
+
   // Resolve params Promise
   useEffect(() => {
     async function resolveParams() {
@@ -114,7 +115,7 @@ export default function AgentDetailPage({
       try {
         setLoading(true);
         const { agent, credentials } = await getAgentById(agentId!);
-        console.log(user?.walletAddress.toLowerCase() === agent.owner.walletAddress.toLowerCase(),"=====")
+        console.log(user?.walletAddress.toLowerCase() === agent.owner.walletAddress.toLowerCase(), "=====")
         setAgent(agent);
         setAgentCredentials(credentials);
       } catch (err) {
@@ -174,7 +175,7 @@ export default function AgentDetailPage({
   }
 
   return (
-    <div className="space-y-6 bg-white text-black">
+    <div className="space-y-6 bg-white text-black p-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b">
         <div>
           <div className="flex items-center">
@@ -255,6 +256,15 @@ export default function AgentDetailPage({
                     }
                   </dd>
                 </div>
+                {
+                  agent.seed &&
+                  <div className="py-4 grid grid-cols-12">
+                    <dt className="col-span-12 sm:col-span-3 font-medium text-gray-500">Seed</dt>
+                    <dd className="col-span-12 sm:col-span-9 mt-1 sm:mt-0">
+                      {agent.seed}
+                    </dd>
+                  </div>
+                }
                 <div className="py-4 grid grid-cols-12">
                   <dt className="col-span-12 sm:col-span-3 font-medium text-gray-500">Status</dt>
                   <dd className="col-span-12 sm:col-span-9 mt-1 sm:mt-0">
@@ -343,8 +353,10 @@ export default function AgentDetailPage({
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {agentCredentials.map((credential, index) => (
-                <CredentialCard key={index} credential={credential} index={index} />
+                <CredentialCard key={index} credential={credential} index={index} isDID={false} />
               ))}
+
+              <CredentialCard key={agentCredentials.length + 1} credential={JSON.parse(agent.did)} index={agentCredentials.length + 1} isDID={true} />
             </div>
           )}
         </TabsContent>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Dialog,
@@ -26,6 +26,7 @@ import {
 
 // Utility function to format DID
 const formatDID = (did: string) => {
+  if (!did) return "";
   if (did.length <= 20) return did;
   return `${did.slice(0, 10)}...${did.slice(-10)}`;
 };
@@ -33,13 +34,14 @@ const formatDID = (did: string) => {
 // Utility function to format timestamp to readable date
 const formatDate = (dateString: string) => {
   if (!dateString) return 'N/A';
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  try {
+    const date = new Date(dateString);
+    // Use a more consistent format that won't vary between server/client
+    return date.toISOString().split('T')[0] + ' ' +
+      date.toTimeString().split(' ')[0].slice(0, 5);
+  } catch {
+    return 'Invalid Date';
+  }
 };
 
 // Determine credential status
@@ -74,34 +76,82 @@ const statusConfig = {
   }
 };
 
+// Define the credential data type
+type CredentialData = {
+  id: string;
+  revoked: boolean;
+  vc: {
+    expirationDate: string;
+    issuanceDate: string;
+    credentialSubject: string;
+    issuer: string;
+    type: string;
+    didIdentifier: string;
+  };
+};
+
 export const CredentialCard = ({
   credential,
-  index
+  index,
+  isDID
 }: {
   credential: any,
-  index: number
+  index: number,
+  isDID: boolean
 }) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [credData, setCredData] = useState<CredentialData | null>(null);
 
-  // Extract relevant information
-  const {
-    id,
-    revoked,
-    vc: {
-      expirationDate,
-      issuanceDate,
-      credentialSubject,
-      issuer,
-      type: credentialType
+  // Move the conditional logic to useEffect
+  useEffect(() => {
+    if (!credential) return;
+
+    let processedData;
+    
+    if (isDID) {
+      processedData = {
+        id: credential.id,
+        revoked: false,
+        vc: {
+          expirationDate: "",
+          issuanceDate: credential.issuanceDate,
+          credentialSubject: "DID Document",
+          issuer: credential.issuer,
+          type: 'DID Document',
+          didIdentifier: credential.issuer
+        }
+      }
+    } else {
+      processedData = {
+        id: credential.id,
+        revoked: credential.revoked,
+        vc: {
+          expirationDate: credential.vc.expirationDate,
+          issuanceDate: credential.vc.issuanceDate,
+          credentialSubject: credential.vc.credentialSubject.type,
+          issuer: credential.vc.issuer,
+          type: credential.vc.credentialSubject.type,
+          didIdentifier: credential.vc.credentialSubject.owner
+        }
+      }
     }
-  } = credential;
+    
+    setCredData(processedData);
+  }, [credential, isDID]);
 
-  const status = getCredentialStatus(revoked, expirationDate);
+  // Don't render until credData is set
+  if (!credData) {
+    return (
+      <div className="w-full max-w-[500px] h-48 bg-gray-200 animate-pulse rounded-lg"></div>
+    );
+  }
+
+  const status = getCredentialStatus(credData.revoked, credData.vc.expirationDate);
   const { color, icon: StatusIcon, iconColor, text } = statusConfig[status];
 
   const handleCopyDID = () => {
-    navigator.clipboard.writeText(credentialSubject.id);
+    navigator.clipboard.writeText(credData.vc.didIdentifier);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -114,7 +164,7 @@ export const CredentialCard = ({
     <>
       <TooltipProvider>
         <motion.div
-          key={id}
+          key={credData.id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -149,7 +199,7 @@ export const CredentialCard = ({
               <div className="flex items-center space-x-3 mb-4">
                 <StatusIcon className={`w-8 h-8 ${iconColor}`} />
                 <h3 className="text-lg font-semibold">
-                  {credentialSubject.type}
+                  {credData.vc.type}
                 </h3>
               </div>
 
@@ -157,63 +207,63 @@ export const CredentialCard = ({
                 <div>
                   <span className="text-xs opacity-70 block mb-1">Issuer</span>
                   <Tooltip>
-                    <TooltipTrigger className="w-full">
+                    <TooltipTrigger asChild className="w-full">
                       <div className="flex items-center space-x-2">
                         <p className="font-medium flex-grow truncate text-left">
-                          {formatDID(issuer)}
+                          {formatDID(credData.vc.issuer)}
                         </p>
-                        <button
+                        <div
                           onClick={handleCopyDID}
-                          className="hover:bg-white/20 rounded-full p-1 transition-colors"
+                          className="hover:bg-white/20 rounded-full p-1 transition-colors cursor-pointer"
                         >
                           <Copy
                             className={`w-4 h-4 ${copied ? 'text-green-300' : 'text-white/70'}`}
                           />
-                        </button>
+                        </div>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"
                       className="bg-black text-white max-w-[300px] break-words"
                     >
-                      {issuer}
+                      {credData.vc.issuer}
                     </TooltipContent>
                   </Tooltip>
                 </div>
                 <div>
                   <span className="text-xs opacity-70 block mb-1">Issued To</span>
                   <Tooltip>
-                    <TooltipTrigger className="w-full">
+                    <TooltipTrigger asChild className="w-full">
                       <div className="flex items-center space-x-2">
                         <p className="font-medium flex-grow truncate text-left">
-                          {formatDID(credentialSubject.id)}
+                          {formatDID(credData.vc.didIdentifier)}
                         </p>
-                        <button
+                        <div
                           onClick={handleCopyDID}
-                          className="hover:bg-white/20 rounded-full p-1 transition-colors"
+                          className="hover:bg-white/20 rounded-full p-1 transition-colors cursor-pointer"
                         >
                           <Copy
                             className={`w-4 h-4 ${copied ? 'text-green-300' : 'text-white/70'}`}
                           />
-                        </button>
+                        </div>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"
                       className="bg-black text-white max-w-[300px] break-words"
                     >
-                      {credentialSubject.id}
+                      {credData.vc.didIdentifier}
                     </TooltipContent>
                   </Tooltip>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <span className="text-xs opacity-70 block mb-1">Issued At</span>
-                    <p className="font-medium text-left">{formatDate(issuanceDate)}</p>
+                    <p className="font-medium text-left">{formatDate(credData.vc.issuanceDate)}</p>
                   </div>
                   <div>
                     <span className="text-xs opacity-70 block mb-1">Valid Until</span>
-                    <p className="font-medium text-left">{formatDate(expirationDate)}</p>
+                    <p className="font-medium text-left">{isDID ? "" : formatDate(credData.vc.expirationDate)}</p>
                   </div>
                 </div>
               </div>

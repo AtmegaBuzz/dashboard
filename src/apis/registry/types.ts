@@ -42,6 +42,7 @@ export interface Agent {
   }
   createdAt: string;
   updatedAt: string;
+  seed: string | null | undefined;
 }
 
 // DTOs for Metadata

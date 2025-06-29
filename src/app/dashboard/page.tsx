@@ -37,7 +37,7 @@ const formatDate = (timestamp: number) => {
 
 const getCredentialStatus = (revoked: boolean, expirationDate: number) => {
   const currentTimestamp = Math.floor(Date.now() / 1000);
-  
+
   if (revoked) return 'revoked';
   if (expirationDate && currentTimestamp > expirationDate) return 'expired';
   return 'active';
@@ -152,7 +152,7 @@ export default function AgentsPage() {
         {/* Credentials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {credentials.map((credential, index) => (
-            <CredentialCard key={index} credential={credential} index={index}/>
+            <CredentialCard key={index} credential={credential} index={index} isDID={false} />
           ))}
         </div>
 
