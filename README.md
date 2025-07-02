@@ -6,3 +6,5 @@
 3. remove cost per response 
 
 1. Dashboard -> show agent name, skillset, agent type, Skill rating, remove rest of the things to tripple dot or detail view
+
+Redeploy Trigger
