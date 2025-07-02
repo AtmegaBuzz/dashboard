@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { AgentForm } from "@/components/dashboard/agent-form";
 import { Agent } from "@/apis/registry/types";
 import { getAgentById } from "@/apis/registry";
+import { useAtom } from "jotai";
+import { accessTokenAtom } from "@/store/global.store";
 
 export default function EditAgentPage({ params }: { params: Promise<{ id: string }> }) {
   const [agent, setAgent] = useState<Agent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [agentId, setAgentId] = useState<string | null>(null);
+  const [accessToken] = useAtom(accessTokenAtom)
 
   // Resolve params Promise
   useEffect(() => {
@@ -26,7 +29,7 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
     async function fetchAgent() {
       try {
         setLoading(true);
-        const agent = await getAgentById(agentId!);
+        const agent = await getAgentById(agentId!, accessToken!);
         setAgent(agent.agent);
       } catch (err) {
         setError("Failed to load agent details");
@@ -55,13 +58,13 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
 
   return (
     <div className="space-y-6">
-      <AgentForm 
+      <AgentForm
         agent={{
           name: agent.name,
           description: agent.description!,
           capabilities: agent.capabilities,
-        }} 
-        isEditing={true} 
+        }}
+        isEditing={true}
       />
     </div>
   );

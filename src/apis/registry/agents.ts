@@ -57,14 +57,13 @@ export const getAgents = async (
 export const getMyAgents = async (
   authToken: string
 ): Promise<Agent[]> => {
-  console.log(authToken,"===")  
   const response = await apiClient.get<Agent[]>("/agents/get-my-agents", {
     headers: {
       Authorization: `Bearer ${authToken}`
     }
   });
 
-  
+
   return response.data;
 };
 
@@ -72,8 +71,12 @@ export const getMyAgents = async (
 /**
  * Get agent by ID
  */
-export const getAgentById = async (id: string): Promise<{ agent: Agent, credentials: VCResponse[] }> => {
-  const response = await apiClient.get<{ agent: Agent, credentials: VCResponse[] }>(`/agents/${id}`);
+export const getAgentById = async (id: string, authToken: string): Promise<{ agent: Agent, credentials: VCResponse[] }> => {
+  const response = await apiClient.get<{ agent: Agent, credentials: VCResponse[] }>(`/agents/${id}`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  });
   return response.data;
 };
 

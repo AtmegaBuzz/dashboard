@@ -33,7 +33,7 @@ import { getAgentById } from "@/apis/registry";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import CredentialCard from "@/components/dashboard/credential-card";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/global.store";
+import { accessTokenAtom, userAtom } from "@/store/global.store";
 
 // Helper component for copying text to clipboard
 const CopyButton = ({ text = "", className = "" }) => {
@@ -95,6 +95,8 @@ export default function AgentDetailPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [agentId, setAgentId] = useState<string | null>(null);
+  const [accessToken] = useAtom(accessTokenAtom)
+
 
   const [user] = useAtom(userAtom);
 
@@ -114,7 +116,7 @@ export default function AgentDetailPage({
     async function fetchAgent() {
       try {
         setLoading(true);
-        const { agent, credentials } = await getAgentById(agentId!);
+        const { agent, credentials } = await getAgentById(agentId!, accessToken!);
         console.log(user?.walletAddress.toLowerCase() === agent.owner.walletAddress.toLowerCase(), "=====")
         setAgent(agent);
         setAgentCredentials(credentials);
