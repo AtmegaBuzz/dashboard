@@ -140,7 +140,7 @@ export function Features() {
                             Empower Your AI Agents
                         </h2>
                         <p className="text-gray-600 text-lg">
-                            Transform your AI agents into collaborative entities with P3AI&apos;s powerful SDK and integration tools.
+                            Transform your AI agents into collaborative entities with Zynd&apos;s powerful SDK and integration tools.
                         </p>
                     </motion.div>
                 </div>

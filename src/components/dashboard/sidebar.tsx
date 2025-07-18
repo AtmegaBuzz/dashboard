@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import logo from "@/assets/logo-new3.png"; // Import the image from assets
+import logo from "@/assets/logo2.png"; // Import the image from assets
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: "grid" },
@@ -22,12 +22,12 @@ export function Sidebar() {
           <div className="size-8 border border-black/10 rounded-lg flex items-center justify-center bg-white group-hover:border-[#7678ed] transition-colors">
             <Image
               src={logo}
-              className="w-full h-full scale-150"
-              alt="P3 AI Network Logo"
+              className="w-full h-full scale-150 p-1"
+              alt="Zynd Protocol Logo"
             />
           </div>
           <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
-            AI Network
+            Zynd Protocol
           </div>
         </Link>
       </div>

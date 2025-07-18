@@ -56,7 +56,7 @@ export function TopNav() {
 
   return (
     <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-      <div className="text-xl font-bold">P3AI Dashboard</div>
+      <div className="text-xl font-bold">Zynd Dashboard</div>
 
       {isConnected && (
         <DropdownMenu>

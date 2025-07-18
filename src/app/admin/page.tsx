@@ -95,7 +95,7 @@ export default function AdminDashboardPage() {
 
   return (
       <main className="flex-1 space-y-4 p-8 pt-6">
-        <AdminDashboardHeader heading="Admin Panel" text="Approve all users into P3 Agent Network." />
+        <AdminDashboardHeader heading="Admin Panel" text="Approve all users into Zynd." />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

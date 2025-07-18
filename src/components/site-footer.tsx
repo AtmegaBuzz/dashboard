@@ -1,14 +1,12 @@
 "use client"
 
 import X from "@/assets/social-x.svg"
-import Instagram from "@/assets/social-instagram.svg"
-import Youtube from "@/assets/social-youtube.svg"
-import SiteLogo from "@/assets/logo.svg"
-import Link from "next/link"
+import SiteLogo from "@/assets/logo2.png"
 import { Send } from "lucide-react"
 import { collectMail } from "@/apis/registry/utils"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import Image from "next/image"
 
 export default function SiteFooter() {
 
@@ -43,9 +41,9 @@ export default function SiteFooter() {
                     <div className="space-y-4">
                         <div className="flex items-center gap-3 group">
                             <div className="border border-white/10 size-10 rounded-lg inline-flex items-center justify-center bg-[#141414] group-hover:border-[#7678ed] transition-colors">
-                                <SiteLogo className="size-7 h-auto" />
+                                <Image src={SiteLogo} className="size-7 h-auto" alt="Zynd Protocol Logo" />
                             </div>
-                            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">P3 AI</span>
+                            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">Zynd Protocol</span>
                         </div>
                         <p className="text-white/60 text-sm leading-relaxed max-w-xs">
                             Empowering the future of autonomous AI communication.
@@ -86,7 +84,7 @@ export default function SiteFooter() {
             <div className="border-t border-white/10 bg-[#0D0D0D]">
                 <div className="container max-w-6xl mx-auto py-6 px-4 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-sm text-white/60">
-                        © 2024 P3 AI. All rights reserved.
+                        © 2024 Zynd Protocol. All rights reserved.
                     </p>
                     {/* <div className="flex gap-6 text-sm text-white/60">
                         <Link href="/privacy" className="hover:text-[#7678ed] transition-colors">

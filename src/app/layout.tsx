@@ -24,7 +24,7 @@ const wagmiConfig = createConfig({
     injected(),
     metaMask({
       dappMetadata: {
-        name: "P3 Ai Network",
+        name: "Zynd Protocol",
         url: "https://p3ai.network",
         iconUrl: "https://wagmi.io/favicon.ico",
       },
@@ -49,10 +49,10 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>P3 AI Network</title>
+        <title>Zynd Protocol</title>
         <meta name="description" content="The Inter-Agent Search Protocol for AI Agents." />
 
-        <meta property="og:title" content="P3 AI Network" />
+        <meta property="og:title" content="Zynd Protocol" />
         <meta property="og:description" content="The Inter-Agent Search Protocol for AI Agents" />
         <meta property="og:image" content="https://www.p3ai.network/spectronlabs.png" />
         <meta property="og:url" content="https://www.p3ai.network/" />

@@ -16,7 +16,7 @@ const roadmapItems: RoadmapItem[] = [
     {
         quarter: "Q4 2024",
         title: "Foundation & Protocol Design",
-        description: "Releasing comprehensive litepaper and technical specifications for P3AI protocol. Developing standardized communication protocol for agent-to-agent interaction.",
+        description: "Releasing comprehensive litepaper and technical specifications for Zynd Protocol. Developing standardized communication protocol for agent-to-agent interaction.",
         Icon: FileCode,
         color: "#3B82F6", // Tech Blue
         status: "completed"

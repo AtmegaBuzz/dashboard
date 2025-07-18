@@ -99,7 +99,7 @@ export default function AgentsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-black">Agents</h2>
-          <p className="text-gray-500 mt-1">Manage your P3 AI Network agents</p>
+          <p className="text-gray-500 mt-1">Manage your Zynd agents</p>
         </div>
         <Link href="/dashboard/agents/create">
           <Button className="bg-gradient-to-r from-[#7678ed] to-[#3B82F6] hover:opacity-90 text-white border-none">

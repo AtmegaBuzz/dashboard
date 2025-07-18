@@ -44,7 +44,7 @@ export const HeroSection = () => {
         try {
 
             connect({ connector: metaMask() });
-            signMessage({ message: "This is P3AI." })
+            signMessage({ message: "This is Zynd Protocol." })
 
             console.log("Signature: ", data);
             console.log(address);
@@ -63,7 +63,7 @@ export const HeroSection = () => {
             const loginData: LoginDto = {
                 wallet_address: address!,
                 signature: data!,
-                message: "This is P3AI."
+                message: "This is Zynd Protocol."
             }
 
             const resp = await login(loginData);
@@ -99,7 +99,7 @@ export const HeroSection = () => {
                         >
                             <div className="flex gap-1.5 items-center bg-black/5 rounded-full py-1 px-2">
                                 <Github size={14} className="text-black" />
-                                <span className="text-xs font-medium text-black">p3ai/sdk</span>
+                                <span className="text-xs font-medium text-black">zynd/sdk</span>
                             </div>
                             <div className="flex items-center gap-1 text-xs">
                                 <Star size={14} className="fill-[#7678ed] text-[#7678ed]" />
