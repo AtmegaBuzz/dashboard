@@ -5,6 +5,7 @@ import registryApiClient from "./client";
 export * from "./agents";
 export * from "./metadata";
 export * from "./users";
+export * from "./auth";
 
 // Export the client for custom API calls
 export { registryApiClient };
