@@ -65,7 +65,7 @@ export default function Navbar() {
 
             router.push("dashboard")
         })();
-    }, [data])
+    }, [data, address, router])
 
     const scrollToSection = (sectionId: string) => {
         setIsOpen(false);

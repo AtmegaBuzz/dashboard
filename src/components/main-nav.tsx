@@ -8,6 +8,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { usePathname } from 'next/navigation';
 import Link from "next/link";
 import SiteLogo from "@/assets/logo.svg"
+import Image from "next/image";
 
 interface MainNavProps {
   items?: MainNavItem[];
@@ -57,7 +58,14 @@ export function MainNav({ items, children }: MainNavProps) {
         className="flex items-center space-x-2 md:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
-        {showMobileMenu ? <Icons.close /> : <img src="/images/logo.png" className="w-8 h-8"/>}
+        {showMobileMenu ? <Icons.close /> : <Image
+          src="/images/logo.png"
+          alt="Zynd AI Logo"
+          width={32}    
+          height={32}
+          className="w-8 h-8"
+        />
+        }
 
         <span className="font-bold">Menu</span>
       </button>

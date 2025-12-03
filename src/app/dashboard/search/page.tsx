@@ -72,7 +72,7 @@ export default function TagSearchPage() {
     }
 
     fetchAgents();
-  }, []);
+  }, [selectedTags]);
 
   // Update suggestions based on input
   useEffect(() => {

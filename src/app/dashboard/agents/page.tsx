@@ -44,7 +44,7 @@ export default function AgentsPage() {
     }
 
     fetchAgents();
-  }, []);
+  }, [accessToken]);
 
   // Filter agents based on search term
   const filteredAgents = (agents || []).filter(agent =>

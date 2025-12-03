@@ -39,7 +39,7 @@ export function TopNav() {
     };
 
     getMyself();
-  }, [isConnected, authToken, setUser]);
+  }, [isConnected, authToken, setUser, setUserUserCreds]);
 
   const handleLogout = () => {
     setAuthToken(null);
@@ -52,7 +52,7 @@ export function TopNav() {
       router.push("/")
     }
 
-  }, [authToken])
+  }, [authToken, router])
 
   return (
     <nav className="flex justify-between items-center p-4 bg-white shadow-md">

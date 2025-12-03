@@ -40,7 +40,7 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
     }
 
     fetchAgent();
-  }, [agentId]);
+  }, [agentId, accessToken]);
 
   if (loading) {
     return (

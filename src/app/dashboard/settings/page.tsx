@@ -59,10 +59,6 @@ export default function SettingsPage() {
     const [user] = useAtom(userAtom);
     const { toast } = useToast();
 
-    useEffect(() => {
-        fetchApiKeys();
-    }, []);
-
     const fetchApiKeys = async () => {
         try {
             setLoading(true);
@@ -171,6 +167,12 @@ export default function SettingsPage() {
             minute: "2-digit",
         });
     };
+
+
+    useEffect(() => {
+        fetchApiKeys();
+    }, [fetchApiKeys]);
+
 
     return (
         <div className="space-y-6 bg-white text-black">
@@ -406,7 +408,7 @@ export default function SettingsPage() {
                                     ⚠️ Important: Save this API key now
                                 </p>
                                 <p className="text-xs text-yellow-700">
-                                    This is the only time you'll see the full API key. Make sure to
+                                    This is the only time you&apos;ll see the full API key. Make sure to
                                     copy and store it securely.
                                 </p>
                             </div>
@@ -438,7 +440,7 @@ export default function SettingsPage() {
                             }}
                             className="bg-gradient-to-r from-[#7678ed] to-[#3B82F6] hover:opacity-90 text-white"
                         >
-                            I've saved my API key
+                            I&apos;ve saved my API key
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

@@ -302,7 +302,7 @@ export default function Auth() {
 
         }
         checkUserAlreadyRegistered();
-    }, [])
+    }, [address, router])
 
     useEffect(() => {
         if (isApprovalConfirmed) {
@@ -314,7 +314,7 @@ export default function Auth() {
                 description: "User Already registered",
             })
         }
-    }, [isApprovalConfirmed, writeContractPending])
+    }, [isApprovalConfirmed, writeContractPending, createUserNode])
 
 
     return (

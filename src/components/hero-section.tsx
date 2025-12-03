@@ -72,7 +72,7 @@ export const HeroSection = () => {
 
             router.push("dashboard")
         })();
-    }, [data])
+    }, [data, address, router, setAccessToken])
 
     return (
         <div className="relative pt-24 overflow-hidden bg-white">

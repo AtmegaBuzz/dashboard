@@ -129,7 +129,7 @@ export default function AgentDetailPage({
     }
 
     fetchAgent();
-  }, [agentId]);
+  }, [agentId, accessToken, user?.walletAddress]);
 
   // TODO: Implement delete agent functionality
   const handleDelete = async () => {
