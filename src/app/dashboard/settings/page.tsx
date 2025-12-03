@@ -171,7 +171,7 @@ export default function SettingsPage() {
 
     useEffect(() => {
         fetchApiKeys();
-    }, [fetchApiKeys]);
+    }, []);
 
 
     return (
