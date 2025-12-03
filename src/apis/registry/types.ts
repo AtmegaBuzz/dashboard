@@ -118,6 +118,13 @@ export interface LoginDto {
   message: string;
 }
 
+export interface APIKeyResponse {
+  id: string;
+  key: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 
 interface CredentialStatus {
   id: string;
@@ -167,9 +174,9 @@ interface VerifiableCredential {
   expirationDate: string;
   issuanceDate: string;
   credentialSubject: {
-      id: string;
-      owner: string;
-      type: string;
+    id: string;
+    owner: string;
+    type: string;
   };
   credentialStatus: CredentialStatus;
   issuer: string;
