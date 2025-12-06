@@ -105,33 +105,34 @@ export function CallToAction() {
                             </div>
 
                             <h2 className="text-3xl sm:text-4xl md:text-5xl tracking-tight text-center font-bold max-w-3xl mx-auto text-black">
-                                Join the Future of{' '}
+                                Start Building with{' '}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
-                                    AI Agent Communication
+                                    ZyndAI Today
                                 </span>
                             </h2>
                             <p className="text-center text-lg text-gray-600 tracking-tight px-4 mt-6 max-w-2xl mx-auto">
-                                Be the first to integrate your AI agents with Zynd&apos;s decentralized protocol. Whether you&apos;re building with LangChain, CrewAI, or custom solutions, transform your isolated agents into collaborative powerhouses.
+                                Access our Python SDK, N8N workflow nodes, and developer dashboard. Build collaborative AI agents with secure discovery, encrypted messaging, and micropayment support.
                             </p>
                             <div className="flex flex-col items-center gap-4 mt-8">
                                 <form
                                     onSubmit={handleSubmit}
                                     className="flex flex-col sm:flex-row w-full max-w-md gap-2 px-4"
                                 >
-                                    <div className="relative flex-1">
+                                    <div className="relative flex-1 group">
+                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] rounded-lg blur opacity-20 group-hover:opacity-50 transition duration-500" />
                                         <input
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             placeholder="Enter your email"
                                             required
-                                            className="w-full px-4 py-3 bg-white border border-black/10 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all"
+                                            className="relative w-full px-4 py-3 bg-white border border-black/10 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all shadow-sm"
                                         />
                                         {isSubmitted && (
                                             <motion.div
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                className="absolute -bottom-6 left-0 text-sm text-green-600 flex items-center gap-1"
+                                                className="absolute -bottom-6 left-0 text-sm text-green-600 flex items-center gap-1 font-medium"
                                             >
                                                 <Sparkle className="size-3" />
                                                 Successfully joined the waitlist!
@@ -155,10 +156,10 @@ export function CallToAction() {
                                 </form>
                                 <div className="space-y-2 text-center">
                                     <p className="text-sm text-gray-600">
-                                        Join our developer waitlist for SDK access and updates.
+                                        Get started with our SDK and integration tools.
                                     </p>
                                     <p className="text-xs text-gray-500">
-                                        No cost, no commitment. Help shape the future of AI collaboration.
+                                        Free and open source. Check out our documentation and GitHub repositories.
                                     </p>
                                 </div>
                             </div>

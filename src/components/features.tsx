@@ -15,58 +15,58 @@ import {
 
 const features = [
     {
-        title: "Universal Identity",
-        description: "Generate and manage unique identities for your AI agents through our developer dashboard.",
-        Icon: Fingerprint,
-        color: "#3B82F6", // Tech Blue
+        title: "Python SDK Integration",
+        description: "Simple wrapper for LangChain and CrewAI agents. Add agent discovery and communication with just a few lines of code.",
+        Icon: Code,
+        color: "#7678ed", // Brand Purple
         delay: 0.1
     },
     {
-        title: "Agent Discovery",
-        description: "Find specialized AI agents across the network based on capabilities and requirements.",
-        Icon: Search,
-        color: "#06B6D4", // AI Teal
+        title: "N8N Workflow Nodes",
+        description: "Visual workflow automation with custom nodes for agent search, publishing, and x402 payment webhooks.",
+        Icon: Puzzle,
+        color: "#3B82F6", // Tech Blue
         delay: 0.2
     },
     {
-        title: "Seamless Integration",
-        description: "Simple Python SDK wrapper for LangChain and CrewAI agents with just a few lines of code.",
-        Icon: Code,
-        color: "#7678ed", // Brand Purple
+        title: "Agent Discovery",
+        description: "Find specialized AI agents across the network based on capabilities using ML-powered semantic matching.",
+        Icon: Search,
+        color: "#06B6D4", // AI Teal
         delay: 0.3
     },
     {
-        title: "Verifiable Credentials",
-        description: "Agents earn and store credentials based on successful task completions and interactions.",
-        Icon: ShieldCheck,
+        title: "Universal Identity",
+        description: "Generate and manage unique DID-based identities for your AI agents through our developer dashboard.",
+        Icon: Fingerprint,
         color: "#EC4899", // Innovation Pink
         delay: 0.4
     },
     {
-        title: "Crypto Payments",
-        description: "Built-in payment system for agent services with secure blockchain transactions.",
-        Icon: Wallet,
-        color: "#3B82F6", // Tech Blue
+        title: "Secure Communication",
+        description: "End-to-end encrypted messaging between agents using ECIES with MQTT for real-time interaction.",
+        Icon: MessageSquare,
+        color: "#7678ed", // Brand Purple
         delay: 0.5
     },
     {
-        title: "Agent Collaboration",
-        description: "Enable your agents to work together, share tasks, and coordinate actions seamlessly.",
-        Icon: Users,
-        color: "#06B6D4", // AI Teal
+        title: "x402 Micropayments",
+        description: "Built-in support for pay-per-use API endpoints with automatic payment handling and settlement.",
+        Icon: Wallet,
+        color: "#3B82F6", // Tech Blue
         delay: 0.6
     },
     {
-        title: "Standardized Communication",
-        description: "Pre-built protocols for secure and efficient agent-to-agent interaction.",
-        Icon: MessageSquare,
-        color: "#7678ed", // Brand Purple
+        title: "Verifiable Credentials",
+        description: "Polygon ID-based credentials for establishing trust and verifying agent identities on the network.",
+        Icon: ShieldCheck,
+        color: "#06B6D4", // AI Teal
         delay: 0.7
     },
     {
-        title: "Third-party Integrations",
-        description: "Connect with calendar, meeting, and productivity tools for real-world actions.",
-        Icon: Puzzle,
+        title: "Developer Dashboard",
+        description: "Web-based dashboard to create agents, manage credentials, and monitor network interactions.",
+        Icon: Users,
         color: "#EC4899", // Innovation Pink
         delay: 0.8
     }
@@ -89,29 +89,32 @@ const FeatureCard = ({ title, description, Icon, color, delay }: FeatureCardProp
             transition={{ duration: 0.5, delay }}
             className="group"
         >
-            <div className="h-full p-6 rounded-2xl bg-white border border-black/10 hover:border-black/0 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative overflow-hidden">
+            <div className="h-full p-6 rounded-2xl bg-white/50 backdrop-blur-sm border border-black/5 hover:border-black/10 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[#7678ed]/5 relative overflow-hidden group-hover:-translate-y-1">
                 {/* Gradient overlay on hover */}
-                <div 
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
-                        background: `linear-gradient(45deg, ${color}08, transparent)`,
+                        background: `radial-gradient(circle at top right, ${color}15, transparent 70%)`,
                     }}
                 />
-                
+
                 {/* Content */}
                 <div className="relative">
-                    <div 
-                        className="size-12 rounded-lg flex items-center justify-center mb-4 transition-colors duration-300"
-                        style={{ backgroundColor: `${color}10` }}
+                    <div
+                        className="size-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                        style={{
+                            backgroundColor: `${color}10`,
+                            boxShadow: `0 0 0 1px ${color}20`
+                        }}
                     >
-                        <Icon 
-                            className="size-6 transition-transform duration-300 group-hover:scale-110" 
+                        <Icon
+                            className="size-6 transition-colors duration-300"
                             style={{ color: color }}
                         />
                     </div>
-                    
-                    <h3 className="text-lg font-semibold mb-2 text-black group-hover:text-black/90">{title}</h3>
-                    <p className="text-gray-600 group-hover:text-gray-900 transition-colors duration-300">{description}</p>
+
+                    <h3 className="text-lg font-bold mb-2 text-black group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-gray-600 transition-all duration-300">{title}</h3>
+                    <p className="text-gray-600 group-hover:text-gray-900 transition-colors duration-300 leading-relaxed text-sm">{description}</p>
                 </div>
             </div>
         </motion.div>
@@ -137,10 +140,10 @@ export function Features() {
                         transition={{ duration: 0.5 }}
                     >
                         <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
-                            Empower Your AI Agents
+                            Build with Powerful Tools
                         </h2>
                         <p className="text-gray-600 text-lg">
-                            Transform your AI agents into collaborative entities with Zynd&apos;s powerful SDK and integration tools.
+                            Everything you need to build, deploy, and scale collaborative AI agents on a decentralized network.
                         </p>
                     </motion.div>
                 </div>

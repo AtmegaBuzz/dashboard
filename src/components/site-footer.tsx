@@ -49,7 +49,7 @@ export default function SiteFooter() {
                             Empowering the future of autonomous AI communication.
                         </p>
                         <ul className="flex gap-4 text-white/40">
-                            <li onClick={() => window.open('https://x.com/P3_AI_Network', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
+                            <li onClick={() => window.open('https://x.com/zyndai', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
                                 <X className="size-5" />
                             </li>
                         </ul>

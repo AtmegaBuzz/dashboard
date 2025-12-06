@@ -15,6 +15,11 @@ import { useRouter } from "next/navigation";
 
 const features = [
     {
+        icon: Settings,
+        label: "Python SDK & N8N Ready",
+        color: "#7678ed" // Brand Purple
+    },
+    {
         icon: Shield,
         label: "Decentralized & Secure",
         color: "#3B82F6" // Tech Blue
@@ -23,11 +28,6 @@ const features = [
         icon: FileText,
         label: "Open Protocol Standards",
         color: "#06B6D4" // AI Teal
-    },
-    {
-        icon: Settings,
-        label: "Developer Friendly SDK",
-        color: "#EC4899" // Innovation Pink
     }
 ];
 
@@ -78,9 +78,9 @@ export const HeroSection = () => {
         <div className="relative pt-24 overflow-hidden bg-white">
             {/* Background decorative elements */}
             <div className="absolute inset-0 -z-10">
-                <div className="absolute -top-40 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
-                <div className="absolute -top-40 right-20 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
-                <div className="absolute top-40 left-1/2 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+                <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-[#7678ed] opacity-20 blur-[100px]" />
+                <div className="absolute right-0 top-0 -z-10 h-[310px] w-[310px] rounded-full bg-[#3B82F6] opacity-20 blur-[100px]" />
             </div>
 
             <div className="container mx-auto px-4 pb-24">
@@ -89,21 +89,21 @@ export const HeroSection = () => {
                     <div className="w-full lg:w-1/2 space-y-6">
                         {/* Github Stats */}
                         <motion.a
-                            href="https://github.com/P3-AI-Network/agent-framework"
+                            href="https://github.com/orgs/zyndai/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-4 bg-white hover:bg-black/5 border border-black/10 rounded-full py-1.5 pl-2 pr-4 transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-4 bg-white/50 backdrop-blur-sm border border-black/5 hover:border-black/10 rounded-full py-1.5 pl-2 pr-4 transition-all cursor-pointer hover:shadow-lg hover:shadow-[#7678ed]/10"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
                             <div className="flex gap-1.5 items-center bg-black/5 rounded-full py-1 px-2">
                                 <Github size={14} className="text-black" />
-                                <span className="text-xs font-medium text-black">zynd/sdk</span>
+                                <span className="text-xs font-medium text-black">zyndai</span>
                             </div>
                             <div className="flex items-center gap-1 text-xs">
                                 <Star size={14} className="fill-[#7678ed] text-[#7678ed]" />
-                                <span className="font-medium text-black">In Development</span>
+                                <span className="font-medium text-black">Open Source SDK</span>
                             </div>
                         </motion.a>
 
@@ -113,14 +113,17 @@ export const HeroSection = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-4">
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-4 tracking-tight">
                                 Inter-Agent{' '}
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
-                                    Search Protocol{' '}
-                                </span>
+                                <span className="relative whitespace-nowrap">
+                                    <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4] animate-gradient-x">
+                                        Search Protocol
+                                    </span>
+                                    <span className="absolute inset-0 bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4] blur-xl opacity-30 animate-pulse" />
+                                </span>{' '}
                                 for AI Agents
                             </h1>
-                            <div className="text-lg text-gray-600 max-w-xl">
+                            <div className="text-lg text-gray-600 max-w-xl leading-relaxed">
                                 Enable your AI agents to discover and collaborate with other agents autonomously. Built on decentralized infrastructure for secure, scalable agent interactions.
                             </div>
                         </motion.div>
@@ -143,7 +146,7 @@ export const HeroSection = () => {
 
                         {/* Stats */}
                         <motion.div
-                            className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-black/10"
+                            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-black/5"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
@@ -151,11 +154,11 @@ export const HeroSection = () => {
                             {features.map((feature, index) => (
                                 <div
                                     key={feature.label}
-                                    className="flex items-center gap-3"
+                                    className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 transition-colors duration-300"
                                 >
                                     <div
-                                        className="size-10 rounded-lg flex items-center justify-center"
-                                        style={{ backgroundColor: `${feature.color}10` }}
+                                        className="size-10 rounded-lg flex items-center justify-center shadow-sm"
+                                        style={{ backgroundColor: `${feature.color}15` }}
                                     >
                                         <feature.icon
                                             size={20}
@@ -164,7 +167,7 @@ export const HeroSection = () => {
                                         />
                                     </div>
                                     <div>
-                                        <div className="text-sm font-medium text-gray-600">{feature.label}</div>
+                                        <div className="text-sm font-medium text-gray-700 leading-tight">{feature.label}</div>
                                     </div>
                                 </div>
                             ))}
