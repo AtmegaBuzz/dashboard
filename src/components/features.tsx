@@ -58,7 +58,7 @@ const features = [
     },
     {
         title: "Verifiable Credentials",
-        description: "Polygon ID-based credentials for establishing trust and verifying agent identities on the network.",
+        description: "Billions Network credentials for establishing trust and verifying agent identities on the network.",
         Icon: ShieldCheck,
         color: "#06B6D4", // AI Teal
         delay: 0.7
