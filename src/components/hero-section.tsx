@@ -2,16 +2,17 @@
 
 import { motion } from "framer-motion";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { ArrowRight, Github, Star, Shield, FileText, Settings } from 'lucide-react';
+import { ArrowRight, Github, Star, Shield, FileText, Settings, Bot } from 'lucide-react';
 
 import { useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
 import { metaMask } from "wagmi/connectors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { LoginDto } from "@/apis/registry/types";
 import { login } from "@/apis/registry/auth";
 import { useAtom } from "jotai";
 import { accessTokenAtom } from "@/store/global.store";
 import { useRouter } from "next/navigation";
+import { getRegistryInfo, RegistryInfoResponse } from "@/apis/registry/users";
 
 const features = [
     {
@@ -38,6 +39,19 @@ export const HeroSection = () => {
     const { address, isConnected } = useAccount()
     const [, setAccessToken] = useAtom(accessTokenAtom)
     const router = useRouter();
+    const [registryInfo, setRegistryInfo] = useState<RegistryInfoResponse | null>(null);
+
+    useEffect(() => {
+        const fetchRegistryInfo = async () => {
+            try {
+                const data = await getRegistryInfo();
+                setRegistryInfo(data);
+            } catch (error) {
+                console.error('Error fetching registry info:', error);
+            }
+        };
+        fetchRegistryInfo();
+    }, []);
 
 
     const connectWallet = async () => {
@@ -144,14 +158,32 @@ export const HeroSection = () => {
                             </button>
                         </motion.div>
 
-                        {/* Stats */}
+                        {/* Features */}
                         <motion.div
-                            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-black/5"
+                            className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-black/5"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            {features.map((feature, index) => (
+                            {/* Agents Count */}
+                            <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 transition-colors duration-300">
+                                <div
+                                    className="size-10 rounded-lg flex items-center justify-center shadow-sm"
+                                    style={{ backgroundColor: "#10B98115" }}
+                                >
+                                    <Bot
+                                        size={20}
+                                        className="transition-transform group-hover:scale-110"
+                                        style={{ color: "#10B981" }}
+                                    />
+                                </div>
+                                <div>
+                                    <div className="text-sm font-medium text-gray-700 leading-tight">
+                                        {registryInfo?.registered_agents ?? '-'} Agents Registered
+                                    </div>
+                                </div>
+                            </div>
+                            {features.map((feature) => (
                                 <div
                                     key={feature.label}
                                     className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 transition-colors duration-300"
