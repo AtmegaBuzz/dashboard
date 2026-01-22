@@ -69,7 +69,7 @@ export const getMyAgents = async (
 
 
 /**
- * Get agent by ID
+ * Get agent by ID (authenticated)
  */
 export const getAgentById = async (id: string, authToken: string): Promise<{ agent: Agent, credentials: VCResponse[] }> => {
   const response = await apiClient.get<{ agent: Agent, credentials: VCResponse[] }>(`/agents/${id}`, {
@@ -78,6 +78,16 @@ export const getAgentById = async (id: string, authToken: string): Promise<{ age
     }
   });
   return response.data;
+};
+
+/**
+ * Get agent by ID (public)
+ */
+export const getAgentByIdPublic = async (id: string): Promise<Agent | null> => {
+  const response = await apiClient.get<AgentResponse>("/agents", {
+    params: { id },
+  });
+  return response.data.data?.[0] || null;
 };
 
 /**

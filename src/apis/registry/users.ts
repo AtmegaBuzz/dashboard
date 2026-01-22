@@ -21,3 +21,27 @@ export const getMe = async (authToken: string): Promise<{user: UserResponse, cre
   });
   return response.data
 }
+
+export interface StatsResponse {
+  totalAgents: number;
+}
+
+/**
+ * Get platform stats (total users and agents)
+ */
+export const getStats = async (): Promise<StatsResponse> => {
+  const response = await apiClient.get<StatsResponse>("/stats");
+  return response.data;
+}
+
+export interface RegistryInfoResponse {
+  registered_agents: number;
+}
+
+/**
+ * Get registry info (number of registered agents)
+ */
+export const getRegistryInfo = async (): Promise<RegistryInfoResponse> => {
+  const response = await apiClient.get<RegistryInfoResponse>("/utils/registry-info");
+  return response.data;
+}

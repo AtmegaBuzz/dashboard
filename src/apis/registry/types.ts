@@ -91,6 +91,7 @@ export interface LoginResponse {
 
 // Query Params
 export interface GetAgentsParams {
+  id?: string;
   name?: string;
   status?: AgentStatus;
   capabilities?: string[];

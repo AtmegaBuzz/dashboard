@@ -87,7 +87,8 @@ export default function Navbar() {
         { label: "Technical", sectionId: "technical", color: "#3B82F6" },
         { label: "Features", sectionId: "features", color: "#06B6D4" },
         { label: "Roadmap", sectionId: "roadmap", color: "#EC4899" },
-        { label: "Litepaper", href: "/litepaper", color: "#7678ed" }
+        { label: "Litepaper", href: "/litepaper", color: "#7678ed" },
+        { label: "Registry", href: "/registry", color: "#10B981" },
     ];
 
     return (
@@ -108,10 +109,34 @@ export default function Navbar() {
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-8">
                         {navLinks.map((link) => {
-                            const content = (
+                            if (link.label === "Litepaper") {
+                                return (
+                                    <Link target="blank" key={link.href} href={"/docs/litepaper.pdf"} className="text-gray-600 hover:text-black relative group text-sm font-medium">
+                                        {link.label}
+                                        <div
+                                            className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full"
+                                            style={{ backgroundColor: link.color }}
+                                        />
+                                    </Link>
+                                )
+                            }
+
+                            if (link.href) {
+                                return (
+                                    <Link key={link.href} href={link.href} className="text-gray-600 hover:text-black relative group text-sm font-medium">
+                                        {link.label}
+                                        <div
+                                            className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full"
+                                            style={{ backgroundColor: link.color }}
+                                        />
+                                    </Link>
+                                );
+                            }
+
+                            return (
                                 <button
-                                    key={link.sectionId || link.href}
-                                    onClick={link.sectionId ? () => scrollToSection(link.sectionId) : undefined}
+                                    key={link.sectionId}
+                                    onClick={() => scrollToSection(link.sectionId!)}
                                     className="text-gray-600 hover:text-black relative group text-sm font-medium"
                                 >
                                     {link.label}
@@ -120,22 +145,6 @@ export default function Navbar() {
                                         style={{ backgroundColor: link.color }}
                                     />
                                 </button>
-                            );
-
-                            if (link.label === "Litepaper") {
-                                return (
-                                    <Link target="blank" key={link.href} href={"/docs/litepaper.pdf"}>
-                                        {content}
-                                    </Link>
-                                )
-                            }
-
-                            return link.href ? (
-                                <Link key={link.href} href={link.href}>
-                                    {content}
-                                </Link>
-                            ) : (
-                                content
                             );
                         })}
                     </nav>
@@ -158,24 +167,59 @@ export default function Navbar() {
                                 <div className="flex flex-col gap-6">
                                     {/* Mobile Navigation Links */}
                                     <nav className="flex flex-col gap-4">
-                                        {navLinks.map((link) => (
-                                            <button
-                                                key={link.sectionId || link.href}
-                                                onClick={() => {
-                                                    setIsOpen(false);
-                                                    if (link.sectionId) {
-                                                        scrollToSection(link.sectionId);
-                                                    }
-                                                }}
-                                                className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
-                                            >
-                                                <div
-                                                    className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
-                                                    style={{ backgroundColor: link.color }}
-                                                />
-                                                {link.label}
-                                            </button>
-                                        ))}
+                                        {navLinks.map((link) => {
+                                            if (link.label === "Litepaper") {
+                                                return (
+                                                    <Link
+                                                        key={link.href}
+                                                        href="/docs/litepaper.pdf"
+                                                        target="blank"
+                                                        onClick={() => setIsOpen(false)}
+                                                        className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                                    >
+                                                        <div
+                                                            className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
+                                                            style={{ backgroundColor: link.color }}
+                                                        />
+                                                        {link.label}
+                                                    </Link>
+                                                );
+                                            }
+
+                                            if (link.href) {
+                                                return (
+                                                    <Link
+                                                        key={link.href}
+                                                        href={link.href}
+                                                        onClick={() => setIsOpen(false)}
+                                                        className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                                    >
+                                                        <div
+                                                            className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
+                                                            style={{ backgroundColor: link.color }}
+                                                        />
+                                                        {link.label}
+                                                    </Link>
+                                                );
+                                            }
+
+                                            return (
+                                                <button
+                                                    key={link.sectionId}
+                                                    onClick={() => {
+                                                        setIsOpen(false);
+                                                        scrollToSection(link.sectionId!);
+                                                    }}
+                                                    className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                                >
+                                                    <div
+                                                        className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
+                                                        style={{ backgroundColor: link.color }}
+                                                    />
+                                                    {link.label}
+                                                </button>
+                                            );
+                                        })}
                                     </nav>
 
                                     {/* Mobile Action Buttons */}
