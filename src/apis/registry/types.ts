@@ -43,6 +43,7 @@ export interface Agent {
   createdAt: string;
   updatedAt: string;
   seed: string | null | undefined;
+  httpWebhookUrl: string;
 }
 
 // DTOs for Metadata

@@ -1,16 +1,24 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Bot, ArrowLeft, Globe, Copy, Check, Send, Loader2, Calendar, User, Hash } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Bot, ArrowLeft, Globe, Copy, Check, Send, Loader2, Calendar, User, Hash, Wallet, AlertCircle } from "lucide-react";
+import { createWalletClient, custom } from "viem";
+import { baseSepolia } from "viem/chains";
+import { wrapFetchWithPayment } from "x402-fetch";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
 import { Agent } from "@/apis/registry/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+declare global {
+    interface Window {
+        ethereum?: any;
+    }
+}
+
 export default function AgentDetailPage() {
-    const params = useParams();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -21,6 +29,12 @@ export default function AgentDetailPage() {
     const [prompt, setPrompt] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [response, setResponse] = useState<string | null>(null);
+
+    // Wallet state
+    const [walletAddress, setWalletAddress] = useState<string>("");
+    const [isWalletConnected, setIsWalletConnected] = useState(false);
+    const [walletLoading, setWalletLoading] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState<string>("0.01");
 
     useEffect(() => {
         const dataParam = searchParams.get("data");
@@ -38,7 +52,48 @@ export default function AgentDetailPage() {
         setLoading(false);
     }, [searchParams]);
 
-    const httpUrl = agent ? `https://api.p3ai.network/agents/${agent.id}/invoke` : "";
+    // Check for existing wallet connection
+    useEffect(() => {
+        if (typeof window.ethereum !== "undefined") {
+            window.ethereum
+                .request({ method: "eth_accounts" })
+                .then((accounts: string[]) => {
+                    if (accounts.length > 0) {
+                        setWalletAddress(accounts[0]);
+                        setIsWalletConnected(true);
+                    }
+                });
+        }
+    }, []);
+
+    const connectWallet = async () => {
+        try {
+            if (typeof window.ethereum === "undefined") {
+                setResponse(JSON.stringify({ error: "MetaMask is not installed. Please install MetaMask to continue." }, null, 2));
+                return;
+            }
+
+            setWalletLoading(true);
+
+            const accounts = await window.ethereum.request({
+                method: "eth_requestAccounts",
+            });
+
+            if (accounts.length > 0) {
+                setWalletAddress(accounts[0]);
+                setIsWalletConnected(true);
+            }
+        } catch (err: any) {
+            setResponse(JSON.stringify({ error: `Failed to connect wallet: ${err.message}` }, null, 2));
+        } finally {
+            setWalletLoading(false);
+        }
+    };
+
+    const disconnectWallet = () => {
+        setWalletAddress("");
+        setIsWalletConnected(false);
+    };
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
@@ -48,26 +103,66 @@ export default function AgentDetailPage() {
 
     const handleSubmitPrompt = async () => {
         if (!prompt.trim()) return;
+        if (!agent?.httpWebhookUrl) {
+            setResponse(JSON.stringify({ error: "No HTTP endpoint available for this agent" }, null, 2));
+            return;
+        }
+
+        if (!isWalletConnected) {
+            setResponse(JSON.stringify({ error: "Please connect your wallet first" }, null, 2));
+            return;
+        }
 
         setIsSubmitting(true);
         setResponse(null);
 
-        // Simulate API call with dummy response
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            const accounts = await window.ethereum.request({
+                method: "eth_accounts",
+            });
 
-        const dummyResponse = {
-            status: "success",
-            agent: agent?.name,
-            response: `This is a dummy response from ${agent?.name}. In production, this would be the actual response from the agent after processing your prompt: "${prompt}"`,
-            timestamp: new Date().toISOString(),
-            metadata: {
-                processingTime: "1.2s",
-                tokensUsed: 150
+            if (!accounts || accounts.length === 0) {
+                throw new Error("No accounts found. Please connect MetaMask.");
             }
-        };
 
-        setResponse(JSON.stringify(dummyResponse, null, 2));
-        setIsSubmitting(false);
+            const walletClient = createWalletClient({
+                account: accounts[0],
+                chain: baseSepolia,
+                transport: custom(window.ethereum),
+            });
+
+            // Convert amount to base units (USDC has 6 decimals)
+            const amountInBaseUnits = BigInt(Math.floor(parseFloat(paymentAmount) * 1000000));
+
+            const fetchWithPay = wrapFetchWithPayment(
+                fetch,
+                walletClient as any,
+                amountInBaseUnits
+            );
+
+            const apiResponse = await fetchWithPay(agent.httpWebhookUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ prompt }),
+            });
+
+            const data = await apiResponse.json();
+            setResponse(JSON.stringify({
+                status: apiResponse.status,
+                statusText: apiResponse.statusText,
+                data: data,
+            }, null, 2));
+        } catch (err: any) {
+            console.error("Error calling agent:", err);
+            setResponse(JSON.stringify({
+                error: "Agent offline",
+                details: err.message
+            }, null, 2));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const allCapabilities = agent?.capabilities
@@ -192,12 +287,12 @@ export default function AgentDetailPage() {
                                 <div className="flex items-center gap-2">
                                     <Globe className="h-5 w-5 text-gray-400 flex-shrink-0" />
                                     <div className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 font-mono text-sm text-gray-700 overflow-x-auto">
-                                        {httpUrl}
+                                        {agent.httpWebhookUrl}
                                     </div>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => copyToClipboard(httpUrl)}
+                                        onClick={() => copyToClipboard(agent.httpWebhookUrl)}
                                         className="bg-white text-gray-700 border-gray-200 hover:bg-gray-50 flex-shrink-0"
                                     >
                                         {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
@@ -207,8 +302,74 @@ export default function AgentDetailPage() {
 
                             {/* Prompt Section */}
                             <div className="bg-white border border-gray-200 rounded-xl p-6">
-                                <h2 className="text-lg font-semibold text-gray-900 mb-4">Test Agent</h2>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-lg font-semibold text-gray-900">Test Agent</h2>
+                                    {/* Wallet Connection */}
+                                    {isWalletConnected ? (
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
+                                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                <span className="text-sm text-emerald-700 font-mono">
+                                                    {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                                                </span>
+                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={disconnectWallet}
+                                                className="text-gray-500 hover:text-gray-700"
+                                            >
+                                                Disconnect
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <Button
+                                            onClick={connectWallet}
+                                            disabled={walletLoading}
+                                            variant="outline"
+                                            className="border-[#7678ed] text-[#7678ed] hover:bg-[#7678ed]/5"
+                                        >
+                                            {walletLoading ? (
+                                                <>
+                                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                    Connecting...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Wallet className="h-4 w-4 mr-2" />
+                                                    Connect Wallet
+                                                </>
+                                            )}
+                                        </Button>
+                                    )}
+                                </div>
+
+                                {!isWalletConnected && (
+                                    <div className="flex items-center gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 mb-4">
+                                        <AlertCircle className="h-4 w-4 text-amber-600 flex-shrink-0" />
+                                        <p className="text-sm text-amber-700">Connect your wallet to test this agent with x402 payment</p>
+                                    </div>
+                                )}
+
                                 <div className="space-y-4">
+                                    {/* Payment Amount */}
+                                    <div>
+                                        <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Max Payment Amount (USDC)
+                                        </label>
+                                        <input
+                                            id="amount"
+                                            type="number"
+                                            step="0.001"
+                                            min="0"
+                                            value={paymentAmount}
+                                            onChange={(e) => setPaymentAmount(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all font-mono"
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">Maximum USDC you&apos;re willing to pay for this request</p>
+                                    </div>
+
+                                    {/* Prompt */}
                                     <div>
                                         <label htmlFor="prompt" className="block text-sm font-medium text-gray-700 mb-2">
                                             Prompt
@@ -222,20 +383,21 @@ export default function AgentDetailPage() {
                                             className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all resize-none"
                                         />
                                     </div>
+
                                     <Button
                                         onClick={handleSubmitPrompt}
-                                        disabled={!prompt.trim() || isSubmitting}
+                                        disabled={!prompt.trim() || isSubmitting || !isWalletConnected}
                                         className="bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white hover:opacity-90 disabled:opacity-50"
                                     >
                                         {isSubmitting ? (
                                             <>
                                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                                Processing...
+                                                Processing Payment...
                                             </>
                                         ) : (
                                             <>
                                                 <Send className="h-4 w-4 mr-2" />
-                                                Submit
+                                                Send with Payment
                                             </>
                                         )}
                                     </Button>
