@@ -74,7 +74,9 @@ export default function RootLayout({
         <Script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></Script>
-        <Script>
+        <Script
+         id="google-analytics-init"
+  strategy="afterInteractive">
         {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
