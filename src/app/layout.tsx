@@ -1,7 +1,7 @@
 "use client";
 
 import { Inter } from "next/font/google";
-// import "./globals.css";
+import "./globals.css";
 import { clsx } from "clsx";
 import { http, createConfig, injected, WagmiProvider } from "wagmi";
 import { polygonAmoy } from "wagmi/chains";
