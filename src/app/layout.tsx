@@ -1,54 +1,16 @@
-"use client";
-
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { clsx } from "clsx";
-import { http, createConfig, injected, WagmiProvider } from "wagmi";
-import { polygonAmoy } from "wagmi/chains";
-import { metaMask } from "wagmi/connectors";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
-
-if (typeof window === "undefined") {
-  global.localStorage = {
-    getItem: () => null,
-    setItem: () => null,
-    removeItem: () => null,
-  } as any;
-}
-
-const wagmiConfig = createConfig({
-  chains: [polygonAmoy],
-  connectors: [
-    injected(),
-    metaMask({
-      dappMetadata: {
-        name: "Zynd Protocol",
-        url: "https://p3ai.network",
-        iconUrl: "https://wagmi.io/favicon.ico",
-      },
-    }),
-  ],
-  transports: {
-    [polygonAmoy.id]: http(),
-  },
-});
+import Providers from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-    },
-  },
-});
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-
-    const GA_ID = process.env.NEXT_PUBLIC_ANALYTICS_ID;
+  const GA_ID = process.env.NEXT_PUBLIC_ANALYTICS_ID;
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -57,7 +19,6 @@ export default function RootLayout({
           name="description"
           content="The Inter-Agent Search Protocol for AI Agents."
         />
-
         <meta property="og:title" content="Zynd Protocol" />
         <meta
           property="og:description"
@@ -73,23 +34,20 @@ export default function RootLayout({
       <body className={clsx(inter.className, "antialiased")}>
         <Script
           async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></Script>
-        <Script
-         id="google-analytics-init"
-  strategy="afterInteractive">
-        {`
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+        />
+        <Script id="google-analytics-init" strategy="afterInteractive">
+          {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GA_ID}');
           `}
         </Script>
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </WagmiProvider>
-        <Toaster/>
+        <Providers>
+          {children}
+        </Providers>
+        <Toaster />
       </body>
     </html>
   );
