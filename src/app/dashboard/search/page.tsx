@@ -52,13 +52,26 @@ export default function TagSearchPage() {
     async function fetchAgents() {
       try {
         setLoading(true);
-        let data: Agent[] = []
+        let data: Agent[] = [];
         if (selectedTags.length !== 0) {
-          const response = await searchAgents({capabilities: selectedTags.join(","), status: "ACTIVE", limit: 50 });
-          data = response.data
+          const searchTerm = selectedTags.join(",");
+          const [keywordRes, capabilitiesRes] = await Promise.all([
+            searchAgents({ keyword: searchTerm, status: "ACTIVE", limit: 50 }),
+            searchAgents({ capabilities: searchTerm, status: "ACTIVE", limit: 50 }),
+          ]);
+          // Combine and deduplicate by agent id
+          const seen = new Set<string>();
+          const combined: Agent[] = [];
+          for (const agent of [...keywordRes.data, ...capabilitiesRes.data]) {
+            if (!seen.has(agent.id)) {
+              seen.add(agent.id);
+              combined.push(agent);
+            }
+          }
+          data = combined;
         } else {
-          const response = await searchAgents({status: "ACTIVE", limit: 50 });
-          data = response.data
+          const response = await searchAgents({ status: "ACTIVE", limit: 50 });
+          data = response.data;
         }
         setAgents(data);
         setFilteredAgents(data);
