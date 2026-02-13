@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
 import { Inter } from "next/font/google";
-import "./globals.css";
+// import "./globals.css";
 import { clsx } from "clsx";
-import { http, createConfig, injected, WagmiProvider } from 'wagmi'
-import { polygonAmoy } from 'wagmi/chains'
-import { metaMask } from 'wagmi/connectors'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Toaster } from "@/components/ui/toaster"
+import { http, createConfig, injected, WagmiProvider } from "wagmi";
+import { polygonAmoy } from "wagmi/chains";
+import { metaMask } from "wagmi/connectors";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import Script from "next/script";
 
-
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
   global.localStorage = {
     getItem: () => null,
     setItem: () => null,
-    removeItem: () => null
+    removeItem: () => null,
   } as any;
 }
 
@@ -28,44 +28,66 @@ const wagmiConfig = createConfig({
         url: "https://p3ai.network",
         iconUrl: "https://wagmi.io/favicon.ico",
       },
-    })],
+    }),
+  ],
   transports: {
     [polygonAmoy.id]: http(),
   },
-})
+});
 
 const inter = Inter({ subsets: ["latin"] });
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: false
-    }
-  }
-})
+      retry: false,
+    },
+  },
+});
 
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
 
-export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-
+    const GA_ID = process.env.NEXT_PUBLIC_ANALYTICS_ID;
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <title>Zynd Protocol</title>
-        <meta name="description" content="The Inter-Agent Search Protocol for AI Agents." />
+        <meta
+          name="description"
+          content="The Inter-Agent Search Protocol for AI Agents."
+        />
 
         <meta property="og:title" content="Zynd Protocol" />
-        <meta property="og:description" content="The Inter-Agent Search Protocol for AI Agents" />
-        <meta property="og:image" content="https://www.p3ai.network/spectronlabs.png" />
+        <meta
+          property="og:description"
+          content="The Inter-Agent Search Protocol for AI Agents"
+        />
+        <meta
+          property="og:image"
+          content="https://www.p3ai.network/spectronlabs.png"
+        />
         <meta property="og:url" content="https://www.p3ai.network/" />
         <meta property="og:type" content="website" />
-
       </head>
       <body className={clsx(inter.className, "antialiased")}>
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></Script>
+        <Script>
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             {children}
           </QueryClientProvider>
         </WagmiProvider>
-        < Toaster />
+        <Toaster/>
       </body>
     </html>
   );
