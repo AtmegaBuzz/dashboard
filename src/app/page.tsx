@@ -7,10 +7,12 @@ import { Features } from "@/components/features";
 import {GithubIndicator} from "@/components/github-indicator";
 import Roadmap from "@/components/roadmap";
 import { HeroSection } from "@/components/hero-section";
+import { HackathonPopup } from "@/components/hackathon-popup";
 
 export default function Home() {
     return (
         <>
+            <HackathonPopup />
             <SiteHeader />
             <HeroSection />
             {/* <LogoTicker /> */}
