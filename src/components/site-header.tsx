@@ -65,6 +65,7 @@ export default function Navbar() {
 
             router.push("dashboard")
         })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, address, router])
 
     const scrollToSection = (sectionId: string) => {

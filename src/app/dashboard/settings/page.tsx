@@ -171,6 +171,7 @@ export default function SettingsPage() {
 
     useEffect(() => {
         fetchApiKeys();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 

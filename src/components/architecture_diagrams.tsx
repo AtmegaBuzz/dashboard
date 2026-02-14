@@ -3,6 +3,7 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { animate, motion, useMotionTemplate, useMotionValue, ValueAnimationTransition } from "framer-motion";
 import { ComponentPropsWithoutRef, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const tabs = [
     {
@@ -211,9 +212,11 @@ export function ArchitectureDiagrams() {
                         transition={{ duration: 0.4 }}
                         className="relative z-10 w-full max-w-4xl"
                     >
-                        <img
+                        <Image
                             src={tabs[selectedTab].image}
                             alt={tabs[selectedTab].title}
+                            width={896}
+                            height={500}
                             className="w-full h-auto object-contain max-h-[500px]"
                         />
                     </motion.div>

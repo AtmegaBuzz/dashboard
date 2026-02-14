@@ -314,6 +314,7 @@ export default function Auth() {
                 description: "User Already registered",
             })
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isApprovalConfirmed, writeContractPending, createUserNode])
 
 
