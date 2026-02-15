@@ -42,8 +42,8 @@ const linkCards = [
     {
         emoji: "⚡",
         title: "Zynd AI",
-        subtitle: "Economy For AI Agents",
-        href: "https://zynd.ai",
+        subtitle: "Get paid for your AI agents",
+        href: "https://zynd.ai/pay",
         isZynd: true,
         delay: 0.2,
     },
