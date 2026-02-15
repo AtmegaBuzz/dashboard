@@ -107,7 +107,7 @@ export function Roadmap() {
                             <div className="relative flex gap-8 pb-12 group">
                                 {/* Icon */}
                                 <div
-                                    className="relative size-16 shrink-0 rounded-2xl flex items-center justify-center bg-[#141414] border border-white/5 transition-all duration-300 group-hover:scale-110 group-hover:border-white/10 group-hover:shadow-[0_0_20px_-5px_currentColor]"
+                                     className="relative size-16 shrink-0 rounded-2xl flex items-center justify-center bg-[#141414] border border-white/5 transition-all duration-300 group-hover:scale-110 group-hover:border-white/10 group-hover:shadow-[0_0_20px_-5px_currentColor]"
                                     style={{
                                         color: item.color,
                                         boxShadow: `0 0 0 1px ${item.color}20`
@@ -118,10 +118,10 @@ export function Roadmap() {
                                     />
                                     {/* Status indicator */}
                                     <div
-                                        className={`absolute -right-1 -top-1 size-4 rounded-full border-4 border-[#111111] transition-all duration-300 ${item.status === 'completed' ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' :
-                                                item.status === 'inProgress' ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse' :
-                                                    'bg-gray-600'
-                                            }`}
+                                         className={`absolute -right-1 -top-1 size-4 rounded-full border-4 border-[#111111] transition-all duration-300 ${item.status === 'completed' ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' :
+                                                 item.status === 'inProgress' ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse' :
+                                                     'bg-gray-600'
+                                             }`}
                                     />
                                 </div>
 

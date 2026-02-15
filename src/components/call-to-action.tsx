@@ -70,21 +70,21 @@ export function CallToAction() {
     };
 
     return (
-        <section className="py-20 md:py-24 bg-gradient-to-b from-white to-gray-50" ref={sectionRef}>
+        <section className="py-20 md:py-24 bg-gradient-to-b from-white to-gray-50 dark:from-[#0a0a0a] dark:to-[#111111]" ref={sectionRef}>
             <div className="container max-w-6xl mx-auto px-4">
                 <motion.div
                     animate={{ backgroundPositionX: BackgroundStars.width }}
                     transition={{ duration: 120, repeat: Infinity, ease: 'linear' }}
                     className="p-1 rounded-2xl bg-gradient-to-b from-black/5 to-transparent"
                 >
-                    <div className="border border-black/10 py-20 sm:py-24 px-4 sm:px-6 rounded-xl overflow-hidden relative group bg-white"
+                    <div className="border border-black/10 dark:border-white/[0.08] py-20 sm:py-24 px-4 sm:px-6 rounded-xl overflow-hidden relative group bg-white dark:bg-[#111111]"
                         style={{}}
                     >
                         {/* Background Effects */}
                         <div className="absolute inset-0 -z-10">
-                            <div className="absolute -top-40 right-0 w-96 h-96 bg-teal-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000" />
-                            <div className="absolute top-40 left-0 w-96 h-96 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob" />
-                            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-4000" />
+                            <div className="absolute -top-40 right-0 w-96 h-96 bg-teal-50 dark:bg-[#06B6D4] rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-50 dark:opacity-5 animate-blob animation-delay-2000" />
+                            <div className="absolute top-40 left-0 w-96 h-96 bg-blue-50 dark:bg-[#3B82F6] rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-50 dark:opacity-5 animate-blob" />
+                            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-50 dark:bg-[#7678ed] rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-50 dark:opacity-5 animate-blob animation-delay-4000" />
                         </div>
 
                         <div
@@ -104,13 +104,13 @@ export function CallToAction() {
                                 </div>
                             </div>
 
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl tracking-tight text-center font-bold max-w-3xl mx-auto text-black">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl tracking-tight text-center font-bold max-w-3xl mx-auto text-black dark:text-white">
                                 Start Building with{' '}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
                                     ZyndAI Today
                                 </span>
                             </h2>
-                            <p className="text-center text-lg text-gray-600 tracking-tight px-4 mt-6 max-w-2xl mx-auto">
+                            <p className="text-center text-lg text-gray-600 dark:text-white/60 tracking-tight px-4 mt-6 max-w-2xl mx-auto">
                                 Access our Python SDK, N8N workflow nodes, and developer dashboard. Build collaborative AI agents with secure discovery, encrypted messaging, and micropayment support.
                             </p>
                             <div className="flex flex-col items-center gap-4 mt-8">
@@ -126,7 +126,7 @@ export function CallToAction() {
                                             onChange={(e) => setEmail(e.target.value)}
                                             placeholder="Enter your email"
                                             required
-                                            className="relative w-full px-4 py-3 bg-white border border-black/10 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all shadow-sm"
+                                            className="relative w-full px-4 py-3 bg-white dark:bg-white/[0.05] border border-black/10 dark:border-white/[0.1] rounded-lg text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/25 focus:outline-none focus:border-[#7678ed] focus:ring-2 focus:ring-[#7678ed]/20 transition-all shadow-sm"
                                         />
                                         {isSubmitted && (
                                             <motion.div
@@ -155,10 +155,10 @@ export function CallToAction() {
                                     </button>
                                 </form>
                                 <div className="space-y-2 text-center">
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-gray-600 dark:text-white/50">
                                         Get started with our SDK and integration tools.
                                     </p>
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-gray-500 dark:text-white/30">
                                         Free and open source. Check out our documentation and GitHub repositories.
                                     </p>
                                 </div>

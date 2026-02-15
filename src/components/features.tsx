@@ -89,7 +89,7 @@ const FeatureCard = ({ title, description, Icon, color, delay }: FeatureCardProp
             transition={{ duration: 0.5, delay }}
             className="group"
         >
-            <div className="h-full p-6 rounded-2xl bg-white/50 backdrop-blur-sm border border-black/5 hover:border-black/10 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[#7678ed]/5 relative overflow-hidden group-hover:-translate-y-1">
+            <div className="h-full p-6 rounded-2xl bg-white/50 dark:bg-white/[0.03] backdrop-blur-sm border border-black/5 dark:border-white/[0.08] hover:border-black/10 dark:hover:border-white/[0.15] transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[#7678ed]/5 relative overflow-hidden group-hover:-translate-y-1">
                 {/* Gradient overlay on hover */}
                 <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -113,8 +113,8 @@ const FeatureCard = ({ title, description, Icon, color, delay }: FeatureCardProp
                         />
                     </div>
 
-                    <h3 className="text-lg font-bold mb-2 text-black group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-gray-600 transition-all duration-300">{title}</h3>
-                    <p className="text-gray-600 group-hover:text-gray-900 transition-colors duration-300 leading-relaxed text-sm">{description}</p>
+                    <h3 className="text-lg font-bold mb-2 text-black dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-gray-600 dark:group-hover:from-white dark:group-hover:to-white/60 transition-all duration-300">{title}</h3>
+                    <p className="text-gray-600 dark:text-white/50 group-hover:text-gray-900 dark:group-hover:text-white/80 transition-colors duration-300 leading-relaxed text-sm">{description}</p>
                 </div>
             </div>
         </motion.div>
@@ -123,12 +123,12 @@ const FeatureCard = ({ title, description, Icon, color, delay }: FeatureCardProp
 
 export function Features() {
     return (
-        <section id="features" className="py-20 md:py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+        <section id="features" className="py-20 md:py-24 bg-gradient-to-b from-white to-gray-50 dark:from-[#0a0a0a] dark:to-[#111111] relative overflow-hidden">
             {/* Background decorative elements */}
             <div className="absolute inset-0 -z-10">
-                <div className="absolute top-40 left-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob" />
-                <div className="absolute top-40 right-0 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-2000" />
-                <div className="absolute -bottom-32 left-20 w-72 h-72 bg-teal-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-4000" />
+                <div className="absolute top-40 left-0 w-72 h-72 bg-blue-100 dark:bg-[#7678ed] rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-50 dark:opacity-5 animate-blob" />
+                <div className="absolute top-40 right-0 w-72 h-72 bg-purple-100 dark:bg-[#3B82F6] rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-50 dark:opacity-5 animate-blob animation-delay-2000" />
+                <div className="absolute -bottom-32 left-20 w-72 h-72 bg-teal-100 dark:bg-[#06B6D4] rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl opacity-50 dark:opacity-5 animate-blob animation-delay-4000" />
             </div>
 
             <div className="container mx-auto px-4">
@@ -142,7 +142,7 @@ export function Features() {
                         <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4]">
                             Build with Powerful Tools
                         </h2>
-                        <p className="text-gray-600 text-lg">
+                        <p className="text-gray-600 dark:text-white/60 text-lg">
                             Everything you need to build, deploy, and scale collaborative AI agents on a decentralized network.
                         </p>
                     </motion.div>

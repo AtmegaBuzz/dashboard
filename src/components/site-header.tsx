@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Sun, Moon } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -13,11 +13,14 @@ import { accessTokenAtom } from "@/store/global.store";
 import { login } from "@/apis/registry/auth";
 import { LoginDto } from "@/apis/registry/types";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme } = useTheme();
     const { address, isConnected } = useAccount()
     const { connect } = useConnect()
     const { signMessage, data } = useSignMessage()
@@ -41,6 +44,8 @@ export default function Navbar() {
         }
     }
 
+
+    useEffect(() => setMounted(true), []);
 
     // Handle scroll effect
     useEffect(() => {
@@ -89,17 +94,18 @@ export default function Navbar() {
         { label: "Features", sectionId: "features", color: "#06B6D4" },
         { label: "Roadmap", sectionId: "roadmap", color: "#EC4899" },
         { label: "Litepaper", href: "/litepaper", color: "#7678ed" },
+        { label: "Blog", href: "/blogs", color: "#F59E0B" },
         { label: "Registry", href: "/registry", color: "#10B981" },
     ];
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-lg border-b border-black/5 shadow-sm' : 'bg-white'
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-lg border-b border-black/5 dark:border-white/5 shadow-sm' : 'bg-white dark:bg-[#0a0a0a]'
             }`}>
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="size-8 border border-black/10 rounded-lg flex items-center justify-center bg-white group-hover:border-[#7678ed] transition-colors">
+                        <div className="size-8 border border-black/10 dark:border-white/10 rounded-lg flex items-center justify-center bg-white dark:bg-[#141414] group-hover:border-[#7678ed] transition-colors">
                             <Image src={logo} className="w-full h-full scale-150 p-1" alt="Zynd Protocol Logo" />
                         </div>
                         <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
@@ -112,7 +118,7 @@ export default function Navbar() {
                         {navLinks.map((link) => {
                             if (link.label === "Litepaper") {
                                 return (
-                                    <Link target="blank" key={link.href} href={"/docs/litepaper.pdf"} className="text-gray-600 hover:text-black relative group text-sm font-medium">
+                                    <Link target="blank" key={link.href} href={"/docs/litepaper.pdf"} className="text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white relative group text-sm font-medium">
                                         {link.label}
                                         <div
                                             className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full"
@@ -124,7 +130,7 @@ export default function Navbar() {
 
                             if (link.href) {
                                 return (
-                                    <Link key={link.href} href={link.href} className="text-gray-600 hover:text-black relative group text-sm font-medium">
+                                    <Link key={link.href} href={link.href} className="text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white relative group text-sm font-medium">
                                         {link.label}
                                         <div
                                             className="absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 rounded-full"
@@ -138,7 +144,7 @@ export default function Navbar() {
                                 <button
                                     key={link.sectionId}
                                     onClick={() => scrollToSection(link.sectionId!)}
-                                    className="text-gray-600 hover:text-black relative group text-sm font-medium"
+                                    className="text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white relative group text-sm font-medium"
                                 >
                                     {link.label}
                                     <div
@@ -151,7 +157,18 @@ export default function Navbar() {
                     </nav>
 
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
+                        {/* Theme Toggle */}
+                        {mounted && (
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="size-9 flex items-center justify-center rounded-lg border border-black/10 dark:border-white/10 text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white hover:border-black/20 dark:hover:border-white/20 transition-colors"
+                                aria-label="Toggle theme"
+                            >
+                                {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+                            </button>
+                        )}
+
                         <button
                             onClick={connectWallet}
                             className="hidden md:inline-flex h-9 px-4 items-center justify-center rounded-lg bg-[#7678ed] text-white text-sm font-medium hover:opacity-90 transition-opacity"
@@ -162,9 +179,9 @@ export default function Navbar() {
                         {/* Mobile Menu Button */}
                         <Sheet open={isOpen} onOpenChange={setIsOpen}>
                             <SheetTrigger className="md:hidden">
-                                <Menu className="size-6 text-gray-600 hover:text-black transition-colors" />
+                                <Menu className="size-6 text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors" />
                             </SheetTrigger>
-                            <SheetContent side="right" className="w-full max-w-xs p-6 bg-white/80 backdrop-blur-xl border-l border-black/5">
+                            <SheetContent side="right" className="w-full max-w-xs p-6 bg-white/80 dark:bg-[#0a0a0a]/90 backdrop-blur-xl border-l border-black/5 dark:border-white/5">
                                 <div className="flex flex-col gap-6">
                                     {/* Mobile Navigation Links */}
                                     <nav className="flex flex-col gap-4">
@@ -176,7 +193,7 @@ export default function Navbar() {
                                                         href="/docs/litepaper.pdf"
                                                         target="blank"
                                                         onClick={() => setIsOpen(false)}
-                                                        className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                                        className="flex items-center gap-2 text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors text-sm font-medium text-left group"
                                                     >
                                                         <div
                                                             className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
@@ -193,7 +210,7 @@ export default function Navbar() {
                                                         key={link.href}
                                                         href={link.href}
                                                         onClick={() => setIsOpen(false)}
-                                                        className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                                        className="flex items-center gap-2 text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors text-sm font-medium text-left group"
                                                     >
                                                         <div
                                                             className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
@@ -211,7 +228,7 @@ export default function Navbar() {
                                                         setIsOpen(false);
                                                         scrollToSection(link.sectionId!);
                                                     }}
-                                                    className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors text-sm font-medium text-left group"
+                                                    className="flex items-center gap-2 text-gray-600 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors text-sm font-medium text-left group"
                                                 >
                                                     <div
                                                         className="w-1 h-1 rounded-full transition-all duration-300 group-hover:w-2"
@@ -226,7 +243,7 @@ export default function Navbar() {
                                     {/* Mobile Action Buttons */}
                                     <div className="grid gap-3">
                                         <button
-                                            className="h-10 flex items-center justify-center rounded-lg border border-black/10 text-gray-600 text-sm font-medium hover:text-black hover:border-black/20 transition-colors"
+                                            className="h-10 flex items-center justify-center rounded-lg border border-black/10 dark:border-white/10 text-gray-600 dark:text-white/60 text-sm font-medium hover:text-black dark:hover:text-white hover:border-black/20 dark:hover:border-white/20 transition-colors"
                                             onClick={connectWallet}
                                         >
                                             Connect Wallet

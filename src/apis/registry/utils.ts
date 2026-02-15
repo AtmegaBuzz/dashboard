@@ -4,7 +4,7 @@ import apiClient from "./client";
 
 export interface CreateMailCollectorRequest {
     email: string;
-    purpose?: "NEWS_LETTER" | "EARLY_ACCESS"; // or: 'NEWS_LETTER' | 'EARLY_ACCESS'
+    purpose?: "NEWS_LETTER" | "EARLY_ACCESS";
 }
 
 export const collectMail = async (
@@ -17,4 +17,21 @@ export const collectMail = async (
     } else {
         return false
     }
+};
+
+export type WaitlistRole = "BUILDER" | "FOUNDER" | "INVESTOR" | "RESEARCHER" | "STUDENT" | "OTHER";
+
+export interface CreateWaitlistRequest {
+    email: string;
+    role: WaitlistRole;
+    linkedinProfile?: string;
+    building?: string;
+    attendingAiSummit?: boolean;
+}
+
+export const submitWaitlist = async (
+    data: CreateWaitlistRequest
+): Promise<boolean> => {
+    const response = await apiClient.post('/utils/waitlist', data);
+    return response.status === 201;
 };

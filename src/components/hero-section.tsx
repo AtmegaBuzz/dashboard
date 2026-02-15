@@ -89,10 +89,10 @@ export const HeroSection = () => {
     }, [data, address, router, setAccessToken])
 
     return (
-        <div className="relative pt-24 overflow-hidden bg-white">
+        <div className="relative pt-24 overflow-hidden bg-white dark:bg-[#0a0a0a]">
             {/* Background decorative elements */}
             <div className="absolute inset-0 -z-10">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:24px_24px]" />
                 <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-[#7678ed] opacity-20 blur-[100px]" />
                 <div className="absolute right-0 top-0 -z-10 h-[310px] w-[310px] rounded-full bg-[#3B82F6] opacity-20 blur-[100px]" />
             </div>
@@ -106,18 +106,18 @@ export const HeroSection = () => {
                             href="https://github.com/orgs/zyndai/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-4 bg-white/50 backdrop-blur-sm border border-black/5 hover:border-black/10 rounded-full py-1.5 pl-2 pr-4 transition-all cursor-pointer hover:shadow-lg hover:shadow-[#7678ed]/10"
+                            className="inline-flex items-center gap-4 bg-white/50 dark:bg-white/5 backdrop-blur-sm border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 rounded-full py-1.5 pl-2 pr-4 transition-all cursor-pointer hover:shadow-lg hover:shadow-[#7678ed]/10"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <div className="flex gap-1.5 items-center bg-black/5 rounded-full py-1 px-2">
-                                <Github size={14} className="text-black" />
-                                <span className="text-xs font-medium text-black">zyndai</span>
+                            <div className="flex gap-1.5 items-center bg-black/5 dark:bg-white/10 rounded-full py-1 px-2">
+                                <Github size={14} className="text-black dark:text-white" />
+                                <span className="text-xs font-medium text-black dark:text-white">zyndai</span>
                             </div>
                             <div className="flex items-center gap-1 text-xs">
                                 <Star size={14} className="fill-[#7678ed] text-[#7678ed]" />
-                                <span className="font-medium text-black">Open Source SDK</span>
+                                <span className="font-medium text-black dark:text-white">Open Source SDK</span>
                             </div>
                         </motion.a>
 
@@ -127,7 +127,7 @@ export const HeroSection = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black mb-4 tracking-tight">
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black dark:text-white mb-4 tracking-tight">
                                 Inter-Agent{' '}
                                 <span className="relative whitespace-nowrap">
                                     <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4] animate-gradient-x">
@@ -137,7 +137,7 @@ export const HeroSection = () => {
                                 </span>{' '}
                                 for AI Agents
                             </h1>
-                            <div className="text-lg text-gray-600 max-w-xl leading-relaxed">
+                            <div className="text-lg text-gray-600 dark:text-white/60 max-w-xl leading-relaxed">
                                 Enable your AI agents to discover and collaborate with other agents autonomously. Built on decentralized infrastructure for secure, scalable agent interactions.
                             </div>
                         </motion.div>
@@ -149,24 +149,24 @@ export const HeroSection = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            <button onClick={connectWallet} className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity group">
+                            <button onClick={connectWallet} className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-gradient-to-r from-[#7678ed] to-[#3B82F6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity group shadow-lg shadow-[#7678ed]/20">
                                 Get Started
                                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
                             </button>
-                            <button onClick={handleClick} className="inline-flex items-center justify-center h-12 px-6 bg-black/5 hover:bg-black/10 rounded-lg font-medium text-black transition-colors">
+                            <button onClick={handleClick} className="inline-flex items-center justify-center h-12 px-6 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-lg font-medium text-black dark:text-white transition-colors">
                                 View Documentation
                             </button>
                         </motion.div>
 
                         {/* Features */}
                         <motion.div
-                            className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-black/5"
+                            className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-black/5 dark:border-white/10"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
                             {/* Agents Count */}
-                            <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 transition-colors duration-300">
+                                <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-300">
                                 <div
                                     className="size-10 rounded-lg flex items-center justify-center shadow-sm"
                                     style={{ backgroundColor: "#10B98115" }}
@@ -178,7 +178,7 @@ export const HeroSection = () => {
                                     />
                                 </div>
                                 <div>
-                                    <div className="text-sm font-medium text-gray-700 leading-tight">
+                                    <div className="text-sm font-medium text-gray-700 dark:text-white/70 leading-tight">
                                         {registryInfo?.registered_agents ?? '-'} Agents Registered
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@ export const HeroSection = () => {
                             {features.map((feature) => (
                                 <div
                                     key={feature.label}
-                                    className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 transition-colors duration-300"
+                                    className="flex items-center gap-3 p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-300"
                                 >
                                     <div
                                         className="size-10 rounded-lg flex items-center justify-center shadow-sm"
@@ -199,7 +199,7 @@ export const HeroSection = () => {
                                         />
                                     </div>
                                     <div>
-                                        <div className="text-sm font-medium text-gray-700 leading-tight">{feature.label}</div>
+                                        <div className="text-sm font-medium text-gray-700 dark:text-white/70 leading-tight">{feature.label}</div>
                                     </div>
                                 </div>
                             ))}
