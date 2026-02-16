@@ -51,7 +51,7 @@ const linkCards = [
         emoji: "💰",
         title: "Zynd AIcakthon",
         subtitle: "₹6,00,000 Prize Pool",
-        href: "https://whereuelevate.com/drills/zynd-aickathon",
+        href: "https://luma.com/16oyz168",
         delay: 0.15,
     },
     {
