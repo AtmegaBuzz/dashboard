@@ -37,7 +37,7 @@ const linkCards = [
         title: "AI Impact Summit Mixer",
         subtitle: "18th Feb, 2025",
         href: "https://luma.com/5c70x6y7",
-        delay: 0.1,
+        delay: 0.05,
     },
     {
         emoji: "⚡",
@@ -45,21 +45,21 @@ const linkCards = [
         subtitle: "Get paid for your AI agents",
         href: "https://zynd.ai/pay",
         isZynd: true,
-        delay: 0.2,
+        delay: 0.1,
     },
     {
         emoji: "💰",
         title: "Zynd AIcakthon",
         subtitle: "₹6,00,000 Prize Pool",
         href: "https://whereuelevate.com/drills/zynd-aickathon",
-        delay: 0.3,
+        delay: 0.15,
     },
     {
         emoji: "📝",
         title: "Zynd Blog",
         subtitle: "What is Zynd?",
         href: "/blogs/what-is-zynd",
-        delay: 0.4,
+        delay: 0.2,
     },
 ];
 
@@ -74,168 +74,106 @@ export default function SummitContent() {
                 <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#00AAFF] opacity-[0.03] blur-[100px] rounded-full" />
             </div>
 
-            {/* Hero Section */}
-            <section className="relative pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20">
-                <div className="container max-w-5xl mx-auto px-4 sm:px-6">
-                    <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-                        {/* Left — Branding */}
-                        <motion.div
-                            className="w-full lg:w-1/2 text-center lg:text-left"
-                            initial={{ opacity: 0, y: 20 }}
+            {/* Compact Header — Branding + Summit Info */}
+            <section className="relative pt-8 sm:pt-12 pb-6 sm:pb-8">
+                <div className="container max-w-3xl mx-auto px-4 sm:px-6">
+                    <motion.div
+                        className="text-center"
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                    >
+                        <motion.h1
+                            className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-1"
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
+                            transition={{ duration: 0.4, delay: 0.05 }}
                         >
-                            {/* Summit badge */}
-                            <motion.div
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00AAFF]/10 border border-[#00AAFF]/20 mb-6"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.4, delay: 0.1 }}
-                            >
-                                <CalendarDays className="size-4 text-[#00AAFF]" />
-                                <span className="text-sm font-medium text-[#00AAFF]">India AI Impact Summit 2025</span>
-                            </motion.div>
-
-                            <motion.h1
-                                className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-4"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.15 }}
-                            >
-                                <span
-                                    className="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#00AAFF] to-white"
-                                    style={{ fontFamily: "'SF Mono', 'Fira Code', 'Courier New', monospace" }}
-                                >
-                                    ZYND AI
-                                </span>
-                            </motion.h1>
-
-                            <motion.p
-                                className="text-lg sm:text-xl text-white/60 mb-2 tracking-wide"
+                            <span
+                                className="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#00AAFF] to-white"
                                 style={{ fontFamily: "'SF Mono', 'Fira Code', 'Courier New', monospace" }}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.25 }}
                             >
-                                Economy For AI Agents
-                            </motion.p>
+                                ZYND AI
+                            </span>
+                        </motion.h1>
 
-                            <motion.div
-                                className="flex items-center justify-center lg:justify-start gap-2 text-white/40 text-sm mb-8"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.4, delay: 0.35 }}
-                            >
-                                <MapPin className="size-4" />
-                                <span>Feb 16–20, 2025 &bull; New Delhi, India</span>
-                            </motion.div>
-
-                            {/* Social links */}
-                            <motion.div
-                                className="flex items-center justify-center lg:justify-start gap-3"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.4, delay: 0.4 }}
-                            >
-                                {socialLinks.map((social) => (
-                                    <a
-                                        key={social.label}
-                                        href={social.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        title={social.label}
-                                        className={`size-12 rounded-2xl flex items-center justify-center ${social.bg} ${social.border} transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl`}
-                                    >
-                                        <social.icon className={`size-5 ${social.iconColor}`} />
-                                    </a>
-                                ))}
-                            </motion.div>
-                        </motion.div>
-
-                        {/* Right — Hero visual card */}
-                        <motion.div
-                            className="w-full lg:w-1/2"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
+                        <motion.p
+                            className="text-sm sm:text-base text-white/50 mb-3 tracking-wide"
+                            style={{ fontFamily: "'SF Mono', 'Fira Code', 'Courier New', monospace" }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4, delay: 0.1 }}
                         >
-                            <div
-                                className="relative rounded-3xl overflow-hidden"
-                                style={{
-                                    boxShadow: "0 0 0 2px #00AAFF, 0 8px 40px rgba(0, 170, 255, 0.2)",
-                                }}
-                            >
-                                <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-gradient-to-br from-[#1a2a3a] via-[#2a3a4a] to-[#1a2535]">
-                                    {/* Grid overlay */}
-                                    <div className="absolute inset-0 opacity-40">
-                                        <div
-                                            className="absolute inset-0"
-                                            style={{
-                                                backgroundImage: `
-                                                    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-                                                    linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-                                                `,
-                                                backgroundSize: "20px 40px",
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1520]/80 via-transparent to-[#2a3a4a]/30" />
-                                    <div className="absolute top-0 right-0 w-48 h-48 bg-[#00AAFF]/10 rounded-full blur-3xl" />
-                                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0066AA]/10 rounded-full blur-2xl" />
+                            Economy For AI Agents
+                        </motion.p>
 
-                                    <div className="relative z-10 p-6 sm:p-8 flex flex-col h-full justify-between">
-                                        <div>
-                                            <p className="text-[#00AAFF] text-xs sm:text-sm font-medium tracking-widest uppercase mb-2">AI Agent Infrastructure</p>
-                                            <h2
-                                                className="text-3xl sm:text-4xl font-bold text-white tracking-wider"
-                                                style={{ fontFamily: "'SF Mono', 'Fira Code', 'Courier New', monospace" }}
-                                            >
-                                                ZYND AI
-                                            </h2>
-                                            <p className="text-white/50 text-sm sm:text-base mt-2 max-w-xs">
-                                                The trust and payment layer for AI agents.
-                                            </p>
-                                        </div>
-                                        <div className="flex items-center gap-2 mt-4">
-                                            <div className="size-2 rounded-full bg-green-400 animate-pulse" />
-                                            <span className="text-white/40 text-xs tracking-wide">Live at AI Impact Summit</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        {/* Summit badge + location inline */}
+                        <motion.div
+                            className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-white/40 text-xs sm:text-sm mb-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4, delay: 0.15 }}
+                        >
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00AAFF]/10 border border-[#00AAFF]/20 text-[#00AAFF] font-medium">
+                                <CalendarDays className="size-3.5" />
+                                AI Impact Summit 2025
+                            </span>
+                            <span className="inline-flex items-center gap-1">
+                                <MapPin className="size-3.5" />
+                                Feb 16–20 &bull; New Delhi
+                            </span>
                         </motion.div>
-                    </div>
+
+                        {/* Social links */}
+                        <motion.div
+                            className="flex items-center justify-center gap-3"
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.2 }}
+                        >
+                            {socialLinks.map((social) => (
+                                <a
+                                    key={social.label}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title={social.label}
+                                    className={`size-10 rounded-xl flex items-center justify-center ${social.bg} ${social.border} transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl`}
+                                >
+                                    <social.icon className={`size-4 ${social.iconColor}`} />
+                                </a>
+                            ))}
+                        </motion.div>
+                    </motion.div>
                 </div>
             </section>
 
             {/* Divider */}
-            <div className="container max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="container max-w-3xl mx-auto px-4 sm:px-6">
                 <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
 
-            {/* Links Section */}
-            <section className="py-16 sm:py-20">
+            {/* Explore Section — immediately visible */}
+            <section className="py-8 sm:py-12">
                 <div className="container max-w-3xl mx-auto px-4 sm:px-6">
                     <motion.h2
-                        className="text-2xl sm:text-3xl font-bold text-center mb-10 sm:mb-12 text-white"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
+                        className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8 text-white"
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.25 }}
                     >
                         Explore
                     </motion.h2>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         {linkCards.map((card) => {
                             const isExternal = card.href.startsWith("http");
                             return (
                                 <motion.div
                                     key={card.title}
-                                    initial={{ opacity: 0, y: 15 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.4, delay: card.delay }}
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: 0.25 + card.delay }}
                                 >
                                     <Link
                                         href={card.href}
@@ -274,15 +212,14 @@ export default function SummitContent() {
             </section>
 
             {/* Footer */}
-            <div className="container max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="container max-w-3xl mx-auto px-4 sm:px-6">
                 <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
             <motion.footer
                 className="py-8 sm:py-10 text-center"
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
             >
                 <p className="text-sm text-white/30 tracking-wide">
                     Zynd AI
