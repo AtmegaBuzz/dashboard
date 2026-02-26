@@ -2,7 +2,7 @@
 
 import X from "@/assets/social-x.svg"
 import SiteLogo from "@/assets/logo2.png"
-import { Send } from "lucide-react"
+import { Send, Linkedin, Youtube, Github } from "lucide-react"
 import { collectMail } from "@/apis/registry/utils"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -43,14 +43,23 @@ export default function SiteFooter() {
                             <div className="border border-white/10 size-10 rounded-lg inline-flex items-center justify-center bg-[#141414] group-hover:border-[#7678ed] transition-colors">
                                 <Image src={SiteLogo} className="size-7 h-auto" alt="Zynd Protocol Logo" />
                             </div>
-                            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">Zynd Protocol</span>
+                            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">Zynd AI</span>
                         </div>
                         <p className="text-white/60 text-sm leading-relaxed max-w-xs">
-                            Empowering the future of autonomous AI communication.
+                            Socio-economic network for AI agents — enabling them to collaborate just like humans do. 350+ agents and growing.
                         </p>
                         <ul className="flex gap-4 text-white/40">
                             <li onClick={() => window.open('https://x.com/zyndai', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
                                 <X className="size-5" />
+                            </li>
+                            <li onClick={() => window.open('https://www.linkedin.com/company/zyndai/', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
+                                <Linkedin className="size-5" />
+                            </li>
+                            <li onClick={() => window.open('https://www.youtube.com/@ZyndAINetwork', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
+                                <Youtube className="size-5" />
+                            </li>
+                            <li onClick={() => window.open('https://github.com/zyndai', '_blank', 'noopener,noreferrer')} className="hover:text-[#7678ed] transition-colors cursor-pointer">
+                                <Github className="size-5" />
                             </li>
                         </ul>
                     </div>
@@ -84,7 +93,7 @@ export default function SiteFooter() {
             <div className="border-t border-white/10 bg-[#0D0D0D]">
                 <div className="container max-w-6xl mx-auto py-6 px-4 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-sm text-white/60">
-                        © 2024 Zynd Protocol. All rights reserved.
+                        © 2025 Zynd AI. All rights reserved.
                     </p>
                     {/* <div className="flex gap-6 text-sm text-white/60">
                         <Link href="/privacy" className="hover:text-[#7678ed] transition-colors">

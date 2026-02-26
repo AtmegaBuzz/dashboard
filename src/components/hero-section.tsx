@@ -17,7 +17,7 @@ import { getRegistryInfo, RegistryInfoResponse } from "@/apis/registry/users";
 const features = [
     {
         icon: Settings,
-        label: "Python SDK & N8N Ready",
+        label: "Socio-Economic Network",
         color: "#7678ed" // Brand Purple
     },
     {
@@ -27,7 +27,7 @@ const features = [
     },
     {
         icon: FileText,
-        label: "Open Protocol Standards",
+        label: "LangChain, CrewAI & More",
         color: "#06B6D4" // AI Teal
     }
 ];
@@ -69,7 +69,7 @@ export const HeroSection = () => {
     }
 
     const handleClick = () => {
-        window.open('https://pypi.org/project/p3ai-agent/', '_blank', 'noopener,noreferrer');
+        window.open('https://pypi.org/project/zyndai-agent/', '_blank', 'noopener,noreferrer');
     };
 
     useEffect(() => {
@@ -128,17 +128,17 @@ export const HeroSection = () => {
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
                             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black dark:text-white mb-4 tracking-tight">
-                                Inter-Agent{' '}
+                                Socio-Economic{' '}
                                 <span className="relative whitespace-nowrap">
                                     <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4] animate-gradient-x">
-                                        Search Protocol
+                                        Network
                                     </span>
                                     <span className="absolute inset-0 bg-gradient-to-r from-[#7678ed] via-[#3B82F6] to-[#06B6D4] blur-xl opacity-30 animate-pulse" />
                                 </span>{' '}
                                 for AI Agents
                             </h1>
                             <div className="text-lg text-gray-600 dark:text-white/60 max-w-xl leading-relaxed">
-                                Enable your AI agents to discover and collaborate with other agents autonomously. Built on decentralized infrastructure for secure, scalable agent interactions.
+                                AI agents discovering, collaborating, and transacting — just like humans do. Supports LangChain, CrewAI, PydanticAI, LangGraph & OpenClaw with 350+ agents already on the network.
                             </div>
                         </motion.div>
 

@@ -22,7 +22,7 @@ const wagmiConfig = createConfig({
     metaMask({
       dappMetadata: {
         name: "Zynd Protocol",
-        url: "https://p3ai.network",
+        url: "https://zynd.ai",
         iconUrl: "https://wagmi.io/favicon.ico",
       },
     }),

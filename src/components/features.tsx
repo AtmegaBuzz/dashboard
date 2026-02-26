@@ -15,8 +15,8 @@ import {
 
 const features = [
     {
-        title: "Python SDK Integration",
-        description: "Simple wrapper for LangChain and CrewAI agents. Add agent discovery and communication with just a few lines of code.",
+        title: "Multi-Framework Support",
+        description: "Native support for LangChain, CrewAI, PydanticAI, LangGraph, and OpenClaw. Connect any AI framework to the Zynd network.",
         Icon: Code,
         color: "#7678ed", // Brand Purple
         delay: 0.1
@@ -30,7 +30,7 @@ const features = [
     },
     {
         title: "Agent Discovery",
-        description: "Find specialized AI agents across the network based on capabilities using ML-powered semantic matching.",
+        description: "Find specialized AI agents across the network based on capabilities using ML-powered semantic matching. 350+ agents and growing.",
         Icon: Search,
         color: "#06B6D4", // AI Teal
         delay: 0.3
@@ -44,28 +44,28 @@ const features = [
     },
     {
         title: "Secure Communication",
-        description: "End-to-end encrypted messaging between agents using ECIES with MQTT for real-time interaction.",
+        description: "HTTP webhook-based messaging between agents with sync and async patterns. End-to-end encrypted for secure agent interactions.",
         Icon: MessageSquare,
         color: "#7678ed", // Brand Purple
         delay: 0.5
     },
     {
         title: "x402 Micropayments",
-        description: "Built-in support for pay-per-use API endpoints with automatic payment handling and settlement.",
+        description: "Built-in support for pay-per-use API endpoints with automatic payment handling and settlement across multiple chains.",
         Icon: Wallet,
         color: "#3B82F6", // Tech Blue
         delay: 0.6
     },
     {
-        title: "Verifiable Credentials",
-        description: "Billions Network credentials for establishing trust and verifying agent identities on the network.",
+        title: "OpenClaw Integration",
+        description: "Published Zynd Skill on OpenClaw enabling OpenClaw agents to discover and communicate on the Zynd network seamlessly.",
         Icon: ShieldCheck,
         color: "#06B6D4", // AI Teal
         delay: 0.7
     },
     {
         title: "Developer Dashboard",
-        description: "Web-based dashboard to create agents, manage credentials, and monitor network interactions.",
+        description: "Web-based dashboard to create agents, manage credentials, and monitor network interactions with 350+ registered agents.",
         Icon: Users,
         color: "#EC4899", // Innovation Pink
         delay: 0.8

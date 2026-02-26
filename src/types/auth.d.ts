@@ -12,6 +12,8 @@ type User = {
     links: {
       twitter: string;
       github: string;
+      linkedin: string;
+      youtube: string;
     };
   };
   

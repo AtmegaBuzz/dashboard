@@ -45,6 +45,25 @@ import {
     Trash2,
 } from "lucide-react";
 
+const FULL_KEYS_STORAGE_KEY = "zynd_api_full_keys";
+
+function loadFullKeysFromStorage(): Record<string, string> {
+    try {
+        const stored = localStorage.getItem(FULL_KEYS_STORAGE_KEY);
+        return stored ? JSON.parse(stored) : {};
+    } catch {
+        return {};
+    }
+}
+
+function saveFullKeysToStorage(keys: Record<string, string>) {
+    try {
+        localStorage.setItem(FULL_KEYS_STORAGE_KEY, JSON.stringify(keys));
+    } catch {
+        // ignore storage errors
+    }
+}
+
 export default function SettingsPage() {
     const [apiKeys, setApiKeys] = useState<APIKeyResponse[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,9 +74,15 @@ export default function SettingsPage() {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [fullKeys, setFullKeys] = useState<Record<string, string>>({});
     const [accessToken] = useAtom(accessTokenAtom);
     const [user] = useAtom(userAtom);
     const { toast } = useToast();
+
+    // Load persisted full keys from localStorage on mount
+    useEffect(() => {
+        setFullKeys(loadFullKeysFromStorage());
+    }, []);
 
     const fetchApiKeys = async () => {
         try {
@@ -89,6 +114,20 @@ export default function SettingsPage() {
             setNewApiKey(key);
             setShowNewKeyDialog(true);
             await fetchApiKeys();
+            // Persist the full key mapped to its ID so copy works after refresh
+            if (key) {
+                const updatedKeys = await getApiKeys(accessToken);
+                const matchingKey = updatedKeys.find(
+                    (k) => key.startsWith(k.key.split("...")[0])
+                );
+                if (matchingKey) {
+                    setFullKeys((prev) => {
+                        const updated = { ...prev, [matchingKey.id]: key };
+                        saveFullKeysToStorage(updated);
+                        return updated;
+                    });
+                }
+            }
             toast({
                 title: "Success",
                 description: "API key created successfully",
@@ -119,6 +158,13 @@ export default function SettingsPage() {
                 throw new Error("No access token");
             }
             await deleteApiKey(accessToken, keyToDelete);
+            // Remove from persisted full keys
+            setFullKeys((prev) => {
+                const updated = { ...prev };
+                delete updated[keyToDelete];
+                saveFullKeysToStorage(updated);
+                return updated;
+            });
             await fetchApiKeys();
             toast({
                 title: "Success",
@@ -336,9 +382,12 @@ export default function SettingsPage() {
                                                 className="hover:bg-blue-50/40 border-b border-gray-200 transition-colors"
                                             >
                                                 <TableCell className="py-4">
-                                                    <code className="px-3 py-1.5 bg-gray-50 rounded border border-gray-200 text-sm font-mono text-black">
-                                                        {apiKey.key}
+                                                    <code className="px-3 py-1.5 bg-gray-50 rounded border border-gray-200 text-sm font-mono text-black break-all">
+                                                        {fullKeys[apiKey.id] || apiKey.key}
                                                     </code>
+                                                    {!fullKeys[apiKey.id] && (
+                                                        <span className="block text-xs text-amber-600 mt-1">Masked - full key shown only at creation</span>
+                                                    )}
                                                 </TableCell>
                                                 <TableCell>
                                                     <span className="text-sm text-gray-600">
@@ -352,24 +401,27 @@ export default function SettingsPage() {
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        <Button
-                                                            variant="outline"
-                                                            size="sm"
-                                                            onClick={() => copyToClipboard(apiKey.key, apiKey.id)}
-                                                            className="bg-white text-[#3B82F6] border-[#3B82F640] hover:bg-[#3B82F610] h-8 px-3"
-                                                        >
-                                                            {copiedId === apiKey.id ? (
-                                                                <>
-                                                                    <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
-                                                                    Copied
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <Copy className="h-3.5 w-3.5 mr-1.5" />
-                                                                    Copy
-                                                                </>
-                                                            )}
-                                                        </Button>
+                                                        {fullKeys[apiKey.id] && (
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => copyToClipboard(fullKeys[apiKey.id], apiKey.id)}
+                                                                className="bg-white text-[#3B82F6] border-[#3B82F640] hover:bg-[#3B82F610] h-8 px-3"
+                                                                title="Copy full API key"
+                                                            >
+                                                                {copiedId === apiKey.id ? (
+                                                                    <>
+                                                                        <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
+                                                                        Copied
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <Copy className="h-3.5 w-3.5 mr-1.5" />
+                                                                        Copy
+                                                                    </>
+                                                                )}
+                                                            </Button>
+                                                        )}
                                                         <Button
                                                             variant="outline"
                                                             size="sm"

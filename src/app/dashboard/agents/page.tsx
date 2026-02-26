@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { PlusIcon, ExternalLinkIcon, Pencil, EyeIcon, SearchIcon } from "lucide-react";
+import { ExternalLinkIcon, Pencil, EyeIcon, SearchIcon } from "lucide-react";
 import { getMyAgents } from "@/apis/registry";
 import { Agent, Capabilities } from "@/apis/registry/types";
 import { Input } from "@/components/ui/input";
@@ -101,12 +101,6 @@ export default function AgentsPage() {
           <h2 className="text-3xl font-bold tracking-tight text-black">Agents</h2>
           <p className="text-gray-500 mt-1">Manage your Zynd agents</p>
         </div>
-        <Link href="/dashboard/agents/create">
-          <Button className="bg-gradient-to-r from-[#7678ed] to-[#3B82F6] hover:opacity-90 text-white border-none">
-            <PlusIcon className="mr-2 h-4 w-4" />
-            Create Agent
-          </Button>
-        </Link>
       </div>
 
       <Card className="bg-white border border-gray-200 overflow-hidden shadow-sm">
@@ -153,9 +147,9 @@ export default function AgentsPage() {
                 {searchTerm ? "No matching agents found" : "No agents found"}
               </h3>
               <p className="mt-1 text-gray-500">
-                {searchTerm ? `Try a different search term or create a new agent.` : `Get started by creating your first agent.`}
+                {searchTerm ? `Try a different search term.` : `Register agents using the Python SDK or N8N nodes.`}
               </p>
-              {searchTerm ? (
+              {searchTerm && (
                 <div className="mt-6 flex justify-center gap-3">
                   <Button
                     onClick={() => setSearchTerm("")}
@@ -163,21 +157,6 @@ export default function AgentsPage() {
                   >
                     Clear Search
                   </Button>
-                  <Link href="/dashboard/agents/create">
-                    <Button className="bg-gradient-to-r from-[#7678ed] to-[#3B82F6] hover:opacity-90 text-white">
-                      <PlusIcon className="mr-2 h-4 w-4" />
-                      Create Agent
-                    </Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="mt-6">
-                  <Link href="/dashboard/agents/create">
-                    <Button className="bg-gradient-to-r from-[#7678ed] to-[#3B82F6] hover:opacity-90 text-white">
-                      <PlusIcon className="mr-2 h-4 w-4" />
-                      Create Agent
-                    </Button>
-                  </Link>
                 </div>
               )}
             </div>

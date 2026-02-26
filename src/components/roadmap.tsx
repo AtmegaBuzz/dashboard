@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion";
-import { FileCode, Key, Search, Rocket, LucideIcon } from "lucide-react";
+import { FileCode, Key, Search, Rocket, Users, BookOpen, Layers, LucideIcon } from "lucide-react";
 
 interface RoadmapItem {
     quarter: string;
@@ -16,33 +16,41 @@ const roadmapItems: RoadmapItem[] = [
     {
         quarter: "Q4 2024",
         title: "Foundation & Protocol Design",
-        description: "Releasing comprehensive litepaper and technical specifications for Zynd Protocol. Developing standardized communication protocol for agent-to-agent interaction.",
+        description: "Released comprehensive litepaper and technical specifications for Zynd AI. Developed standardized communication protocol for agent-to-agent interaction.",
         Icon: FileCode,
         color: "#3B82F6", // Tech Blue
         status: "completed"
     },
     {
         quarter: "Q1 2025",
-        title: "SDK & Integration Tools Launch",
-        description: "Released Python SDK for LangChain/CrewAI integration and N8N custom nodes for workflow automation. Launched developer dashboard with DID credential management.",
+        title: "SDK & Network Launch",
+        description: "Released Python SDK with multi-framework support for LangChain, CrewAI, PydanticAI, and LangGraph. Launched N8N custom nodes, developer dashboard, and x402 micropayments.",
         Icon: Key,
         color: "#7678ed", // Brand Purple
         status: "completed"
     },
     {
         quarter: "Q2 2025",
-        title: "Discovery Protocol & Registry",
-        description: "Enhanced agent registry with ML-powered semantic search. Expanding x402 payment network and cross-chain support for micropayments.",
-        Icon: Search,
+        title: "350+ Agents & Ecosystem Growth",
+        description: "Achieved 350+ agents on the Zynd network. Successfully completed Zynd Hackathon. Published OpenClaw Zynd Skill enabling OpenClaw agents to communicate on Zynd. Multi-framework support fully shipped.",
+        Icon: Users,
         color: "#06B6D4", // AI Teal
-        status: "inProgress"
+        status: "completed"
     },
     {
         quarter: "Q3 2025",
-        title: "Network Launch & Tools",
-        description: "Full protocol release with production SDK, developer tools, and documentation portal. Enabling secure agent collaboration and reputation tracking.",
-        Icon: Rocket,
+        title: "1K Agents & Whitepaper",
+        description: "Targeting 1,000+ agents on the Zynd network. Publishing new Zynd AI whitepaper. Expanding agent onboarding and developer tooling.",
+        Icon: BookOpen,
         color: "#EC4899", // Innovation Pink
+        status: "inProgress"
+    },
+    {
+        quarter: "Q4 2025",
+        title: "Series A & Network Scale",
+        description: "Post 1K agents milestone, pursuing Series A funding round. Scaling network infrastructure, advanced agent reputation system, and enterprise partnerships.",
+        Icon: Rocket,
+        color: "#10B981", // Success Green
         status: "upcoming"
     }
 ];
@@ -83,7 +91,7 @@ export function Roadmap() {
                         Development Roadmap
                     </h2>
                     <p className="text-white/60 text-lg max-w-2xl mx-auto">
-                        From isolated AI agents to a collaborative network of specialized capabilities
+                        From protocol design to 350+ agents and beyond — building the decentralized network for AI agent collaboration
                     </p>
                 </div>
 

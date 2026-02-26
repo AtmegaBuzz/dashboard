@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: admin       # Username for the database
       POSTGRES_PASSWORD: password # Password for the database
-      POSTGRES_DB: p3ai          # Default database to be created
+      POSTGRES_DB: zyndai        # Default database to be created
     ports:
       - "5432:5432"              # Expose the PostgreSQL service on port 5432
     volumes:

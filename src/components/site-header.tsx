@@ -109,7 +109,7 @@ export default function Navbar() {
                             <Image src={logo} className="w-full h-full scale-150 p-1" alt="Zynd Protocol Logo" />
                         </div>
                         <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
-                            Zynd Protocol
+                            Zynd AI
                         </div>
                     </Link>
 

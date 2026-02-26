@@ -16,7 +16,7 @@ const socialLinks = [
     {
         icon: Linkedin,
         label: "LinkedIn",
-        href: "https://www.linkedin.com/company/zynd/",
+        href: "https://www.linkedin.com/company/zyndai/",
         bg: "bg-[#0A66C2]",
         iconColor: "text-white",
         border: "",

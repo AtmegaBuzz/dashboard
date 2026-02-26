@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract P3AIDIDRegistry {
+contract ZyndAIDIDRegistry {
     // Struct to store DID information
     struct DIDDocument {
         string documentHash;        // The DID document stored as a JSON string
@@ -226,11 +226,11 @@ contract P3AIDIDRegistry {
     
     // Helper functions for DID generation
     function generateUserDID(address userAddress) internal pure returns (string memory) {
-        return string(abi.encodePacked("did:p3ai:user:", toHexString(userAddress)));
+        return string(abi.encodePacked("did:zynd:user:", toHexString(userAddress)));
     }
     
     function generateAIAgentDID(address agentAddress) internal pure returns (string memory) {
-        return string(abi.encodePacked("did:p3ai:agent:", toHexString(agentAddress)));
+        return string(abi.encodePacked("did:zynd:agent:", toHexString(agentAddress)));
     }
     
     function toHexString(address addr) internal pure returns (string memory) {

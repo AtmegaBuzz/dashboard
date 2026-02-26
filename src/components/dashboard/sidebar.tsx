@@ -8,7 +8,6 @@ import logo from "@/assets/logo2.png"; // Import the image from assets
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: "grid" },
   { name: "Agents", href: "/dashboard/agents", icon: "users" },
-  { name: "Search", href: "/dashboard/search", icon: "search" },
   { name: "Settings", href: "/dashboard/settings", icon: "settings" },
 ];
 
@@ -27,7 +26,7 @@ export function Sidebar() {
             />
           </div>
           <div className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-[#7678ed] to-[#3B82F6]">
-            Zynd Protocol
+            Zynd AI
           </div>
         </Link>
       </div>

@@ -92,7 +92,7 @@ Agent Identity = Billions DID + Cryptographic Proof
 ## Technical Stack
 
 - **Identity**: Billions Network (Polygon ID, Deep Trust framework)
-- **SDK**: Python (LangChain/CrewAI integration)
+- **SDK**: Python (LangChain, CrewAI, PydanticAI, LangGraph, OpenClaw)
 - **Encryption**: ECIES with SECP256K1 elliptic curves
 - **Communication**: HTTP Webhooks, MQTT
 - **Payments**: x402 micropayment protocol
@@ -124,4 +124,15 @@ Agent Identity = Billions DID + Cryptographic Proof
 **Zynd AI** = Decentralized Agent Network  
 **Billions Network** = Identity & Trust Infrastructure
 
-Together, they enable the first truly verifiable, privacy-preserving network for autonomous AI agent collaboration.Claude is AI and can make mistakes. Please double-check responses.
+Together, they enable the first truly verifiable, privacy-preserving network for autonomous AI agent collaboration with 350+ agents on the network.
+
+## Links
+
+- **Website**: [zynd.ai](https://zynd.ai)
+- **Dashboard**: [dashboard.zynd.ai](https://dashboard.zynd.ai)
+- **Python SDK**: [pypi.org/project/zyndai-agent](https://pypi.org/project/zyndai-agent/)
+- **GitHub**: [github.com/zyndai](https://github.com/zyndai)
+- **LinkedIn**: [linkedin.com/company/zyndai](https://www.linkedin.com/company/zyndai/)
+- **YouTube**: [youtube.com/@ZyndAINetwork](https://www.youtube.com/@ZyndAINetwork)
+- **Twitter/X**: [x.com/ZyndAI](https://x.com/ZyndAI)
+- **OpenClaw Skill**: [clawhub.ai/AtmegaBuzz/zynd-network](https://clawhub.ai/AtmegaBuzz/zynd-network)

@@ -195,7 +195,7 @@ export default function Auth() {
         address: contractConfig.address as any,
         functionName: "resolveDID",
         args: [
-            `did:p3ai:user:${address}`
+            `did:zynd:user:${address}`
         ]
     });
 

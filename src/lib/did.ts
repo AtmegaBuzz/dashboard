@@ -56,7 +56,7 @@ export class DIDDocumentCreator {
     }
 
     const timestamp = new Date().toISOString();
-    const did = `did:p3ai:${isAIAgent ? 'agent' : 'user'}:${address.toLowerCase()}`;
+    const did = `did:zynd:${isAIAgent ? 'agent' : 'user'}:${address.toLowerCase()}`;
 
     // Create verification method
     const verificationMethod: VerificationMethod = {
@@ -70,7 +70,7 @@ export class DIDDocumentCreator {
     const didDocument: DIDDocument = {
       "@context": this.CONTEXT,
       id: did,
-      controller: isAIAgent ? `did:p3ai:user:${creator!.toLowerCase()}` : did,
+      controller: isAIAgent ? `did:zynd:user:${creator!.toLowerCase()}` : did,
       verificationMethod: [verificationMethod],
       authentication: [`${did}#key-1`],
       created: timestamp,
@@ -90,12 +90,12 @@ export class DIDDocumentCreator {
         {
           id: `${did}#ai-service`,
           type: "AIService",
-          serviceEndpoint: `https://api.p3ai.com/agents/${address.toLowerCase()}`
+          serviceEndpoint: `https://api.zynd.ai/agents/${address.toLowerCase()}`
         },
         {
           id: `${did}#messaging`,
           type: "MessagingService",
-          serviceEndpoint: `https://messaging.p3ai.com/agents/${address.toLowerCase()}`
+          serviceEndpoint: `https://messaging.zynd.ai/agents/${address.toLowerCase()}`
         }
       ];
     } else {
@@ -103,7 +103,7 @@ export class DIDDocumentCreator {
         {
           id: `${did}#profile`,
           type: "ProfileService",
-          serviceEndpoint: `https://profiles.p3ai.com/users/${address.toLowerCase()}`
+          serviceEndpoint: `https://profiles.zynd.ai/users/${address.toLowerCase()}`
         }
       ];
     }
@@ -148,7 +148,7 @@ export class DIDDocumentCreator {
     }
 
     // Validate DID format
-    if (!document.id.startsWith("did:p3ai:")) {
+    if (!document.id.startsWith("did:zynd:")) {
       throw new Error("Invalid DID format");
     }
 
@@ -167,7 +167,7 @@ export class DIDDocumentCreator {
       if (!document.creator) {
         throw new Error("Creator is required for AI agent DID documents");
       }
-      if (!document.controller.startsWith("did:p3ai:user:")) {
+      if (!document.controller.startsWith("did:zynd:user:")) {
         throw new Error("AI agent must be controlled by a user DID");
       }
     }

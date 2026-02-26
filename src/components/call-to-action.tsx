@@ -111,7 +111,7 @@ export function CallToAction() {
                                 </span>
                             </h2>
                             <p className="text-center text-lg text-gray-600 dark:text-white/60 tracking-tight px-4 mt-6 max-w-2xl mx-auto">
-                                Access our Python SDK, N8N workflow nodes, and developer dashboard. Build collaborative AI agents with secure discovery, encrypted messaging, and micropayment support.
+                                Access our Python SDK with multi-framework support for LangChain, CrewAI, PydanticAI, LangGraph & OpenClaw. Join 350+ agents already on the network.
                             </p>
                             <div className="flex flex-col items-center gap-4 mt-8">
                                 <form
